@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:id="@+id/main_title_id"
+android:background="#00000000"
+    android:layout_height="@dimen/dim_88px">
+
+
+    <LinearLayout
+        android:id="@+id/left_title_line"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:layout_width="80dp"
+        android:layout_height="match_parent"
+        android:gravity="left|center_vertical">
+
+        <TextView
+            android:id="@+id/left_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:layout_marginLeft="15dp"
+
+            android:padding="@dimen/dim_20px"
+            android:text="header_notfiy"
+            android:textSize="@dimen/dim_font_input"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/left_title_icon"
+            android:layout_width="10dp"
+            android:layout_height="14dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="17dp"
+            android:src="@drawable/sensorcm_left_back"
+            android:gravity="center"
+           />
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/left_message_dot"
+        android:layout_width="@dimen/dim_16px"
+        android:layout_height="@dimen/dim_16px"
+        android:layout_marginLeft="@dimen/dim_70px"
+        android:layout_marginTop="@dimen/dim_26px"
+        android:background="@drawable/message_dot"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:gravity="center"
+        android:singleLine="true"
+        android:textColor="@color/white"
+        android:textSize="18sp" />
+
+    <LinearLayout
+        android:id="@+id/right_title_line"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/right_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:padding="@dimen/dim_20px"
+            android:textColor="@color/white"
+            android:text="筛选"
+            android:textSize="@dimen/dim_font_input"
+            android:visibility="gone" />
+
+
+        <ImageView
+            android:id="@+id/right_title_icon"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="15dp"
+android:src="@drawable/pc_add"
+            android:gravity="center"
+             />
+
+        <ImageView
+            android:id="@+id/right_title_icon2"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="15dp"
+            android:visibility="gone"
+            android:gravity="center"
+             />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/title_line_id"
+android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_alignParentBottom="true"
+        android:background="@color/font_titie2" />
+
+</RelativeLayout>

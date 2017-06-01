@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="52dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#00000000"
+
+    android:orientation="horizontal">
+    <ImageView
+        android:id="@+id/sort_head_three_id"
+
+        android:layout_width="21dp"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:layout_height="17dp"
+        android:layout_marginLeft="6dp"
+
+        android:layout_marginRight="6dp"
+        android:src="@drawable/sort_hg1"
+        />
+
+
+    <com.makeramen.RoundedImageView
+        android:id="@+id/sort_avar_id"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+       android:layout_centerInParent="true"
+        android:layout_gravity="center_horizontal"
+
+
+        android:scaleType="fitXY"
+        android:src="@drawable/test_avar"
+        app:riv_border_color="@color/white"
+        app:riv_border_width="2dp"
+        app:riv_corner_radius="30dip"
+        app:riv_oval="true" />
+<LinearLayout
+    android:layout_width="40dp"
+    android:layout_height="match_parent"
+    android:layout_marginRight="41dp"
+    android:gravity="center"
+    android:layout_alignParentRight="true"
+    android:layout_centerVertical="true"
+    >
+
+    <ImageView
+        android:id="@+id/sort_love_id"
+android:layout_gravity="center"
+        android:layout_width="16dp"
+
+        android:layout_height="14dp"
+        android:src="@drawable/sort_love2"
+        />
+</LinearLayout>
+    <TextView
+        android:id="@+id/sort_love_num_id"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:text="56"
+
+        android:layout_centerVertical="true"
+        android:layout_marginRight="15dp"
+        android:layout_alignParentRight="true"
+        android:textColor="@color/font_titie2"
+        android:textSize="13sp"
+        />
+
+
+    <TextView
+        android:id="@+id/sort_cup_tea_id"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:text="356杯"
+
+        android:layout_centerVertical="true"
+        android:layout_marginRight="95dp"
+        android:layout_alignParentRight="true"
+        android:textColor="@color/black"
+        android:textSize="15sp"
+        />
+
+<LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="52dp"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:layout_alignParentLeft="true"
+    android:layout_centerVertical="true"
+    android:layout_marginLeft="33dp"
+    >
+
+    <TextView
+        android:id="@+id/sort_ordernum_id"
+
+        android:layout_width="35dp"
+        android:layout_height="wrap_content"
+        android:gravity="left"
+        android:text="1"
+android:layout_marginRight="5dp"
+        android:textColor="@color/black"
+        android:textSize="15sp"
+        />
+
+    <TextView
+        android:id="@+id/sort_nickname_id"
+
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:gravity="left"
+        android:text="大幂幂四爷"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:textColor="@color/black"
+        android:textSize="15sp"
+        />
+
+
+</LinearLayout>
+
+<View
+    android:layout_width="match_parent"
+    android:layout_height="1dp"
+    android:layout_alignParentBottom="true"
+    android:background="@color/black"
+
+    />
+
+
+</RelativeLayout>

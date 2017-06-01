@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    android:background="@color/white"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical"
+
+
+    >
+    <include layout="@layout/sensormine_frg_header" />
+
+    <RelativeLayout
+        android:id="@+id/checkupdate_rel_id"
+
+        android:layout_width="match_parent"
+        android:layout_marginTop="60dp"
+
+        android:layout_height="66dp">
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_alignParentTop="true"
+            android:background="@color/black"
+            />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_alignParentBottom="true"
+            android:background="@color/black"
+            />
+
+
+
+<ImageView
+    android:id="@+id/update_dot_id"
+    android:layout_marginLeft="23dp"
+
+            android:layout_width="23dp"
+            android:layout_height="25dp"
+    android:layout_alignParentLeft="true"
+            android:layout_centerInParent="true"
+            android:scaleType="fitXY"
+            />
+
+        <TextView
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="70dp"
+            android:text="检查新版本"
+            android:textColor="@color/black"
+            android:textSize="17sp" />
+
+
+        <TextView
+
+            android:id="@+id/version_comment_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="40dp"
+            android:textColor="@color/font_titie2"
+            android:textSize="13sp" />
+
+
+        <ImageView
+
+            android:layout_width="10dp"
+            android:layout_height="14dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="23dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/topbar_btn_bank_right"
+            android:scaleType="fitXY"
+            />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/onlinedebug_rel_id"
+
+        android:layout_width="match_parent"
+
+        android:layout_height="66dp">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_alignParentBottom="true"
+            android:background="@color/black"
+            />
+
+        <ImageView
+
+            android:layout_width="23dp"
+            android:layout_height="19dp"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="23dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/appset_onlinecheck"
+            android:scaleType="fitXY"
+            />
+
+        <TextView
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="70dp"
+            android:text="在线诊断"
+            android:textColor="@color/black"
+            android:textSize="17sp" />
+
+
+        <ImageView
+
+            android:layout_width="10dp"
+            android:layout_height="14dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="23dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/topbar_btn_bank_right"
+            android:scaleType="fitXY"
+            />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/aboutus_rel_id"
+        android:layout_width="match_parent"
+
+        android:layout_height="66dp">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_alignParentBottom="true"
+            android:background="@color/black"
+            />
+
+        <ImageView
+
+            android:layout_width="24dp"
+            android:layout_height="18dp"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="23dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/appset_aboutus"
+            android:scaleType="fitXY"
+            />
+
+        <TextView
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="70dp"
+            android:text="关于我们"
+            android:textColor="@color/black"
+            android:textSize="17sp" />
+
+
+        <ImageView
+
+            android:layout_width="10dp"
+            android:layout_height="14dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="23dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/topbar_btn_bank_right"
+            android:scaleType="fitXY"
+            />
+
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/backidea_rel_id"
+
+        android:layout_width="match_parent"
+
+        android:layout_height="66dp">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_alignParentBottom="true"
+            android:background="@color/black"
+            />
+
+        <ImageView
+
+            android:layout_width="26dp"
+            android:layout_height="16dp"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="23dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/appset_backidea"
+            android:scaleType="fitXY"
+            />
+
+        <TextView
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="70dp"
+            android:text="意见反馈"
+            android:textColor="@color/black"
+            android:textSize="17sp" />
+
+
+        <ImageView
+
+            android:layout_width="10dp"
+            android:layout_height="14dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="23dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/topbar_btn_bank_right"
+            android:scaleType="fitXY"
+            />
+
+    </RelativeLayout>
+</LinearLayout>

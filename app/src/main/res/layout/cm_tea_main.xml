@@ -1,0 +1,559 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/cm_bj_tea">
+
+
+    <RelativeLayout
+        android:id="@+id/pc_connecting_rel"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="30dp"
+            android:gravity="right"
+            android:orientation="vertical"
+
+            >
+
+            <ImageView
+                android:layout_width="62dp"
+                android:layout_height="54dp"
+                android:layout_gravity="right"
+                android:scaleType="fitXY"
+                android:src="@drawable/tea_fy" />
+
+
+            <TextView
+                android:id="@+id/pay_button_id"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="25dp"
+                android:text="购买"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/pc_tea_choose_line"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="31dp"
+            android:layout_marginTop="40dp"
+            android:gravity="left"
+            android:orientation="vertical"
+
+            >
+
+            <TextView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:text="您正在喝"
+                android:textColor="@color/white_alpha60"
+                android:textSize="15sp" />
+
+
+            <LinearLayout
+                android:id="@+id/tea_name_line"
+                android:layout_width="136dp"
+                android:layout_height="60dp"
+                android:layout_gravity="bottom"
+                android:layout_marginTop="7dp"
+                android:gravity="bottom"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <TextView
+
+                    android:id="@+id/tea_name_id"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left|bottom"
+                    android:layout_marginRight="8dp"
+
+                    android:textColor="@color/white"
+                    android:textSize="27sp" />
+
+                <ImageView
+                    android:layout_width="10dp"
+                    android:layout_height="15dp"
+                    android:layout_gravity="bottom"
+                    android:layout_marginBottom="5dp"
+                    android:scaleType="fitXY"
+
+                    android:src="@drawable/cm_choose_tea" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/tea_control_rel"
+            android:layout_width="match_parent"
+            android:layout_height="47dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="46dp">
+
+            <RelativeLayout
+                android:id="@+id/tea_main_set_mg"
+
+                android:layout_width="wrap_content"
+                android:layout_height="47dp"
+                android:layout_centerInParent="true"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/update_device_id"
+
+                    android:layout_width="27dp"
+                    android:layout_height="24dp"
+                    android:layout_above="@+id/update_id"
+                    android:layout_centerHorizontal="true"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="6dp"
+                    android:scaleType="fitXY"
+                   />
+
+                <TextView
+
+                    android:id="@+id/update_id"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:text="固件更新"
+                    android:textColor="@color/white"
+                    android:textSize="12sp" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/tea_main_dl_mg"
+
+                android:layout_width="wrap_content"
+                android:layout_height="47dp"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="56dp"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/tea_bat_img_id"
+                    android:layout_width="42dp"
+                    android:layout_height="11dp"
+                    android:layout_above="@+id/dccontrol_id"
+                    android:layout_centerInParent="true"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="12dp"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/cm_dc_notyet" />
+
+                <TextView
+                    android:id="@+id/dccontrol_id"
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:text="电量管理"
+                    android:textColor="@color/white"
+                    android:textSize="12sp" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/tea_main_device_mg"
+                android:layout_width="wrap_content"
+                android:layout_height="47dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="56dp"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="22dp"
+                    android:layout_height="19dp"
+                    android:layout_above="@+id/device_c_id"
+                    android:layout_centerInParent="true"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="8dp"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/cm_device_tea" />
+
+                <TextView
+                    android:id="@+id/device_c_id"
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:text="设备管理"
+                    android:textColor="@color/white"
+                    android:textSize="12sp" />
+
+            </RelativeLayout>
+
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/tea_cub_info_rel"
+            android:layout_width="match_parent"
+            android:layout_height="281dp"
+            android:layout_above="@+id/tea_control_rel"
+            android:layout_marginBottom="18dp">
+
+
+            <LinearLayout
+                android:layout_width="159dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="49dp"
+                android:layout_alignParentBottom="true"
+
+                android:orientation="vertical"
+                >
+
+            <LinearLayout
+                android:id="@+id/tea_cub_gif"
+
+                android:layout_width="159dp"
+                android:visibility="gone"
+                android:gravity="center"
+                android:layout_height="80dp">
+            <pl.droidsonroids.gif.GifImageView
+                android:layout_width="100dp"
+
+                android:layout_height="60dp"
+                android:src="@drawable/water_pc_gif"
+                />
+            </LinearLayout>
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+               >
+
+
+
+
+                <com.taomake.teabuddy.component.DynamicWave
+                    android:id="@+id/tea_cub_dynamicwave"
+                    android:layout_width="159dp"
+                    android:layout_gravity="bottom"
+                    android:layout_height="221dp" />
+
+
+                <ImageView
+                    android:layout_width="159dp"
+                    android:layout_height="221dp"
+                    android:layout_gravity="bottom"
+
+                    android:scaleType="fitXY"
+                    android:src="@drawable/cm_cub_tea" />
+            </FrameLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/tea_cub_num_smaller_line"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+              android:layout_alignParentBottom="true"
+                android:layout_marginBottom="20dp"
+                android:layout_marginLeft="30dp"
+                android:orientation="horizontal">
+
+                <TextView
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="第"
+                    android:includeFontPadding="false"
+                    android:textColor="@color/white_alpha60"
+                    android:textSize="12sp" />
+
+                <TextView
+
+                    android:id="@+id/tea_sum_cub_text_id"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:includeFontPadding="false"
+
+                    android:textColor="@color/white_alpha60"
+                    android:textSize="120sp" />
+
+                <TextView
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="泡"
+                    android:includeFontPadding="false"
+
+                    android:textColor="@color/white_alpha60"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+
+        </RelativeLayout>
+
+        <TextView
+
+            android:id="@+id/connect_status_commnet_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/pc_tea_choose_line"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="30dp"
+            android:text="正在连接中"
+            android:textColor="@color/white"
+            android:textSize="17sp" />
+    </RelativeLayout>
+
+
+
+
+<!-- *************************************************************************************未连接 -->
+    <RelativeLayout
+        android:id="@+id/pc_unconnected_rel"
+        android:layout_width="match_parent"
+        android:visibility="gone"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="30dp"
+            android:gravity="right"
+            android:orientation="vertical"
+
+            >
+
+            <ImageView
+                android:layout_width="62dp"
+                android:layout_height="54dp"
+                android:layout_gravity="right"
+                android:scaleType="fitXY"
+                android:src="@drawable/tea_fy" />
+
+
+
+
+        </LinearLayout>
+        <TextView
+
+            android:id="@+id/pc_unconnect_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="104dp"
+            android:layout_centerHorizontal="true"
+            android:text="设备未连接"
+            android:textColor="@color/white"
+            android:textSize="30sp" />
+        <TextView
+
+            android:id="@+id/pc_unconnect_first"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/pc_unconnect_title"
+            android:text="1.重新打开手机蓝牙"
+            android:layout_marginTop="60dp"
+            android:layout_marginLeft="34dp"
+            android:textColor="@color/white"
+            android:textSize="15sp" />
+
+
+        <ImageView
+            android:id="@+id/pc_unconnect_img_id"
+            android:layout_width="41dp"
+            android:layout_height="76dp"
+            android:layout_below="@+id/pc_unconnect_first"
+
+            android:layout_marginTop="18dp"
+            android:layout_centerHorizontal="true"
+            android:scaleType="fitXY"
+            android:src="@drawable/pc_unconnect" />
+
+        <TextView
+
+            android:id="@+id/pc_unconnect_second"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/pc_unconnect_img_id"
+            android:text="2.拿起茶密检查“b”灯是否亮"
+            android:layout_marginTop="55dp"
+            android:layout_marginLeft="34dp"
+            android:textColor="@color/white"
+            android:textSize="15sp" />
+
+
+        <ImageView
+            android:id="@+id/pc_cub_img_id"
+            android:layout_width="82dp"
+            android:layout_height="62dp"
+            android:layout_below="@+id/pc_unconnect_second"
+
+            android:layout_marginTop="30dp"
+            android:layout_centerHorizontal="true"
+            android:scaleType="fitXY"
+            android:src="@drawable/pc_cub" />
+
+        <TextView
+
+            android:id="@+id/tea_unconnect_comment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="还没连接上?"
+            android:layout_alignParentBottom="true"
+          android:layout_centerHorizontal="true"
+            android:textColor="@color/font_titie2"
+            android:layout_marginBottom="24dp"
+            android:textSize="15sp" />
+
+    </RelativeLayout>
+
+
+
+
+    <!-- *************************************************************************************重新激活 -->
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:id="@+id/pc_tryagain_rel"
+    android:visibility="gone"
+
+    android:layout_height="match_parent">
+
+    <include layout="@layout/sensormine_frg_header" />
+
+
+    <ImageView
+        android:layout_width="62dp"
+        android:layout_height="54dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="30dp"
+        android:layout_gravity="right"
+        android:scaleType="fitXY"
+        android:src="@drawable/tea_fy" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_marginTop="44dp"
+        android:layout_centerInParent="true"
+        android:layout_height="wrap_content">
+
+
+        <TextView
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/pc_unconnect_img_id"
+            android:text="杯子倒置10秒"
+            android:layout_gravity="center_horizontal"
+            android:textColor="@color/white"
+            android:textSize="15sp" />
+
+        <ImageView
+            android:layout_width="48dp"
+            android:layout_height="62dp"
+
+            android:layout_marginTop="23dp"
+            android:layout_gravity="center_horizontal"
+            android:scaleType="fitXY"
+            android:src="@drawable/pc_daozhi" />
+
+
+        <TextView
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="-- or --"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="60dp"
+            android:textColor="@color/font_titie2"
+            android:textSize="18sp" />
+        <TextView
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/pc_unconnect_img_id"
+            android:text="给杯子充一充电，即可重新激活"
+            android:layout_marginTop="63dp"
+            android:layout_gravity="center_horizontal"
+            android:textColor="@color/white"
+            android:textSize="15sp" />
+
+
+        <ImageView
+            android:layout_width="110dp"
+            android:layout_height="62dp"
+
+            android:layout_marginTop="24dp"
+android:layout_marginLeft="107dp"
+            android:layout_gravity="left"
+            android:scaleType="fitXY"
+            android:src="@drawable/pc_chadian" />
+    </LinearLayout>
+
+
+    <TextView
+
+        android:id="@+id/tea_tryagainconnect_comment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="重新连接"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/font_titie2"
+        android:layout_marginBottom="24dp"
+        android:textSize="15sp" />
+
+</RelativeLayout>
+
+
+    <LinearLayout
+        android:id="@+id/cicrle_line_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="20dp"
+        android:orientation="horizontal"
+
+        >
+        <ImageView
+            android:layout_width="6dp"
+            android:layout_height="6dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/rounded_cicrle_white"
+            />
+
+        <ImageView
+            android:layout_marginLeft="6dp"
+            android:layout_width="6dp"
+            android:layout_height="6dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/rounded_cicrle_30white"
+            />
+
+    </LinearLayout>
+
+
+</RelativeLayout>

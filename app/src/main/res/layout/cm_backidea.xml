@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    android:background="@color/white"
+    android:orientation="vertical"
+
+
+    >
+    <include layout="@layout/sensormine_frg_header" />
+
+
+
+
+
+
+
+<LinearLayout
+    android:id="@+id/title_line_id"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+
+android:layout_centerHorizontal="true"
+    android:layout_marginTop="130dp"
+    android:gravity="center"
+    android:layout_marginRight="35dp"
+    android:layout_marginLeft="35dp"
+    android:orientation="vertical"
+    >
+
+    <TextView
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="意见栏"
+        android:layout_gravity="left"
+
+        android:gravity="left"
+        android:textColor="@color/black"
+        android:textSize="18sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+android:background="@drawable/rounded_backidea"
+        android:layout_marginTop="9dp"
+        android:layout_height="216dp">
+
+        <EditText
+            android:id="@+id/backidea_content_id"
+            android:padding="8dp"
+            android:layout_width="match_parent"
+            android:gravity="top"
+            android:textColor="@color/font_titie2"
+            android:background="@color/white_alpha000"
+            android:layout_height="match_parent" />
+
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/backidea_send_id"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="发送"
+        android:layout_gravity="center"
+android:layout_marginTop="38dp"
+        android:gravity="center"
+        android:textColor="@color/black"
+        android:textSize="18sp" />
+
+</LinearLayout>
+
+
+
+</RelativeLayout>

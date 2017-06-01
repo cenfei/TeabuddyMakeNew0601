@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    android:background="@color/cm_bj_tea"
+    android:orientation="vertical"
+
+
+    >
+    <include layout="@layout/sensormine_frg_header" />
+<LinearLayout
+    android:id="@+id/title_line_id"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+
+android:layout_centerHorizontal="true"
+    android:layout_marginTop="126dp"
+    android:orientation="vertical"
+    >
+
+    <ImageView
+        android:layout_width="55dp"
+        android:layout_height="66dp"
+        android:layout_gravity="center_horizontal"
+        android:src="@drawable/cm_readme"
+        />
+
+
+<LinearLayout
+    android:id="@+id/quick_title_line_id"
+
+    android:layout_marginTop="61dp"
+    android:layout_width="wrap_content"
+
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    >
+    <TextView
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="快速使用说明书"
+        android:layout_marginRight="21dp"
+        android:layout_gravity="center_vertical"
+
+        android:textColor="@color/white"
+        android:textSize="15sp" />
+
+    <ImageView
+        android:layout_width="9dp"
+        android:layout_height="14dp"
+        android:layout_gravity="center_vertical"
+        android:src="@drawable/cm_readme_enter"
+        />
+
+</LinearLayout>
+    <LinearLayout
+        android:id="@+id/detail_title_line_id"
+
+        android:layout_marginTop="61dp"
+        android:layout_width="wrap_content"
+
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+        <TextView
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="详细使用说明书"
+            android:layout_marginRight="21dp"
+            android:layout_gravity="center_vertical"
+
+            android:textColor="@color/white"
+            android:textSize="15sp" />
+
+        <ImageView
+            android:layout_width="9dp"
+            android:layout_height="14dp"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/cm_readme_enter"
+            />
+
+    </LinearLayout>
+
+</LinearLayout>
+
+</RelativeLayout>

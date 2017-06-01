@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/choose_photo_src"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:gravity="center"
+        android:text="从相册中选择"
+        android:textColor="@color/line_hot_all"
+        android:textSize="@dimen/font_26" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+
+        android:background="@color/font_titie2" />
+    <TextView
+        android:id="@+id/choose_photo_lib"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:gravity="center"
+        android:text="从营匠户型库中选择"
+        android:textColor="@color/init_choose"
+        android:textSize="@dimen/font_26" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+
+        android:background="@color/font_titie2" />
+
+    <TextView
+        android:id="@+id/open_camara"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:gravity="center"
+        android:text="拍照"
+        android:textColor="@color/line_hot_all"
+        android:textSize="@dimen/font_26" />
+
+
+
+</LinearLayout>

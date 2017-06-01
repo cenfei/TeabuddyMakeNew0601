@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+    android:background="#00000000"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+
+<FrameLayout
+    android:layout_width="58dp"
+    android:layout_height="58dp"
+   android:gravity="center"
+    android:layout_gravity="center"
+    >
+    <ImageView
+        android:id="@+id/db_img_select_id"
+
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+
+        android:visibility="gone"
+        android:layout_gravity="center"
+
+        android:scaleType="fitXY"
+        android:src="@drawable/rc_voice_s"
+         />
+    <com.makeramen.RoundedImageView
+        android:id="@+id/db_img_id"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+
+        android:layout_gravity="center"
+
+        android:scaleType="fitXY"
+        app:riv_border_color="@color/white"
+        app:riv_border_width="2dp"
+        app:riv_corner_radius="30dip"
+        app:riv_oval="true" />
+</FrameLayout>
+    <TextView
+        android:id="@+id/db_text_id"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:text="默认"
+        android:layout_gravity="center"
+
+        android:textColor="@color/white"
+        android:textSize="12sp" />
+
+</LinearLayout>

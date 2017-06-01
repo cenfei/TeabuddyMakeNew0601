@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/cm_bj_tea"
+    android:orientation="vertical">
+
+
+    <include layout="@layout/sensormine_frg_header" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginTop="97dp"
+
+        android:background="@color/white" />
+
+    <com.taomake.teabuddy.wheelview.WheelView
+        android:id="@+id/wheel_view_wv"
+        android:background="@color/white_alpha000"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+      />
+    <View
+        android:id="@+id/title_line_id"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/white" />
+
+    <RelativeLayout
+        android:id="@+id/choose_ok_title"
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:text="选好了"
+            android:textSize="15sp"
+             />
+
+
+    </RelativeLayout>
+
+
+</LinearLayout>

@@ -1,0 +1,210 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:background="@color/white"
+    android:id="@+id/my_content_view">
+
+    <FrameLayout
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/tab_bar0"
+        />
+
+
+    <LinearLayout
+        android:id="@+id/tab_bar0"
+        android:layout_width="match_parent"
+        android:layout_height="66dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/black"
+        android:orientation="vertical">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:visibility="gone"
+            android:background="@color/back_line" />
+
+
+        <LinearLayout
+        android:id="@+id/tab_bar"
+        android:layout_width="match_parent"
+        android:layout_height="66dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/black"
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:id="@+id/tab_luyin"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+           >
+           <LinearLayout
+               android:layout_width="wrap_content"
+               android:layout_centerInParent="true"
+               android:orientation="vertical"
+               android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/tab_luyin_img_c"
+
+                android:layout_width="41dp"
+                android:layout_height="41dp"
+                android:src="@drawable/luyin_icon_c"
+                android:visibility="gone"
+                android:layout_gravity="center"
+
+                />
+               <ImageView
+                   android:id="@+id/tab_luyin_img"
+
+                   android:layout_width="20dp"
+                   android:layout_height="20dp"
+                   android:src="@drawable/luyin_icon"
+                   android:layout_gravity="center"
+
+                   />
+
+               <TextView
+                   android:id="@+id/tab_luyin_text"
+
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="录音"
+                   android:layout_gravity="center"
+                   android:layout_marginTop="4dp"
+                   android:textColor="@color/white_alpha60"
+                   android:textSize="12sp"
+                   />
+           </LinearLayout>
+
+        </RelativeLayout>
+
+
+
+
+            <RelativeLayout
+                android:id="@+id/tab_paocha"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:background="@drawable/transition_tab_bg">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:orientation="vertical"
+                    android:layout_height="wrap_content">
+                    <ImageView
+                        android:id="@+id/tab_paocha_img_c"
+
+                        android:layout_width="32dp"
+                        android:layout_height="41dp"
+                        android:src="@drawable/paocha_icon_c"
+                        android:visibility="gone"
+                        android:layout_gravity="center"
+
+                        />
+                    <ImageView
+                        android:id="@+id/tab_paocha_img"
+
+                        android:layout_width="16dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/paocha_icon"
+                        android:layout_gravity="center"
+
+                        />
+
+                    <TextView
+                        android:id="@+id/tab_paocha_text"
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="泡茶"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="4dp"
+                        android:textColor="@color/white_alpha60"
+                        android:textSize="12sp"
+                        />
+                </LinearLayout>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/tab_mine"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:background="@drawable/transition_tab_bg">
+
+
+                <LinearLayout
+                    android:id="@+id/mine_msg_line"
+
+                    android:layout_width="18dp"
+                    android:layout_marginTop="3dp"
+                    android:background="@drawable/rounded_unreadmsg"
+android:gravity="center"
+                    android:visibility="gone"
+                    android:layout_height="18dp"
+                    android:layout_toRightOf="@+id/mine_line_id"
+                    android:layout_toEndOf="@+id/mine_line_id"
+                    >
+                <TextView
+                    android:id="@+id/mine_msg_id"
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+android:text="11"
+                    android:textSize="11sp"
+                    android:textColor="@color/white"
+                    />
+
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/mine_line_id"
+                    android:layout_width="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:orientation="vertical"
+                    android:layout_height="wrap_content"
+                    android:weightSum="1">
+                    <ImageView
+                        android:id="@+id/tab_mine_img_c"
+
+                        android:layout_width="44dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/mine_icon_c"
+                        android:visibility="gone"
+                        android:layout_gravity="center"
+
+                        />
+                    <ImageView
+                        android:id="@+id/tab_mine_img"
+
+                        android:layout_width="22dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/mine_icon"
+                        android:layout_gravity="center"
+
+                        />
+
+                    <TextView
+                        android:id="@+id/tab_mine_text"
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="我的"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="4dp"
+                        android:textColor="@color/white_alpha60"
+                        android:textSize="12sp"
+                        />
+                </LinearLayout>
+
+            </RelativeLayout>
+    </LinearLayout>
+
+    </LinearLayout>
+</RelativeLayout>

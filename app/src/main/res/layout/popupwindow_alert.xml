@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="130dp"
+    android:layout_height="100dp"
+    
+    android:background="@drawable/popuwindow_stroke" >
+
+
+    
+     <LinearLayout
+         android:id="@+id/wallet_bind_line"
+         android:layout_width="130dp"
+         android:layout_height="100dp"
+         android:background="@drawable/rounded_process"
+         android:layout_gravity="center"
+         android:gravity="center"
+         android:orientation="vertical" >
+
+         <LinearLayout
+             android:layout_width="wrap_content"
+             android:layout_gravity="center"
+             android:orientation="vertical"
+             android:gravity="center"
+             android:layout_height="wrap_content">
+         <ImageView
+             android:id="@+id/wallet_bind_image"
+             android:layout_width="35dp"
+             android:layout_height="35dp"
+             android:layout_gravity="center_horizontal"
+             android:src="@drawable/loading_icon" />
+
+         <TextView
+             android:id="@+id/wallet_sycn_comment"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_marginTop="10dp"
+             android:layout_gravity="center_horizontal"
+             android:textSize="13sp"
+             android:textColor="@color/white"
+             />
+         </LinearLayout>
+     </LinearLayout>
+
+</FrameLayout>

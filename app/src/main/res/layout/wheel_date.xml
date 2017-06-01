@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_main_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/font_titie2" />
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dim_80px"
+        android:background="@color/back_fb"
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/wheel_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+
+
+            android:layout_marginLeft="@dimen/dim_30px"
+            android:text="取消"
+            android:textColor="@color/line_hot_all"
+            android:textSize="@dimen/dim_font_input" />
+
+
+        <TextView
+            android:id="@+id/wheel_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+
+            android:gravity="center"
+            android:textColor="@color/line_hot_all"
+
+            android:textSize="@dimen/dim_font_content" />
+
+        <TextView
+            android:id="@+id/wheel_confirm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/dim_30px"
+            android:gravity="center"
+            android:text="确定"
+            android:textColor="@color/line_hot_all"
+            android:textSize="@dimen/dim_font_input" />
+    </RelativeLayout>
+
+
+    <com.taomake.teabuddy.wheelview.WheelView
+        android:id="@+id/wheel_view_wv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/dim_40px"
+        android:layout_marginTop="@dimen/dim_40px" />
+
+</LinearLayout>
+

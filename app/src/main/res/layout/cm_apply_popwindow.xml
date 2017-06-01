@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="248dp"
+    android:layout_height="154dp"
+    android:background="#00000000"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+
+
+    <LinearLayout
+        android:id="@+id/record_line_id"
+        android:layout_width="248dp"
+        android:layout_height="154dp"
+        android:background="@drawable/cm_rounded_record"
+
+        android:gravity="center"
+        android:orientation="vertical">
+
+
+        <LinearLayout
+            android:id="@+id/apply_connecting_line"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/connect_msg_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="15dp"
+                android:gravity="center"
+                android:textColor="@color/white_alpha80"
+                android:textSize="12sp" />
+
+
+            <TextView
+                android:id="@+id/connect_stop_record_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="28dp"
+                android:gravity="center"
+                android:text="取消"
+                android:textColor="@color/white_alpha80"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/apply_ready_line"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="28dp"
+                android:gravity="center"
+                android:text="茶密已连接"
+                android:textColor="@color/white_alpha80"
+                android:textSize="12sp" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginLeft="37dp"
+                android:layout_marginTop="16dp"
+
+                android:text="- 请确保茶密电量充足"
+                android:textColor="@color/white_alpha80"
+                android:textSize="12sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginLeft="37dp"
+
+                android:text="- 请确保茶密与手机距离5米内"
+                android:textColor="@color/white_alpha80"
+                android:textSize="12sp" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="31dp">
+
+                <TextView
+                    android:id="@+id/apply_download_begin"
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginLeft="62dp"
+
+                    android:text="开始下载"
+                    android:textColor="@color/white_alpha80"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/apply_download_cancel"
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="62dp"
+
+                    android:text="取消"
+                    android:textColor="@color/white_alpha80"
+                    android:textSize="12sp" />
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/apply_download_line"
+            android:visibility="gone"
+
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="28dp"
+                android:gravity="center"
+                android:text="发送需要3-10分钟，请勿操作手机和茶杯"
+                android:textColor="@color/white_alpha80"
+                android:textSize="12sp" />
+
+
+            <pl.droidsonroids.gif.GifImageView
+                android:layout_width="100dp"
+                android:layout_gravity="center_horizontal"
+
+                android:layout_height="60dp"
+                android:src="@drawable/record_progress"
+                />
+
+            <TextView
+                android:id="@+id/apply_download_comment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="17dp"
+
+                android:text="准备下载语音"
+                android:textColor="@color/white_alpha80"
+                android:textSize="12sp" />
+
+            </LinearLayout>
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="14dp"
+        android:visibility="gone"
+        android:layout_height="14dp"
+        android:layout_below="@+id/record_line_id"
+        android:layout_gravity="center"
+        android:background="@drawable/cm_rerangle_record"
+        android:gravity="center" />
+
+
+</LinearLayout>

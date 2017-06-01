@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    android:background="@color/back_luyin"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical"
+
+
+    >
+    <include layout="@layout/sensormine_frg_header" />
+
+    <GridView
+        android:id="@+id/gridview"
+        android:layout_width="match_parent"
+
+        android:layout_marginTop="36dp"
+        android:layout_marginBottom="36dp"
+
+        android:layout_height="match_parent"
+        android:horizontalSpacing="0.0dip"
+        android:listSelector="@null"
+        android:numColumns="3"
+        android:scrollbars="none"
+        android:stretchMode="columnWidth"
+        android:verticalSpacing="51dp" />
+
+
+
+
+
+</LinearLayout>

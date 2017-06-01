@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    android:background="@color/cm_bj_tea"
+    android:orientation="vertical"
+
+
+    >
+    <include layout="@layout/sensormine_frg_header" />
+<LinearLayout
+    android:id="@+id/title_line_id"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+
+android:layout_centerInParent="true"
+    android:orientation="vertical"
+    >
+
+    <ImageView
+        android:layout_width="28dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center_horizontal|left"
+        android:src="@drawable/cm_2code_icon"
+        />
+
+    <ImageView
+        android:id="@+id/sc_img_id"
+        android:layout_width="142dp"
+        android:layout_height="142dp"
+        android:layout_marginTop="4dp"
+        android:src="@drawable/secondcode"
+        android:layout_gravity="center_horizontal"
+        />
+    <TextView
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="扫描二维码绑定设备"
+        android:layout_marginTop="12dp"
+        android:layout_gravity="center_horizontal"
+
+        android:textColor="@color/white"
+        android:textSize="15sp" />
+
+</LinearLayout>
+</RelativeLayout>

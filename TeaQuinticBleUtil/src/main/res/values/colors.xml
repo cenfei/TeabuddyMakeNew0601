@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+<color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+
+<color name="white">#FFFFFF</color>
+<color name="red">#fa330c</color>
+<color name="green">#090</color>
+<color name="black">#000</color>
+<color name="body_color">#737373</color>
+<color name="gray">#cccccc</color>
+<color name="line">#74c8c2</color>
+<color name="login_line">#e5e5e5</color>
+<color name="yellow">#ff7300</color>
+
+<color name="delete">#da5a5a</color>
+<color name="health">#fff600</color>
+<color name="sport">#01d2ff</color>
+<color name="master">#ffffff</color>
+
+<!-- cloud gradient-->
+<color name="cloud_start_color">#345186</color>
+<color name="cloud_middle_color">#5575b1</color>
+<color name="cloud_end_color">#7d8fbe</color>
+
+<!-- fog gradient-->
+<color name="fog_start_color">#617aae</color>
+<color name="fog_middle_color">#6f88a4</color>
+<color name="fog_end_color">#7b8993</color>
+
+<!-- snow gradient-->
+<color name="snow_start_color">#4b97d2</color>
+<color name="snow_middle_color">#6185e4</color>
+<color name="snow_end_color">#8b94e1</color>
+
+<!-- morning gradient-->
+<color name="morning_start_color">#005bd7</color>
+<color name="morning_middle_color">#3497ea</color>
+<color name="morning_end_color">#93b1be</color>
+
+<!-- afternoon gradient-->
+<color name="afternoon_start_color">#8673c1</color>
+<color name="afternoon_middle_color">#cd89c1</color>
+<color name="afternoon_end_color">#ccaea0</color>
+
+<!-- evening gradient-->
+<color name="evening_start_color">#051f5a</color>
+<color name="evening_middle_color">#034f90</color>
+<color name="evening_end_color">#0084bb</color>
+
+<!-- night gradient-->
+<color name="night_start_color">#1d4597</color>
+<color name="night_middle_color">#2c76af</color>
+<color name="night_end_color">#a8b4bb</color>
+
+<color name="white_alpha100">#FFFFFF</color>
+<color name="white_alpha80">#ccFFFFFF</color>
+<color name="white_alpha60">#99FFFFFF</color>
+<color name="white_alpha40">#66FFFFFF</color>
+<color name="white_alpha35">#59FFFFFF</color>
+<color name="white_alpha20">#33FFFFFF</color>
+<color name="white_alpha10">#19FFFFFF</color>
+<color name="white_alpha000">#00000000</color>
+
+<color name="black_alpha50">#7F000000</color>
+<color name="black_alpha30">#3F000000</color>
+<color name="black_alpha10">#1F000000</color>
+<color name="black_alpha04">#06000000</color>
+<color name="black_alpha90">#cc000000</color>
+
+
+<!-- button background color-->
+<color name="btn_background_40">@color/white_alpha40</color>
+<color name="btn_background_20">@color/white_alpha20</color>
+<color name="btn_disable_back">@color/white_alpha10</color>
+
+<color name="tab_background_enable">#E00288D1</color>
+
+<!-- bmi index bg-->
+<color name="bmi_start">#05d2fc</color>
+<color name="bmi_middle">#7de482</color>
+<color name="bmi_end">#f9f506</color>
+<color name="yellow_sport">#FFF600</color>
+<color name="bule_sleep">#01d2ff</color>
+
+<color name="input_sure">#aaaaaa</color>
+<color name="input_text">#686868</color>
+
+<color name="wechat_bind_hint">#b5b5b5</color>
+<color name="wechat_bind_backgroud">#f6f6f6</color>
+<color name="tencent_bind_text">#535353</color>
+
+<color name="server_type">#434343</color>
+<color name="ad_empty_color">#26a3fb</color>
+
+<color name="red_title_color">#eed10e</color>
+<color name="red_content_color">#880107</color>
+
+
+
+<color name="line_hot_all">#2d2d34</color>
+<color name="font_titie2">#a8a8b1</color>
+
+<color name="line_gray">#66cccccc</color>
+
+
+<color name="drop_down_selected">#2d2d34</color>
+<color name="drop_down_unselected">#a8a8b1</color>
+
+<color name="mask_color">#6f000000</color>
+<color name="check_bg">#f2f2f2</color>
+<color name="un_press_color">#9C27B0</color>
+
+<color name="back_line">#e2e2e5</color>
+<color name="font_fd">#fdfdfd</color>
+<color name="back_fb">#fbfbfb</color>
+<color name="init_choose">#f21b3e</color>
+<color name="white_alpha00">#00FFFFFF</color>
+
+
+<color name="order_result1">#aa631e</color>
+<color name="order_result2">#77cecd</color>
+<color name="order_result3">#ceb66c</color>
+<color name="order_result4">#687dff</color>
+<color name="order_result5">#f21b3e</color>
+<color name="order_result6">#82c95f</color>
+
+
+<color name="dot_on">#cdcdcd</color>
+<color name="dot_out">#9fcdcdcd</color>
+<color name="change_address">#687dff</color>
+<color name="fodder_money">#f21B3E</color>
+<color name="black_fodder">#232323</color>
+<color name="back_luyin">#102548</color>
+<color name="cm_bj_color">#8892a4</color>
+
+<color name="cm_bj_tea">#58afab</color>
+
+<color name="reg_background_gray">#e2e2e2</color>
+<color name="reg_button">#3fccae</color>
+
+<color name="reg_button2">#3767be</color>
+
+<color name="index_down_back">#ececec</color>
+<color name="griditems_bg">#ffe8ecef</color>
+<color name="cm_bj_tea_90">#ee58afab</color>
+
+<color name="pc_choose_color">#8ac7c4</color>
+
+</resources>

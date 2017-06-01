@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="121dp"
+    android:layout_height="118dp"
+    android:background="#00000000"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical"
+    >
+
+
+    <LinearLayout
+        android:id="@+id/record_line_id"
+        android:layout_width="121dp"
+        android:layout_height="104dp"
+        android:background="@drawable/cm_rounded_record"
+        android:fitsSystemWindows="true"
+        android:orientation="vertical">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="15dp"
+            android:gravity="center"
+            android:text="正在录音"
+            android:textColor="@color/white_alpha60"
+            android:textSize="12sp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="5dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="剩余"
+                android:textColor="@color/white_alpha60"
+                android:textSize="7sp" />
+
+            <TextView
+                android:id="@+id/pop_process_record_id"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:gravity="center"
+                android:text="3"
+                android:textColor="@color/white"
+                android:textSize="24sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="秒"
+                android:textColor="@color/white_alpha60"
+                android:textSize="7sp" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/pop_stop_record_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:text="停止录音"
+            android:textColor="@color/white"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="14dp"
+        android:layout_height="14dp"
+android:gravity="center"
+      android:layout_gravity="center"
+android:layout_below="@+id/record_line_id"
+        android:background="@drawable/cm_rerangle_record" />
+
+
+</LinearLayout>

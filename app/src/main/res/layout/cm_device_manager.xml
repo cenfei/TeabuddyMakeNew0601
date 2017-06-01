@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    android:background="@color/cm_bj_tea"
+    android:orientation="vertical"
+
+
+    >
+    <include layout="@layout/sensormine_frg_header" />
+
+
+    <TextView
+
+        android:id="@+id/mg_title_id"
+        android:layout_width="match_parent"
+        android:layout_height="41dp"
+        android:text="小明的喝茶小伙伴"
+        android:layout_marginTop="44dp"
+   android:gravity="center"
+        android:background="@color/text_back"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="15sp" />
+
+
+
+    <TextView
+        android:id="@+id/mg_unbind_id"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="解除绑定"
+        android:visibility="gone"
+        android:layout_marginBottom="56dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/white"
+        android:textSize="15sp" />
+
+
+
+    <RelativeLayout
+
+        android:layout_width="match_parent"
+        android:layout_marginTop="144dp"
+
+        android:layout_height="286dp">
+
+        <TextView
+
+            android:layout_width="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_height="wrap_content"
+            android:text="当前正在使用"
+            android:layout_centerHorizontal="true"
+
+            android:textColor="@color/white"
+            android:textSize="18sp" />
+
+
+        <ImageView
+            android:id="@+id/mg_cubimg_id"
+
+            android:layout_width="110dp"
+            android:layout_height="180dp"
+            android:src="@drawable/white_cub"
+android:layout_centerInParent="true"
+            />
+
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="20dp"
+            android:layout_centerVertical="true"
+            >
+
+            <LinearLayout
+                android:id="@+id/readme_line_id"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+                <ImageView
+                    android:layout_width="13dp"
+                    android:layout_height="16dp"
+                    android:layout_gravity="center"
+
+                    android:src="@drawable/dv_readme"
+                    />
+
+                <TextView
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="说明书"
+android:layout_marginLeft="8dp"
+                    android:layout_gravity="center"
+
+                    android:textColor="@color/white"
+                    android:textSize="15sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/update_line_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal"
+                >
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_gravity="center"
+
+                    android:src="@drawable/dv_update"
+                    />
+
+                <TextView
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="固件更新"
+                    android:layout_gravity="center"
+
+                    android:layout_marginLeft="8dp"
+                    android:textColor="@color/white"
+                    android:textSize="15sp" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/findcode_line_id"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal"
+                >
+                <ImageView
+                    android:layout_width="13dp"
+                    android:layout_height="13dp"
+                    android:layout_gravity="center"
+
+                    android:src="@drawable/dv_findcode"
+                    />
+
+                <TextView
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="找回二维码"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="8dp"
+                    android:textColor="@color/white"
+                    android:textSize="15sp" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+
+    </RelativeLayout>
+
+
+
+</RelativeLayout>

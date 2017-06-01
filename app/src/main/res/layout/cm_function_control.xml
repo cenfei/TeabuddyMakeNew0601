@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/cm_bj_tea"
+    android:orientation="vertical">
+
+    <include layout="@layout/sensormine_frg_header" />
+
+
+
+
+        <GridView
+            android:id="@+id/gridview"
+            android:layout_marginTop="104dp"
+            android:layout_width="fill_parent"
+            android:layout_height="300dp"
+            android:horizontalSpacing="0.0dip"
+            android:listSelector="@null"
+            android:numColumns="2"
+            android:scrollbars="none"
+            android:stretchMode="columnWidth"
+            android:verticalSpacing="0.0dip" />
+
+
+    <LinearLayout
+        android:id="@+id/shutdown_line"
+        android:layout_below="@+id/gridview"
+        android:layout_width="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="56dp"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/db_img_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/fc_close"
+            android:contentDescription="@string/app_name" />
+
+        <TextView
+            android:id="@+id/db_text_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="6.0dip"
+            android:maxLines="1"
+            android:text="关机"
+            android:textColor="@color/white"
+            android:textSize="15.0sp" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="20dp"
+        android:orientation="horizontal"
+
+        >
+
+
+        <ImageView
+            android:layout_width="6dp"
+            android:layout_height="6dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/rounded_cicrle_30white"
+            />
+        <ImageView
+            android:layout_marginLeft="6dp"
+
+            android:layout_width="6dp"
+            android:layout_height="6dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/rounded_cicrle_white"
+            />
+    </LinearLayout>
+</RelativeLayout>

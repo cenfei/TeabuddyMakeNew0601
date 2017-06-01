@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingRight="15dp"
+    android:paddingLeft="15dp"
+    android:background="@color/back_fb"
+    android:orientation="vertical"
+    >
+    <TextView
+        android:layout_width="wrap_content"
+        android:background="@drawable/rounded_green"
+android:layout_gravity="center"
+        android:gravity="center"
+android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:textColor="@color/white"
+        android:text="茶密录音机蓝牙工具"
+        android:layout_height="50dp"
+        android:layout_marginTop="15dp"
+        android:textSize="14sp"
+
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+android:layout_marginTop="20dp"
+        android:orientation="horizontal"
+        >
+
+
+        <TextView
+            android:id="@+id/text_func_content_id"
+            android:layout_width="0dp"
+            android:background="@drawable/rounded_black"
+
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:textSize="9sp"
+            android:padding="5dp"
+            android:textColor="@color/white_alpha60"
+            android:layout_marginRight="10dp"
+            android:scrollbars="vertical"
+            android:fadeScrollbars="false"
+            />
+        <TextView
+            android:id="@+id/text_log_content_id"
+
+            android:layout_width="0dp"
+            android:background="@drawable/rounded_black"
+            android:textSize="9sp"
+            android:padding="5dp"
+            android:textColor="@color/white_alpha60"
+            android:layout_height="match_parent"
+            android:scrollbars="vertical"
+            android:fadeScrollbars="false"
+            android:layout_weight="1"
+
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal"
+        >
+
+        <EditText
+            android:id="@+id/connect_edittext_id"
+
+            android:layout_width="0dp"
+
+            android:hint="如:884aea83a5de"
+android:paddingLeft="10dp"
+            android:background="@drawable/rounded_white"
+            android:layout_height="match_parent"
+            android:layout_marginRight="20dp"
+            android:textSize="13sp"
+            android:textColorHint="@color/font_titie2"
+            android:textColor="@color/black"
+            android:layout_weight="3"
+
+            />
+
+        <Button
+            android:id="@+id/connect_button_id"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:textSize="12sp"
+            android:background="@drawable/rounded_green"
+android:textColor="@color/font_titie2"
+            android:text="连接mac设备"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal"
+        >
+
+        <EditText
+            android:id="@+id/sendcode_edittext_id"
+
+            android:layout_width="0dp"
+
+            android:hint="如:EB0501(不分大小写)"
+           android:paddingLeft="10dp"
+            android:textColorHint="@color/font_titie2"
+            android:textColor="@color/black"
+            android:background="@drawable/rounded_white"
+            android:layout_height="match_parent"
+            android:layout_marginRight="20dp"
+            android:textSize="13sp"
+            android:layout_weight="3"
+
+            />
+
+        <Button
+            android:id="@+id/sendcode_button_id"
+
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:textSize="13sp"
+            android:background="@drawable/rounded_green"
+            android:textColor="@color/font_titie2"
+
+            android:text="向设备发送指令"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal"
+        >
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/logo"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+android:layout_gravity="center"
+            android:layout_height="wrap_content"
+android:text="茶密蓝牙"
+            android:textColor="@color/font_titie2"
+            />
+
+    </LinearLayout>
+
+<View
+    android:layout_width="match_parent"
+    android:layout_height="1px"
+    android:layout_marginTop="10dp"
+   android:background="@color/font_titie2"
+    />
+
+    <GridView
+        android:id="@+id/gridview"
+        android:layout_width="match_parent"
+
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:numColumns="3"
+
+        android:layout_height="match_parent"
+        android:horizontalSpacing="0.0dip"
+        android:listSelector="@null"
+        android:scrollbars="none"
+        android:stretchMode="columnWidth"
+        android:verticalSpacing="10dp" />
+
+
+
+
+
+
+</LinearLayout>

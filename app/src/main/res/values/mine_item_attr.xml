@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="mine_item">
+        <attr name="item_icon" format="reference" />
+        <attr name="item_title" format="string" />
+        <attr name="item_content" format="string" />
+        <attr name="item_content_visible" format="boolean" />
+        <attr name="item_right_visible" format="boolean" />
+        <attr name="item_right_icon" format="reference"/>
+    </declare-styleable>
+
+    <declare-styleable name="info_item">
+        <attr name="info_title" format="string" />
+        <attr name="info_content" format="string" />
+        <attr name="info_content_visible" format="boolean" />
+        <attr name="info_right_visible" format="boolean" />
+        <attr name="info_icon" format="reference" />
+    </declare-styleable>
+
+</resources>

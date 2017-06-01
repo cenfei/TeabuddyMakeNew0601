@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:navi="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/webview_main_layout"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dim_88px"
+        android:background="@null">
+
+
+
+        <ImageView
+            android:id="@+id/left_btn"
+            android:layout_width="10dp"
+            android:layout_height="14dp"
+            android:layout_marginLeft="20dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/topbar_btn_bank"
+            android:layout_centerVertical="true"
+
+            />
+
+
+        <TextView
+            android:id="@+id/close"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dim_88px"
+            android:layout_centerVertical="true"
+            android:singleLine="true"
+            android:gravity="center"
+            android:text="关闭"
+            android:visibility="gone"
+            android:layout_marginLeft="30dp"
+            android:paddingLeft="@dimen/dim_20px"
+            android:paddingRight="@dimen/dim_20px"
+            android:textColor="@color/black"
+            android:textSize="@dimen/dim_font_title" />
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:singleLine="true"
+            android:text=""
+            android:maxLength="16"
+            android:textColor="@color/black"
+            android:textSize="@dimen/dim_font_title" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <WebView
+            android:id="@+id/shuashua_webview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:overScrollMode="never" />
+
+        <ProgressBar
+            android:id="@+id/progressbar_updown"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="5px"
+            android:max="100"
+            android:progress="0"
+            android:secondaryProgress="0"
+            android:progressDrawable="@drawable/back_color0"/>
+
+    </RelativeLayout>
+</LinearLayout>

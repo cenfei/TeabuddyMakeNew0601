@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    android:background="@color/white"
+    android:orientation="vertical"
+
+
+    >
+    <include layout="@layout/sensormine_frg_header" />
+
+
+
+
+
+
+
+<LinearLayout
+    android:id="@+id/title_line_id"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+
+android:layout_centerInParent="true"
+    android:gravity="center"
+    android:layout_marginRight="35dp"
+    android:layout_marginLeft="35dp"
+    android:orientation="vertical"
+    >
+
+    <TextView
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="注    意"
+
+        android:layout_gravity="center"
+
+        android:gravity="center"
+        android:textColor="@color/black"
+        android:textSize="18sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="22dp"
+
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="-  "
+            android:gravity="left"
+
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="此功能仅在杯子遇到问题并在填入从客服处得到的验证码后才能运行"
+            android:gravity="left"
+
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="22dp"
+
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="-  "
+            android:gravity="left"
+
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="诊断前请确保杯子有足够电量或者请连接杯子电源线"
+            android:gravity="left"
+
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="22dp"
+
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="-  "
+            android:gravity="left"
+
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="诊断前请放正杯子并保持放正"
+            android:gravity="left"
+
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            />
+    </LinearLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="65dp"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="验证码:"
+
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/code_edittext_id"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            />
+
+        <EditText
+            android:id="@+id/code_edittext_id"
+            android:layout_width="83dp"
+            android:layout_height="40dp"
+            android:gravity="bottom"
+android:textColor="@color/black"
+            android:textSize="15sp"
+            android:maxLength="10"
+            android:layout_centerHorizontal="true" />
+
+    </RelativeLayout>
+
+
+    <TextView
+        android:id="@+id/begin_debug_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="开始诊断"
+        android:gravity="center"
+
+        android:textColor="@color/text_begin_dbug"
+        android:textSize="15sp"
+        />
+</LinearLayout>
+
+
+
+</RelativeLayout>
