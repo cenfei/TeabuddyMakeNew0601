@@ -609,8 +609,8 @@ public class HotFragment extends Fragment {
     public void connectFindDevice() {
         blindDeviceId = configPref.userDeviceMac().get();
         blindDeviceId = MyStringUtils.macStringToUpper(blindDeviceId);
-        blindDeviceId="88:4A:EA:83:A5:62";
-        configPref.userDeviceMac().put("884AEA83A562");
+//        blindDeviceId="88:4A:EA:83:A5:62";
+//        configPref.userDeviceMac().put("884AEA83A562");
         Log.e("blindDeviceId:", blindDeviceId);
 //            getTeaInfoByUnionid();
         foxProgressbarInterface = new FoxProgressbarInterface();
