@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -78,11 +78,14 @@ private UpdateGridViewCallBack updateGridViewCallBack;
     public View getView(final int position, View convertView, ViewGroup parent) {
         TeaDetailTimeObj personalRanking = mPersonal.get(position);
 
-        if(position==mPersonal.size()&&mPersonal.size()<=11){
+        boolean p=(position==(mPersonal.size()-1));
+
+        boolean a=((mPersonal.size()<=11));
+        if((position==(mPersonal.size()-1))&&(mPersonal.size()<=11)){
             convertView = mInflater.inflate(R.layout.cm_pc_control_update_add_item, null);
 
 
-            LinearLayout    img_add_line=(LinearLayout)convertView.findViewById(R.id.img_add_line);
+            RelativeLayout    img_add_line=(RelativeLayout)convertView.findViewById(R.id.img_add_line);
             img_add_line.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -96,7 +99,7 @@ private UpdateGridViewCallBack updateGridViewCallBack;
 
 
         ViewHolder viewholder;
-        if (convertView == null) {
+        if (convertView == null||convertView.getTag()==null) {
             viewholder = new ViewHolder();
             convertView = mInflater.inflate(R.layout.cm_pc_control_update_item, null);
             convertView.setTag(viewholder);

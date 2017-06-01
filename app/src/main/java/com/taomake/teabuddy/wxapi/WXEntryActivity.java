@@ -72,7 +72,7 @@ public class WXEntryActivity extends AppCompatActivity implements IWXAPIEventHan
 	{
 		MainApp mainApp=(MainApp)getApplicationContext();
 
-				mainApp.api.handleIntent(paramIntent, this);
+		mainApp.api.handleIntent(paramIntent, this);
 	}
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -118,19 +118,19 @@ public class WXEntryActivity extends AppCompatActivity implements IWXAPIEventHan
 						try {
 							object = new JSONObject(result);
 
-						String	accessToken = object.getString("access_token");
-						String	openID = object.getString("openid");
-						String	refreshToken = object.getString("refresh_token");
-						Long	expires_in = object.getLong("expires_in");
-						unionid = object.getString("unionid");
-					    String result2=	getUserInfo(accessToken, openID);
+							String	accessToken = object.getString("access_token");
+							String	openID = object.getString("openid");
+							String	refreshToken = object.getString("refresh_token");
+							Long	expires_in = object.getLong("expires_in");
+							unionid = object.getString("unionid");
+							String result2=	getUserInfo(accessToken, openID);
 
 							JSONObject object2 = new JSONObject(result2);
-								nickname = object2.getString("nickname");
-								headimgurl = object2.getString("headimgurl");
-								city = object2.getString("city");
+							nickname = object2.getString("nickname");
+							headimgurl = object2.getString("headimgurl");
+							city = object2.getString("city");
 
-								province = object2.getString("province");
+							province = object2.getString("province");
 
 						} catch (JSONException e) {
 							e.printStackTrace();
@@ -177,7 +177,7 @@ public class WXEntryActivity extends AppCompatActivity implements IWXAPIEventHan
 		Toast.makeText(this, resp.errStr, Toast.LENGTH_LONG);
 //		ToastUtil.showMessageLong(this, resp.errStr);
 	}
-String unionid=null;
+	String unionid=null;
 
 	Handler handler = new Handler() {
 		@Override
@@ -185,7 +185,7 @@ String unionid=null;
 			super.handleMessage(msg);
 			Bundle data = msg.getData();
 			String val = data.getString("unionid");
-		final	String nickname = data.getString("nickname");
+			final	String nickname = data.getString("nickname");
 
 			String headimgurl = data.getString("headimgurl");
 			final	String city = data.getString("city");
@@ -209,7 +209,7 @@ String unionid=null;
 
 				@Override
 				public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-				byte[]	avarByte = Util.getBitmapByte(loadedImage);
+					byte[]	avarByte = Util.getBitmapByte(loadedImage);
 
 					sendUserForMsg(nickname, avarByte,city,province);
 				}
@@ -248,7 +248,7 @@ String unionid=null;
 
 					context.startActivity(intent);
 
-                finish();
+					finish();
 //					mTextView.setText(bundle.getString("result"));
 //					mImageView.setImageBitmap((Bitmap) data.getParcelableExtra("bitmap"));
 				}
@@ -276,7 +276,7 @@ String unionid=null;
 
 
 	public void getBindDeviceHandler(String resp) {
-        foxProgressbarInterface.stopProgressBar();
+		foxProgressbarInterface.stopProgressBar();
 		if (resp != null && !resp.equals("")) {
 
 			//解析返回json 数据
@@ -321,23 +321,23 @@ String unionid=null;
 		}
 	}
 
-public void  toSencodQrcode(){
-	Intent intent = new Intent();
-	intent.setClass(WXEntryActivity.this, SecondQrCode.class);
+	public void  toSencodQrcode(){
+		Intent intent = new Intent();
+		intent.setClass(WXEntryActivity.this, SecondQrCode.class);
 
-	intent.putExtra("unionid", unionid);
-	startActivity(intent);
-	finish();
-}
+		intent.putExtra("unionid", unionid);
+		startActivity(intent);
+		finish();
+	}
 	int MY_PERMISSIONS_REQUEST_CALL_PHONE2=2002;
 
 	public void checkCameraPersimion(){
 		if (ContextCompat.checkSelfPermission(this,
-				Manifest.permission.WRITE_EXTERNAL_STORAGE)
+				Manifest.permission.CAMERA)
 				!= PackageManager.PERMISSION_GRANTED)
 		{
 			ActivityCompat.requestPermissions(this,
-					new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+					new String[]{Manifest.permission.CAMERA},
 					MY_PERMISSIONS_REQUEST_CALL_PHONE2);
 			//权限还没有授予，需要在这里写申请权限的代码
 		}else {
@@ -374,8 +374,8 @@ public void  toSencodQrcode(){
 	public static String APPID="wxeb1b89052d8f8794";
 	public static String SECRET="210222646dbd203d2bdd07b06bcde466";
 
-		private String  getAccessToken(String code) {
-			String	unionid;
+	private String  getAccessToken(String code) {
+		String	unionid;
 		String urlStr = "https://api.weixin.qq.com/sns/oauth2/access_token?appid="+APPID+"&secret="+SECRET+"&code="+code+"&grant_type=authorization_code";
 		String result = null;
 
@@ -529,8 +529,8 @@ public void  toSencodQrcode(){
 
 
 	public void sendUserForMsg(String nickname,byte[] headurl,String city,String province) {
-        foxProgressbarInterface = new FoxProgressbarInterface();
-        foxProgressbarInterface.startProgressBar(this, "加载中...");
+		foxProgressbarInterface = new FoxProgressbarInterface();
+		foxProgressbarInterface.startProgressBar(this, "加载中...");
 
 
 //		SharedPreferences sp = getSharedPreferences("dataUNIION", MODE_PRIVATE);
@@ -565,7 +565,7 @@ public void  toSencodQrcode(){
 			String bodyResp=null;
 			if (responseBody != null) {
 
-				 bodyResp = new String(responseBody);
+				bodyResp = new String(responseBody);
 				Log.i("bodyResp", bodyResp);
 
 			}

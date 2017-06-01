@@ -74,6 +74,7 @@ import com.example.ti.ble.common.BluetoothLeService;
 import com.example.ti.ble.sensortag.FileActivity;
 import com.example.ti.ble.sensortag.R;
 import com.example.ti.util.Conversion;
+import com.taomake.teabuddy.base.MainApp;
 import com.taomake.teabuddy.util.Constant;
 
 import java.io.File;
@@ -629,7 +630,18 @@ firstStart=false;
 //
 //                AlertDialog d = b.create();
 //                d.show();
-                Toast.makeText(FwUpdateActivityTea.this,"主人升级完成",Toast.LENGTH_SHORT);
+                Toast.makeText(FwUpdateActivityTea.this, "主人升级完成", Toast.LENGTH_SHORT);
+
+                MainApp mainApp=(MainApp)getApplicationContext();
+                mainApp.boolupdateSuccess=true;
+                if(mDeviceActivityTea!=null){
+
+
+                  mDeviceActivityTea.finish();
+                }
+
+
+
                 finish();
 
               }

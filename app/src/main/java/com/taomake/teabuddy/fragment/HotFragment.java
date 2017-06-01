@@ -29,6 +29,7 @@ import com.taomake.teabuddy.activity.DeviceManagerActivity_;
 import com.taomake.teabuddy.activity.DeviceUpdateActivity_;
 import com.taomake.teabuddy.activity.DeviceUpdateTwoActivity_;
 import com.taomake.teabuddy.activity.WebViewActivity_;
+import com.taomake.teabuddy.base.MainApp;
 import com.taomake.teabuddy.component.DynamicWave;
 import com.taomake.teabuddy.component.FoxProgressbarInterface;
 import com.taomake.teabuddy.component.Permission_Popwindow;
@@ -455,7 +456,7 @@ public class HotFragment extends Fragment {
                 String teaname = baseJson.obj.czname;
                 if (teaname == null || "".equals(teaname)) {
                     tea_name_line.setVisibility(View.VISIBLE);
-                    tea_name_id.setText("默认茶种");
+                    tea_name_id.setText("默认茶\n自定义茶");
                 } else {
                     teaname = MyStringUtils.decodeUnicode(teaname);
                     Log.i("teaname", teaname);
@@ -608,6 +609,8 @@ public class HotFragment extends Fragment {
     public void connectFindDevice() {
         blindDeviceId = configPref.userDeviceMac().get();
         blindDeviceId = MyStringUtils.macStringToUpper(blindDeviceId);
+        blindDeviceId="88:4A:EA:83:A5:62";
+        configPref.userDeviceMac().put("884AEA83A562");
         Log.e("blindDeviceId:", blindDeviceId);
 //            getTeaInfoByUnionid();
         foxProgressbarInterface = new FoxProgressbarInterface();
@@ -1074,6 +1077,13 @@ public class HotFragment extends Fragment {
                     }
                 }else {
                     if (firstchange > 0) {
+
+                        MainApp mainApp=(MainApp)getActivity().getApplicationContext();
+                   needupdate=     !mainApp.boolupdateSuccess;
+                        if(!needupdate){
+                            update_device_id.setBackgroundResource(R.drawable.cm_update_device);
+
+                        }
                         changeui();
 
 

@@ -219,7 +219,7 @@
                 android:layout_width="159dp"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:layout_marginRight="49dp"
+                android:layout_marginRight="40dp"
                 android:layout_alignParentBottom="true"
 
                 android:orientation="vertical"
@@ -292,7 +292,7 @@
                     android:includeFontPadding="false"
 
                     android:textColor="@color/white_alpha60"
-                    android:textSize="120sp" />
+                    android:textSize="110sp" />
 
                 <TextView
 

@@ -107,8 +107,11 @@ public class MineTabFragment extends Fragment implements SwipeRefreshLayout.OnRe
     @Click(R.id.mine_remind_id)
     void onmine_remind_id() {
 
-        Util.startActivity(getActivity(), MineRemindsettingActivity_.class);
-
+        if(resultDeviceAll==null){
+            Util.Toast(getActivity(),"主人请先链接茶密");
+        }else {
+            Util.startActivity(getActivity(), MineRemindsettingActivity_.class);
+        }
     }
 
     @Override
@@ -126,9 +129,18 @@ public class MineTabFragment extends Fragment implements SwipeRefreshLayout.OnRe
         IntentFilter filterMine = new IntentFilter();
         filterMine.addAction(MYACTION_UPDATE_Mine);
         getActivity().registerReceiver(receiverMine, filterMine);
+          mine_msg_line=(LinearLayout)chatView.findViewById(R.id.mine_msg_line);
+          mine_msg_num_id=(TextView)chatView.findViewById(R.id.mine_msg_num_id);
 
+        int msgnum=  configPref.sedentaryInterval().get();
+        if(msgnum!=0){
+            mine_msg_line.setVisibility(View.VISIBLE);
+            mine_msg_num_id.setText(msgnum+"");
+        }
         return chatView;
     }
+    LinearLayout  mine_msg_line;
+    TextView  mine_msg_num_id;
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -150,6 +162,12 @@ public class MineTabFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
 
     public void changeui(){
+
+        int msgnum=  configPref.sedentaryInterval().get();
+        if(msgnum!=0){
+            mine_msg_line.setVisibility(View.VISIBLE);
+            mine_msg_num_id.setText(msgnum+"");
+        }
         blindDeviceId = configPref.userDeviceMac().get();
         blindDeviceId = MyStringUtils.macStringToUpper(blindDeviceId);
         Log.e("blindDeviceId:", blindDeviceId);

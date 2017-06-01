@@ -207,8 +207,11 @@ public class ChooseTeaActivity extends BaseActivity {
             }
         };
 
-        int temp = 0;
-        initValue = teaName;
+        int temp = 1;
+
+            initValue = teaName;
+
+
         for (String a : PLANETS) {
 
             if (a.equals(initValue)) {

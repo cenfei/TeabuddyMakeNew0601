@@ -40,6 +40,8 @@ public static WebView webView;
 
     public static final String sinamAppid = "4db46388e95774dd60e37e5baeace63e";
 
+
+    public static boolean boolupdateSuccess=false;
     @Override
     public void onCreate() {
         super.onCreate();

@@ -437,6 +437,8 @@ intent.putExtra("updateteaid","1");
                 Log.d("未读消息总共", baseJson.obj+"条");
                 if(!TextUtils.isEmpty(baseJson.obj)) {
                     Integer unreadnum = Integer.valueOf(baseJson.obj);
+                    configPref.sedentaryInterval().put(unreadnum);
+
                     if (unreadnum > 0) {
                         mine_msg_line.setVisibility(View.VISIBLE);
 
