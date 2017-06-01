@@ -320,11 +320,11 @@ public class HotFragment extends Fragment {
     public static boolean canChangePager = true;
 
     public void unconnectUi() {
-//        cicrle_line_id.setVisibility(View.GONE);
-//        canChangePager = false;
-//        pc_connecting_rel.setVisibility(View.GONE);
-//        pc_unconnected_rel.setVisibility(View.VISIBLE);
-//        pc_tryagain_rel.setVisibility(View.GONE);
+        cicrle_line_id.setVisibility(View.GONE);
+        canChangePager = false;
+        pc_connecting_rel.setVisibility(View.GONE);
+        pc_unconnected_rel.setVisibility(View.VISIBLE);
+        pc_tryagain_rel.setVisibility(View.GONE);
 
 
     }
