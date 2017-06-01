@@ -49,7 +49,15 @@ public class DeviceManagerActivity extends BaseActivity {
 
     int y = 0;
     int limit = 10;
+    @Click(R.id.mg_unbind_id)
+    void onmg_unbind_id() {
 
+        Intent intent = new Intent();
+        intent.setClass(DeviceManagerActivity.this, SecondQrCodeAddDevice_.class);
+
+        startActivity(intent);
+
+    }
 
     @Click(R.id.left_title_line)
     void onLeftTitleLine() {
@@ -62,7 +70,7 @@ public class DeviceManagerActivity extends BaseActivity {
     @Click(R.id.right_title_line)
     void onright_title_line() {
         Intent intent = new Intent();
-        intent.setClass(DeviceManagerActivity.this, SecondQrCodeAddDevice.class);
+        intent.setClass(DeviceManagerActivity.this, SecondQrCodeAddDevice_.class);
 
         startActivity(intent);
 //        finish();

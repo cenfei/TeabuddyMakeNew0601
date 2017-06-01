@@ -349,6 +349,7 @@ boolean firstSelect=false;
         String FromActivity = getIntent().getStringExtra("FromActivity");
 
         if(TextUtils.isEmpty(FromActivity)) {
+
             getSumMsg();
         }
 
@@ -440,6 +441,9 @@ intent.putExtra("updateteaid","1");
                         mine_msg_line.setVisibility(View.VISIBLE);
 
                         mine_msg_id.setText(baseJson.obj);
+                    }else{
+                        mine_msg_line.setVisibility(View.GONE);
+
                     }
                 }
             }
