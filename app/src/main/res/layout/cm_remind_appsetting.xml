@@ -11,6 +11,15 @@
 
     >
     <include layout="@layout/sensormine_frg_header" />
+<FrameLayout
+    android:layout_width="match_parent"
+    android:layout_height="380dp">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:id="@+id/unclick_line"
+        >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -87,21 +96,121 @@ android:layout_marginLeft="35dp"
     </LinearLayout>
 
 
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/black_line_id"
+        android:layout_width="match_parent"
+        android:background="@color/white_alpha80"
+        android:orientation="vertical"
+        android:layout_height="380dp">
+
+
+
+    </LinearLayout>
+
+</FrameLayout>
+
+
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-android:orientation="vertical"
+android:orientation="horizontal"
+    android:layout_marginRight="40dp"
+    android:layout_marginLeft="40dp"
     android:gravity="center"
     >
 
 
+    <LinearLayout
+        android:id="@+id/remind_close_line"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:layout_gravity="center_vertical"
+        android:layout_height="wrap_content">
 
-    <Switch
+        <ImageView
+            android:id="@+id/remind_close_img"
 
-        android:layout_width="wrap_content"
-        android:layout_gravity="center"
-        android:layout_height="wrap_content"
-        android:id="@+id/switch1" />
+            android:layout_width="26dp"
+            android:layout_height="23dp"
+            android:src="@drawable/remind_close"
+            />
+
+        <TextView
+            android:id="@+id/remind_close_text"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="15sp"
+            android:layout_marginTop="6dp"
+            android:textColor="@color/black"
+            android:text="关闭"/>
+
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/move_line"
+
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:layout_gravity="center_vertical"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/move_img"
+
+            android:layout_width="26dp"
+            android:layout_height="23dp"
+            android:src="@drawable/move_icon_gray"
+            />
+
+        <TextView
+            android:id="@+id/move_text"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="15sp"
+            android:layout_marginTop="6dp"
+            android:textColor="@color/text_color"
+            android:text="手动"/>
+
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/intelligence_line"
+
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:layout_gravity="center_vertical"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/intelligence_img"
+
+            android:layout_width="26dp"
+            android:layout_height="23dp"
+            android:src="@drawable/intelligence_icon_gray"
+            />
+
+        <TextView
+            android:id="@+id/intelligence_text"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="15sp"
+            android:layout_marginTop="6dp"
+            android:textColor="@color/text_color"
+            android:text="智能"/>
+
+    </LinearLayout>
+
+
 
 </LinearLayout>
 

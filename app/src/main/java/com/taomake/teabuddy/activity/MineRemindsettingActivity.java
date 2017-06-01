@@ -1,5 +1,6 @@
 package com.taomake.teabuddy.activity;
 
+import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
@@ -9,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.CompoundButton;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -27,6 +29,7 @@ import com.taomake.teabuddy.wheelview.adapters.ArrayWheelAdapter;
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.ViewById;
 import org.androidannotations.annotations.sharedpreferences.Pref;
 
 import java.util.ArrayList;
@@ -48,6 +51,90 @@ public class MineRemindsettingActivity extends BaseActivity {
     @Pref
     ConfigPref_ configPref;
 
+    @ViewById(R.id.remind_close_img)
+    ImageView remind_close_img;
+
+    @ViewById(R.id.remind_close_text)
+    TextView remind_close_text;
+
+    @ViewById(R.id.move_img)
+    ImageView move_img;
+
+    @ViewById(R.id.move_text)
+    TextView move_text;
+
+    @ViewById(R.id.intelligence_img)
+    ImageView intelligence_img;
+
+    @ViewById(R.id.intelligence_text)
+    TextView intelligence_text;
+    @ViewById(R.id.black_line_id)
+    LinearLayout black_line_id;
+
+    @ViewById(R.id.unclick_line)
+    LinearLayout unclick_line;
+
+    public void changeButtonGroup(int choosenum){
+
+        chooseNumButton=choosenum;
+        remind_close_img.setImageDrawable(getResources().getDrawable(R.drawable.remind_close_gray));
+        remind_close_text.setTextColor(getResources().getColor(R.color.text_color));
+
+        move_img.setImageDrawable(getResources().getDrawable(R.drawable.move_icon_gray));
+        move_text.setTextColor(getResources().getColor(R.color.text_color));
+        intelligence_img.setImageDrawable(getResources().getDrawable(R.drawable.intelligence_icon_gray));
+        intelligence_text.setTextColor(getResources().getColor(R.color.text_color));
+
+        switch (choosenum){
+            case 0:
+                remind_close_img.setImageDrawable(getResources().getDrawable(R.drawable.remind_close));
+                remind_close_text.setTextColor(getResources().getColor(R.color.black));
+                black_line_id.setVisibility(View.VISIBLE);
+                unclick_line.setClickable(false);
+                break;
+            case 1:
+                move_img.setImageDrawable(getResources().getDrawable(R.drawable.move_icon));
+                move_text.setTextColor(getResources().getColor(R.color.black));
+                black_line_id.setVisibility(View.GONE);
+                unclick_line.setClickable(true);
+
+
+                break;
+            case 2:
+                intelligence_img.setImageDrawable(getResources().getDrawable(R.drawable.intelligence_icon));
+                intelligence_text.setTextColor(getResources().getColor(R.color.black));
+                black_line_id.setVisibility(View.VISIBLE);
+                unclick_line.setClickable(false);
+
+
+                break;
+
+        }
+
+
+    }
+
+
+
+    @Click(R.id.remind_close_line)
+    void onremind_close_line() {
+
+        changeButtonGroup(0);
+
+    }
+    @Click(R.id.move_line)
+    void onmove_line() {
+
+        changeButtonGroup(1);
+
+    }
+    @Click(R.id.intelligence_line)
+    void onintelligence_line() {
+
+        changeButtonGroup(2);
+    }
+
+Integer chooseNumButton=0;
 
     @Click(R.id.left_title_line)
     void onLeftTitleLine() {
@@ -74,7 +161,7 @@ public class MineRemindsettingActivity extends BaseActivity {
 
         Integer weekDayValue = Integer.valueOf(sb.toString(), 2);//周期 位开关
 
-        boolOpen = boolSwitch ? 1 : 0;
+//        boolOpen = boolSwitch ? 1 : 0;
 
         if (afterNoon == 1) {
             hourSetting = hourSetting + 12;
@@ -82,7 +169,7 @@ public class MineRemindsettingActivity extends BaseActivity {
 
         StringBuffer stringBuffer = new StringBuffer();
         stringBuffer.append("EB14");
-        stringBuffer.append(QuinticCommon.unsignedIntToHexString(boolOpen));
+        stringBuffer.append(QuinticCommon.unsignedIntToHexString(chooseNumButton));
         stringBuffer.append(QuinticCommon.unsignedIntToHexString(minuteSetting));
         stringBuffer.append(QuinticCommon.unsignedIntToHexString(hourSetting));
         stringBuffer.append(QuinticCommon.unsignedIntToHexString(weekDayValue));
@@ -106,8 +193,8 @@ public class MineRemindsettingActivity extends BaseActivity {
 
     }
 
-    boolean boolSwitch = false;
-    Switch switch1;
+//    boolean boolSwitch = false;
+//    Switch switch1;
 
     public void initUi() {
 
@@ -133,17 +220,17 @@ public class MineRemindsettingActivity extends BaseActivity {
         right_title.setText("完成");
         right_title.setTextColor(getResources().getColor(R.color.black));
 
-        switch1 = (Switch) findViewById(R.id.switch1);
-        switch1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView,
-                                         boolean isChecked) {
-                // TODO Auto-generated method stub
-                boolSwitch = isChecked;
-
-            }
-        });
+//        switch1 = (Switch) findViewById(R.id.switch1);
+//        switch1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//
+//            @Override
+//            public void onCheckedChanged(CompoundButton buttonView,
+//                                         boolean isChecked) {
+//                // TODO Auto-generated method stub
+//                boolSwitch = isChecked;
+//
+//            }
+//        });
 
         initdataWheel();
         initdataWheel2();
@@ -311,7 +398,7 @@ public class MineRemindsettingActivity extends BaseActivity {
         }
     }
 
-    int boolOpen, minuteSetting, hourSetting, weekInt;
+    int  minuteSetting, hourSetting, weekInt;
     char[] weekIntCharArray;
     int afterNoon = 0;
 
@@ -429,9 +516,10 @@ public class MineRemindsettingActivity extends BaseActivity {
                                 String trimResult = result.replace(" ", "");
                                 if (trimResult.contains("ea14")) {
                                     byte[] data = QuinticCommon.stringToBytes(trimResult);
-                                    boolOpen = QuinticCommon.unsignedByteToInt(data[2]);
+                                    chooseNumButton = QuinticCommon.unsignedByteToInt(data[2]);
 
-                                    switch1.setChecked(boolOpen == 0 ? false : true);
+                                    changeButtonGroup(chooseNumButton);
+//                                    switch1.setChecked(boolOpen == 0 ? false : true);
 
                                     minuteSetting = QuinticCommon.unsignedByteToInt(data[3]);
 

@@ -148,5 +148,6 @@
 <color name="cm_bj_tea_90">#ee58afab</color>
 
 <color name="pc_choose_color">#8ac7c4</color>
+    <color name="text_color">#918b8a</color>
 
 </resources>
