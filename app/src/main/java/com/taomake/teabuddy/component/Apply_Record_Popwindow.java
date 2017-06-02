@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
@@ -171,10 +172,12 @@ public class Apply_Record_Popwindow {
         apply_download_comment = (TextView) view.findViewById(R.id.apply_download_comment);
 
 
+//        window = new PopupWindow(view,
+//                WindowManager.LayoutParams.WRAP_CONTENT,
+//                WindowManager.LayoutParams.WRAP_CONTENT);
         window = new PopupWindow(view,
-                WindowManager.LayoutParams.WRAP_CONTENT,
-                WindowManager.LayoutParams.WRAP_CONTENT);
-
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT, true);
 
         view.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
         int popupWidth = view.getMeasuredWidth();    //  获取测量后的宽度
@@ -183,7 +186,7 @@ public class Apply_Record_Popwindow {
 
 
         // 设置popWindow弹出窗体可点击，这句话必须添加，并且是true
-        window.setFocusable(true);
+//        window.setFocusable(true);
 
 
         // 实例化一个ColorDrawable颜色为半透明
@@ -196,11 +199,11 @@ public class Apply_Record_Popwindow {
         if (Util.checkDeviceHasNavigationBar(context)) {
             window.showAtLocation(relView,
                     Gravity.CENTER, 0, 0);
-            setBackgroundAlpha(activity, 0.5f);
+//            setBackgroundAlpha(activity, 0.5f);
         } else {
             window.showAtLocation(relView,
                     Gravity.CENTER, 0, 0);
-            backgroundAlpha(0.5f, activity);
+//            backgroundAlpha(0.5f, activity);
 
         }
 

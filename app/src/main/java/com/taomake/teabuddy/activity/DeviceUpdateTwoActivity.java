@@ -11,6 +11,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.taomake.teabuddy.R;
+import com.taomake.teabuddy.base.MainApp;
 import com.taomake.teabuddy.component.FoxProgressbarInterface;
 import com.taomake.teabuddy.network.RowMessageHandler;
 import com.taomake.teabuddy.prefs.ConfigPref_;
@@ -352,7 +353,9 @@ connectFindDevice();
 //BACK 0A 04 01 53result
                                 String trimResult = result.replace(" ", "");
                                 if (trimResult.contains("eb1601")) {
+                                    MainApp mainApp=(MainApp)getApplicationContext();
 
+                                    mainApp.boolupdateSuccess=1;
 
                                     QuinticBleAPISdkBase.getInstanceFactory(DeviceUpdateTwoActivity.this).conn.disconnect();
 

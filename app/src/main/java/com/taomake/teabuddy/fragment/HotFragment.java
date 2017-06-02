@@ -72,9 +72,6 @@ public class HotFragment extends Fragment {
     ImageView update_device_id;
 
 
-
-
-
     @Click(R.id.pc_tea_choose_line)
     void onpc_tea_choose_line() {
         Intent intent = new Intent(getActivity(), ChooseTeaActivity_.class);
@@ -561,8 +558,9 @@ public class HotFragment extends Fragment {
                     //将固件升级信息保存起来
 
 //                    configPref.
+                    MainApp mainApp=(MainApp)getActivity().getApplicationContext();
 
-
+                    mainApp.boolupdateSuccess=2;
                     needupdate = true;
                     configPref.deviceUpdateInfo().put(new Gson().toJson(deviceVersionObj));
                     update_device_id.setBackgroundResource(R.drawable.cm_update_device_c);
@@ -570,7 +568,9 @@ public class HotFragment extends Fragment {
 
                 } else {
 
+                    MainApp mainApp=(MainApp)getActivity().getApplicationContext();
 
+                    mainApp.boolupdateSuccess=0;
                     needupdate = false;
 
                     update_device_id.setBackgroundResource(R.drawable.cm_update_device);
@@ -1066,21 +1066,24 @@ public class HotFragment extends Fragment {
         public void onReceive(Context context, Intent intent) {
             if (MYACTION_UPDATE.equals(intent.getAction())) {
 
-                String updateteaid=intent.getStringExtra("updateteaid");
+                String updateteaid = intent.getStringExtra("updateteaid");
 
                 Log.i("onReceive", "change hot...");
-                if(!TextUtils.isEmpty(updateteaid)){
+                if (!TextUtils.isEmpty(updateteaid)) {
                     if (ChooseTeaActivity.chooseTeaValue != null) {
                         tea_name_id.setText(ChooseTeaActivity.chooseTeaValue);
 
 
                     }
-                }else {
+                } else {
                     if (firstchange > 0) {
 
-                        MainApp mainApp=(MainApp)getActivity().getApplicationContext();
-                   needupdate=     !mainApp.boolupdateSuccess;
-                        if(!needupdate){
+                        MainApp mainApp = (MainApp) getActivity().getApplicationContext();
+
+                        if (mainApp.boolupdateSuccess == 1) deviceVersion = null;
+
+                        needupdate = mainApp.boolupdateSuccess == 2 ? false : true;
+                        if (!needupdate) {
                             update_device_id.setBackgroundResource(R.drawable.cm_update_device);
 
                         }

@@ -633,7 +633,7 @@ firstStart=false;
                 Toast.makeText(FwUpdateActivityTea.this, "主人升级完成", Toast.LENGTH_SHORT);
 
                 MainApp mainApp=(MainApp)getApplicationContext();
-                mainApp.boolupdateSuccess=true;
+                mainApp.boolupdateSuccess=2;
                 if(mDeviceActivityTea!=null){
 
 
