@@ -1,11 +1,16 @@
 package com.taomake.teabuddy.activity;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -65,7 +70,10 @@ public class WelcomeActivity extends BaseActivity {
         welcome_rel_id = (RelativeLayout) findViewById(R.id.welcome_rel_id);
         login_rel_id = (RelativeLayout) findViewById(R.id.login_rel_id);
 
-
+//       if (Build.VERSION.SDK_INT >= 14)
+//             {
+//    Util.startActivity(WelcomeActivity.this, PermissionActivity.class);
+//}
 //        if (configPref.showWelcome4().get()) {
 //            welcome_rel_id.setVisibility(View.GONE);
 //            login_rel_id.setVisibility(View.VISIBLE);
@@ -142,15 +150,78 @@ public class WelcomeActivity extends BaseActivity {
 
             welcome_rel_id.setVisibility(View.VISIBLE);
             login_rel_id.setVisibility(View.GONE);
-            new FoxHandler(this).postDelayed(new Runnable() {
-
-                @Override
-                public void run() {
-                    startActivity();
-                }
-            }, 2000);
+            permissionBle();
+//            if (Build.VERSION.SDK_INT >= 23){
+//                permissionBle();
+//            }else {
+//                postStart();
+//            }
         }
     }
+
+    public void postStart() {
+        new FoxHandler(this).postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                startActivity();
+            }
+        }, 2000);
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[]
+            grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == MY_PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION) {
+            permissionRecord();
+        } else if (requestCode == RECORD_AUDIO_ID) {
+            postStart();
+        }
+
+
+    }
+
+
+    int RECORD_AUDIO_ID = 3004;
+
+    public void permissionRecord() {
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+//请求权限
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO},
+                    RECORD_AUDIO_ID);
+//判断是否需要 向用户解释，为什么要申请该权限
+//            if(ActivityCompat.shouldShowRequestPermissionRationale(this,
+//                    Manifest.permission.READ_CONTACTS)) {
+//                Toast.makeText(this, "shouldShowRequestPermissionRationale", Toast.LENGTH_SHORT).show();
+//            }
+        } else {
+            postStart();
+        }
+
+    }
+
+    int MY_PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION = 3003;
+
+    public void permissionBle() {
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//请求权限
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+                    MY_PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION);
+//判断是否需要 向用户解释，为什么要申请该权限
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.READ_CONTACTS)) {
+                Toast.makeText(this, "shouldShowRequestPermissionRationale", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            permissionRecord();
+        }
+
+    }
+
 
     String WX_APP_ID = "wxeb1b89052d8f8794";
 
@@ -421,4 +492,6 @@ public class WelcomeActivity extends BaseActivity {
 //        }
 
     }
+
+
 }

@@ -45,7 +45,7 @@
                     android:layout_width="161dp"
                     android:layout_height="match_parent"
                     android:maxLength="11"
-                    android:cursorVisible="true"
+                    android:cursorVisible="false"
                     android:inputType="number"
                     android:digits="1234567890"
                     android:background="@color/white_alpha000"
@@ -88,7 +88,7 @@
                     android:layout_width="70dp"
                     android:layout_height="30dp"
                     android:maxLength="6"
-                    android:cursorVisible="true"
+                    android:cursorVisible="false"
                     android:digits="1234567890"
                     android:inputType="number"
                     android:layout_alignParentBottom="true"
@@ -146,7 +146,7 @@
                     android:inputType="number"
                     android:gravity="bottom"
 
-                    android:cursorVisible="true"
+                    android:cursorVisible="false"
                     android:textCursorDrawable="@null"
                     android:layout_alignParentBottom="true"
 

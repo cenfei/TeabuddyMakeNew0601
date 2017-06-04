@@ -62,11 +62,14 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Environment;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -201,6 +204,12 @@ public class FwUpdateActivityTea extends Activity {
   }
   ProgressBar mProgressBar;
   TextView mProgressInfo;
+
+
+  TextView update_process_sucess_text;
+
+  RelativeLayout update_process_success_rel;
+  RelativeLayout update_process_rel;
   @Override
   public void onCreate(Bundle savedInstanceState) {
     Log.d(TAG, "onCreate");
@@ -208,6 +217,41 @@ public class FwUpdateActivityTea extends Activity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.sensor_device_update_three);
     mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
+
+    TextView tea_os_version = (TextView) findViewById(com.taomake.teabuddy.R.id.tea_os_version);
+     update_process_sucess_text = (TextView) findViewById(com.taomake.teabuddy.R.id.update_process_sucess_text);
+
+    update_process_success_rel = (RelativeLayout) findViewById(com.taomake.teabuddy.R.id.update_process_success_rel);
+
+    update_process_rel = (RelativeLayout) findViewById(com.taomake.teabuddy.R.id.update_process_rel);
+ LinearLayout left_title_line = (LinearLayout) findViewById(com.taomake.teabuddy.R.id.left_title_line);
+    left_title_line.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+
+
+        if(mDeviceActivityTea!=null){
+
+
+          mDeviceActivityTea.finish();
+        }
+
+
+
+        finish();
+      }
+    });
+
+
+    String version=getIntent().getStringExtra("upversion");
+
+    if(!TextUtils.isEmpty(version)) {
+      tea_os_version.setText("Cha OS " +version);
+    }else{
+      tea_os_version.setText("Cha OS 1.0");
+
+    }
+
 
     // Icon padding
 //    ImageView view = (ImageView) findViewById(android.R.id.home);
@@ -253,8 +297,21 @@ public class FwUpdateActivityTea extends Activity {
     Log.d(TAG, "onBackPressed");
     if (mProgramming) {
       Toast.makeText(this, R.string.prog_ogoing, Toast.LENGTH_LONG).show();
-    } else
+    } else {
       super.onBackPressed();
+
+
+      if(mDeviceActivityTea!=null){
+
+
+        mDeviceActivityTea.finish();
+      }
+
+
+
+      finish();
+
+    }
   }
   
   @Override
@@ -630,19 +687,26 @@ firstStart=false;
 //
 //                AlertDialog d = b.create();
 //                d.show();
-                Toast.makeText(FwUpdateActivityTea.this, "主人升级完成", Toast.LENGTH_SHORT);
-
+                update_process_sucess_text.setVisibility(View.VISIBLE);
+                update_process_rel.setVisibility(View.GONE);
+                update_process_success_rel.setVisibility(View.VISIBLE);
                 MainApp mainApp=(MainApp)getApplicationContext();
                 mainApp.boolupdateSuccess=2;
-                if(mDeviceActivityTea!=null){
 
+//                Toast.makeText(FwUpdateActivityTea.this, "主人升级完成", Toast.LENGTH_SHORT);
 
-                  mDeviceActivityTea.finish();
-                }
-
-
-
-                finish();
+//                MainApp mainApp=(MainApp)getApplicationContext();
+//                mainApp.boolupdateSuccess=2;
+//
+//                if(mDeviceActivityTea!=null){
+//
+//
+//                  mDeviceActivityTea.finish();
+//                }
+//
+//
+//
+//                finish();
 
               }
             });
@@ -652,6 +716,8 @@ firstStart=false;
       	 msg = "GATT writeCharacteristic failed\n";
       }
       if (!success) {
+                        Toast.makeText(FwUpdateActivityTea.this, "升级失败", Toast.LENGTH_SHORT);
+
 //      	mLog.append(msg);
       }
     } else {

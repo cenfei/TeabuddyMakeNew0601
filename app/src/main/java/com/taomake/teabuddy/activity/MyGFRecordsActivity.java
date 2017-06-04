@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.PowerManager;
 import android.util.Log;
 import android.view.View;
@@ -44,7 +45,6 @@ import com.taomake.teabuddy.util.MyStringUtils;
 import com.taomake.teabuddy.util.Util;
 import com.taomake.teabuddy.wxapi.WechatShareManager;
 import com.tencent.connect.share.QQShare;
-import com.tencent.open.utils.ThreadManager;
 import com.tencent.tauth.IUiListener;
 import com.tencent.tauth.Tencent;
 import com.tencent.tauth.UiError;
@@ -423,7 +423,9 @@ public class MyGFRecordsActivity extends BaseActivity implements IWeiboHandler.R
 
                     @Override
                     public void handleCallBackApply() {
-                     String   blindDeviceId = configPref.userDeviceMac().get();
+                        if(!MyStringUtils.isopenBluetooth(MyGFRecordsActivity.this)) return;
+
+                        String   blindDeviceId = configPref.userDeviceMac().get();
                         blindDeviceId = MyStringUtils.macStringToUpper(blindDeviceId);
                         Log.e("blindDeviceId:", blindDeviceId);
 //                        mWakeLock.acquire();
@@ -480,7 +482,7 @@ public class MyGFRecordsActivity extends BaseActivity implements IWeiboHandler.R
             return;
         }
 
-        ThreadManager.getMainHandler().post(new Runnable() {
+        new Handler(getMainLooper()).post(new Runnable() {
 
             @Override
             public void run() {

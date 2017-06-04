@@ -9,109 +9,135 @@
 
 
     >
+
     <include layout="@layout/sensorheader" />
-<LinearLayout
-    android:id="@+id/title_line_id"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-   android:layout_centerInParent="true"
-    android:gravity="center"
-    android:orientation="vertical"
-    >
 
-    <TextView
-
-        android:id="@+id/update_process_sucess_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="更新成功"
-android:visibility="gone"
- android:layout_marginBottom="28dp"
-        android:gravity="center_horizontal"
-        android:textAlignment="center"
-        android:textColor="#88ffffff"
-        android:textSize="15sp" />
-
-    <ImageView
-        android:id="@+id/update_bigimg_id"
-        android:layout_width="65dp"
-        android:layout_height="102dp"
-        android:layout_gravity="center_horizontal"
-        android:src="@drawable/sensordv_update_big"
-        />
-
-
-    <TextView
-
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Cha OS 2.1"
-        android:layout_marginTop="13dp"
-        android:gravity="center_horizontal"
-        android:layout_alignParentTop="true"
-        android:textAlignment="center"
-        android:textColor="#88ffffff"
-        android:textSize="15sp" />
-
-    <RelativeLayout
-        android:id="@+id/update_process_rel"
+    <LinearLayout
+        android:id="@+id/title_line_id"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="47dp"
-android:layout_gravity="center_horizontal"
-        android:layout_marginLeft="70dp"
-        android:layout_marginRight="70dp"
-        >
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+
+            android:id="@+id/update_process_sucess_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="28dp"
+            android:gravity="center_horizontal"
+            android:text="更新成功"
+            android:textAlignment="center"
+            android:textColor="#88ffffff"
+            android:textSize="15sp"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/update_bigimg_id"
+            android:layout_width="65dp"
+            android:layout_height="102dp"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/sensordv_update_big" />
 
 
+        <TextView
 
+            android:id="@+id/tea_os_version"
 
-        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="13dp"
+            android:gravity="center_horizontal"
+            android:textAlignment="center"
+            android:textColor="#88ffffff"
+            android:textSize="15sp" />
 
-            style="@android:style/Widget.Holo.Light.SeekBar"
-
+        <RelativeLayout
+            android:id="@+id/update_process_rel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/progressBar"
-           android:layout_centerHorizontal="true"
-            android:layout_alignParentTop="true"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="70dp"
+            android:layout_marginRight="70dp"
+            android:layout_marginTop="47dp">
 
-            />
+
+            <ProgressBar
+
+                android:id="@+id/progressBar"
+
+                style="@android:style/Widget.Holo.Light.SeekBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+
+                />
 
 
-        <TextView
-            android:id="@+id/progressBarInfo"
+            <TextView
+                android:id="@+id/progressBarInfo"
 
-            android:layout_below="@+id/progressBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
 
-            android:layout_alignParentRight="true"
-            android:layout_marginTop="6dp"
-            android:textColor="#88ffffff"
-            android:textSize="15sp" />
-    </RelativeLayout>
+                android:layout_below="@+id/progressBar"
+                android:layout_marginTop="6dp"
+                android:textColor="#88ffffff"
+                android:textSize="15sp" />
 
-    <RelativeLayout
-        android:id="@+id/update_process_success_rel"
-        android:layout_width="match_parent"
-        android:visibility="gone"
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/progressBarInfo"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="37dp"
+                android:gravity="center"
+                android:orientation="vertical">
 
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginLeft="70dp"
-        android:layout_marginRight="70dp"
-        >
+                <TextView
 
-        <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="注意"
+                    android:textColor="#ffffff"
+                    android:textSize="20sp" />
 
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="您的固件是最新版本"
-            android:layout_centerInParent="true"
-            android:layout_marginTop="6dp"
-            android:textColor="#88ffffff"
-            android:textSize="15sp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:gravity="center"
+                    android:text="请确保手机屏幕停留在本页面,\n并保持手机和茶杯在3米以内\n否则可能导致升级失败"
+                    android:textColor="#aaffffff"
+                    android:textSize="13sp" />
+            </LinearLayout>
         </RelativeLayout>
-</LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/update_process_success_rel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="70dp"
+            android:layout_marginRight="70dp"
+            android:visibility="gone">
+
+            <TextView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="6dp"
+                android:text="您的固件是最新版本"
+                android:textColor="#88ffffff"
+                android:textSize="15sp" />
+        </RelativeLayout>
+    </LinearLayout>
 </RelativeLayout>

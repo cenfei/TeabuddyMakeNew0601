@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 
 import com.taomake.teabuddy.R;
 import com.taomake.teabuddy.adapter.FragmentAdapter;
+import com.taomake.teabuddy.base.MainApp;
 import com.taomake.teabuddy.component.MyViewpager;
 
 import org.androidannotations.annotations.EFragment;
@@ -125,17 +126,17 @@ public class DesignTabFragment extends Fragment{
 
         @Override
         public void onPageSelected(int position) {
-            if(!HotFragment.canChangePager){
-                mPager.setIsCanScroll(false);
-                ll_container.setVisibility(View.GONE);
-            }else{
-                mPager.setIsCanScroll(true);
-
-                ll_container.setVisibility(View.VISIBLE);
-
-
-
-            }
+//            if(mPager.getCurrentItem()==0&&!HotFragment.canChangePager){
+//                mPager.setIsCanScroll(false);
+//                ll_container.setVisibility(View.GONE);
+//            }else{
+//                mPager.setIsCanScroll(true);
+//
+//                ll_container.setVisibility(View.VISIBLE);
+//
+//
+//
+//            }
 
 
 
@@ -145,19 +146,22 @@ public class DesignTabFragment extends Fragment{
 
         @Override
         public void onPageScrolled(int arg0, float arg1, int arg2) {
-            if(!HotFragment.canChangePager){
-                mPager.setIsCanScroll(false);
-                ll_container.setVisibility(View.GONE);
-            }else {
-                mPager.setIsCanScroll(true);
-
-                ll_container.setVisibility(View.VISIBLE);
-            }
+//            if(mPager.getCurrentItem()==0&&!HotFragment.canChangePager){
+//                mPager.setIsCanScroll(false);
+//                ll_container.setVisibility(View.GONE);
+//            }else {
+//                mPager.setIsCanScroll(true);
+//
+//                ll_container.setVisibility(View.VISIBLE);
+//            }
         }
 
         @Override
         public void onPageScrollStateChanged(int arg0) {
-                if(!HotFragment.canChangePager){
+
+            MainApp mainApp=(MainApp)getActivity().getApplicationContext();
+            mainApp.boolchoosePaocha=mPager.getCurrentItem()==0?true:false;
+                if(mPager.getCurrentItem()==0&&!HotFragment.canChangePager){
                     mPager.setIsCanScroll(false);
                     ll_container.setVisibility(View.GONE);
                 }else {

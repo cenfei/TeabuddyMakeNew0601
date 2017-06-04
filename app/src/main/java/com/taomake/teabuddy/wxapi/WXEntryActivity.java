@@ -33,7 +33,6 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.taomake.teabuddy.R;
-import com.taomake.teabuddy.activity.LoginByphoneActivity_;
 import com.taomake.teabuddy.activity.MainActivity_;
 import com.taomake.teabuddy.activity.SecondQrCode;
 import com.taomake.teabuddy.base.MainApp;
@@ -44,6 +43,7 @@ import com.taomake.teabuddy.object.BindDeviceCodeJson;
 import com.taomake.teabuddy.util.Constant;
 import com.taomake.teabuddy.util.ImageLoaderUtil;
 import com.taomake.teabuddy.util.Util;
+import com.tencent.mm.opensdk.constants.ConstantsAPI;
 import com.tencent.mm.opensdk.modelbase.BaseReq;
 import com.tencent.mm.opensdk.modelbase.BaseResp;
 import com.tencent.mm.opensdk.modelmsg.SendAuth;
@@ -101,6 +101,12 @@ public class WXEntryActivity extends AppCompatActivity implements IWXAPIEventHan
 		int errorCode = resp.errCode;
 		switch (errorCode) {
 			case BaseResp.ErrCode.ERR_OK:
+
+				switch (resp.getType()) {
+					case ConstantsAPI.COMMAND_SENDAUTH:
+						//登录回调,处理登录成功的逻辑
+
+
 				//用户同意
 				final String code = ((SendAuth.Resp) resp).code;
 				Log.d("wx code:", code);
@@ -161,6 +167,15 @@ public class WXEntryActivity extends AppCompatActivity implements IWXAPIEventHan
 						handler.sendMessage(msg);
 					}
 				}).start();
+						break;
+					case ConstantsAPI.COMMAND_SENDMESSAGE_TO_WX:
+						//分享回调,处理分享成功后的逻辑
+
+						finish();
+						break;
+					default:
+						break;
+				}
 
 				break;
 			case BaseResp.ErrCode.ERR_AUTH_DENIED:
@@ -178,89 +193,46 @@ public class WXEntryActivity extends AppCompatActivity implements IWXAPIEventHan
 //		ToastUtil.showMessageLong(this, resp.errStr);
 	}
 	String unionid=null;
-
+	String nickname;
+	String headimgurl;
+	String city;
+	String province;
 	Handler handler = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
 			super.handleMessage(msg);
 			Bundle data = msg.getData();
 			String val = data.getString("unionid");
-			final	String nickname = data.getString("nickname");
+			 nickname = data.getString("nickname");
 
-			String headimgurl = data.getString("headimgurl");
-			final	String city = data.getString("city");
-			final String province = data.getString("province");
+			 headimgurl = data.getString("headimgurl");
+			 city = data.getString("city");
+			 province = data.getString("province");
 
 
 			unionid=val;
 			Log.i("unionid", "请求结果为-->" + val);
 
-			//需要查询当前的账号是否已经绑定设备或者手机号----联网判断
-			imageLoader.loadImage(headimgurl, new ImageLoadingListener() {
-				@Override
-				public void onLoadingStarted(String imageUri, View view) {
+			getMessageBindDeviceForMsg(unionid);//1.先查询是否有绑定设备 2如果有则不需要新建用户 2.1没有则新建
 
-				}
 
-				@Override
-				public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-
-				}
-
-				@Override
-				public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-					byte[]	avarByte = Util.getBitmapByte(loadedImage);
-
-					sendUserForMsg(nickname, avarByte,city,province);
-				}
-
-				@Override
-				public void onLoadingCancelled(String imageUri, View view) {
-
-				}
-			});
 
 			// TODO
 			// UI界面的更新等相关操作
 
 
-//			startActivityForResult(intent, SCANNIN_GREQUEST_CODE);
 
 		}
 	};
 
 
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
-		switch (requestCode) {
-			case SCANNIN_GREQUEST_CODE:
-				if(resultCode == RESULT_OK){
-					Bundle bundle = data.getExtras();
-					String ticket=bundle.getString("result");
-					Log.e("Recv QRcode result",ticket);
 
-					//跳到手机号页面
-					Intent intent = new Intent(WXEntryActivity.this, LoginByphoneActivity_.class);
-
-					intent.putExtra("ticket",ticket);
-					intent.putExtra("unionid",unionid);
-
-					context.startActivity(intent);
-
-					finish();
-//					mTextView.setText(bundle.getString("result"));
-//					mImageView.setImageBitmap((Bitmap) data.getParcelableExtra("bitmap"));
-				}
-				break;
-		}
-	}
 
 	FoxProgressbarInterface foxProgressbarInterface;
 
 	public void getMessageBindDeviceForMsg(String unionid) {
-//        foxProgressbarInterface = new FoxProgressbarInterface();
-//        foxProgressbarInterface.startProgressBar(this, "加载中...");
+        foxProgressbarInterface = new FoxProgressbarInterface();
+        foxProgressbarInterface.startProgressBar(this, "加载中...");
 		ProtocolUtil.getBindDeviceMsg(this, new GetBindDeviceHandler(), unionid);
 
 
@@ -276,7 +248,6 @@ public class WXEntryActivity extends AppCompatActivity implements IWXAPIEventHan
 
 
 	public void getBindDeviceHandler(String resp) {
-		foxProgressbarInterface.stopProgressBar();
 		if (resp != null && !resp.equals("")) {
 
 			//解析返回json 数据
@@ -294,10 +265,13 @@ public class WXEntryActivity extends AppCompatActivity implements IWXAPIEventHan
 
 					if (baseJson.obj == null || (baseJson.obj.mac == null || baseJson.obj.mac.equals(""))) {
 
+//需要查询当前的账号是否已经绑定设备或者手机号----联网判断
 
-						checkCameraPersimion();
+
+						newUser();
 
 					} else {
+						foxProgressbarInterface.stopProgressBar();
 
 
 						Intent intent = new Intent();
@@ -315,11 +289,39 @@ public class WXEntryActivity extends AppCompatActivity implements IWXAPIEventHan
 
 				}
 			}else{
-				checkCameraPersimion();
+
+				newUser();
 			}
 
 		}
 	}
+
+	public void  newUser(){
+		imageLoader.loadImage(headimgurl, new ImageLoadingListener() {
+			@Override
+			public void onLoadingStarted(String imageUri, View view) {
+
+			}
+
+			@Override
+			public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+
+			}
+
+			@Override
+			public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+				byte[] avarByte = Util.getBitmapByte(loadedImage);
+
+				sendUserForMsg(nickname, avarByte, city, province);
+			}
+
+			@Override
+			public void onLoadingCancelled(String imageUri, View view) {
+
+			}
+		});
+	}
+
 
 	public void  toSencodQrcode(){
 		Intent intent = new Intent();
@@ -529,13 +531,7 @@ public class WXEntryActivity extends AppCompatActivity implements IWXAPIEventHan
 
 
 	public void sendUserForMsg(String nickname,byte[] headurl,String city,String province) {
-		foxProgressbarInterface = new FoxProgressbarInterface();
-		foxProgressbarInterface.startProgressBar(this, "加载中...");
 
-
-//		SharedPreferences sp = getSharedPreferences("dataUNIION", MODE_PRIVATE);
-//		String nickname = sp.getString("nickname", null);
-//		String headurl = sp.getString("headimgurl", null);
 
 		if (TextUtils.isEmpty(nickname) || (headurl==null||headurl.length==0)) {
 
@@ -554,9 +550,9 @@ public class WXEntryActivity extends AppCompatActivity implements IWXAPIEventHan
 		public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
 			foxProgressbarInterface.stopProgressBar();
 			String bodyResp = new String(responseBody);
-			Util.Toast(WXEntryActivity.this, "上传成功");
 			Log.i("bodyResp", bodyResp);
-			getMessageBindDeviceForMsg(unionid);
+
+			checkCameraPersimion();
 		}
 
 		@Override
@@ -573,60 +569,8 @@ public class WXEntryActivity extends AppCompatActivity implements IWXAPIEventHan
 
 			finish();
 		}
-//        @Override
-//        protected void handleResp(String resp) {
-//            updateBcNineRecordsHandler(resp);
-//        }
+
 	}
-
-
-
-
-//	private String getAccessToken(String code) {
-//		String url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid="+APPID+"&secret="+SECRET+"&code="+code+"&grant_type=authorization_code";
-//		URI uri = URI.create(url);
-//		HttpClient client = new DefaultHttpClient();
-//		HttpGet get = new HttpGet(uri);
-//
-//		HttpResponse response;
-//		try {
-//			response = client.execute(get);
-//			if (response.getStatusLine().getStatusCode() == 200) {
-//				HttpEntity entity = response.getEntity();
-//
-//				BufferedReader reader = new BufferedReader(new InputStreamReader(entity.getContent(), "UTF-8"));
-//				StringBuilder sb = new StringBuilder();
-//
-//				for (String temp = reader.readLine(); temp != null; temp = reader.readLine()) {
-//					sb.append(temp);
-//				}
-//
-//				JSONObject object = new JSONObject(sb.toString().trim());
-//			String	accessToken = object.getString("access_token");
-//				String	openID = object.getString("openid");
-//				String	refreshToken = object.getString("refresh_token");
-//				Long	expires_in = object.getLong("expires_in");
-//				String	unionid = object.getString("unionid");
-//
-//
-//				return unionid;
-//			}
-//		} catch (ClientProtocolException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} catch (IllegalStateException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} catch (JSONException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//
-//		return null;
-//	}
 
 
 }

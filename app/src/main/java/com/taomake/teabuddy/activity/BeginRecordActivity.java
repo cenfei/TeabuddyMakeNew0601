@@ -1,9 +1,11 @@
 package com.taomake.teabuddy.activity;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -12,6 +14,9 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.View;
@@ -239,6 +244,10 @@ String unionid=null;
         pullToRefreshListView = (PullToRefreshListView) findViewById(R.id.listview_design);
 
         initdata();
+
+
+
+        permissionBle();
     }
 
 
@@ -258,6 +267,32 @@ String unionid=null;
 //        if (BgTransitionUtil.bgDrawable != null) {
 //            mainPage.setBackgroundDrawable(BgTransitionUtil.bgDrawable);
 //        }
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[]
+            grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+//        postStart();
+
+    }
+
+    int RECORD_AUDIO_ID=3004;
+    public void  permissionBle(){
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+//请求权限
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO},
+                    RECORD_AUDIO_ID);
+//判断是否需要 向用户解释，为什么要申请该权限
+//            if(ActivityCompat.shouldShowRequestPermissionRationale(this,
+//                    Manifest.permission.READ_CONTACTS)) {
+//                Toast.makeText(this, "shouldShowRequestPermissionRationale", Toast.LENGTH_SHORT).show();
+//            }
+        }
+
     }
 
 

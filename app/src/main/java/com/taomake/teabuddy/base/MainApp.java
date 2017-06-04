@@ -11,8 +11,8 @@ import com.sina.weibo.sdk.api.share.WeiboShareSDK;
 import com.taomake.teabuddy.util.ImageLoaderUtil;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
-import com.tencent.smtt.sdk.QbSdk;
 import com.tencent.tauth.Tencent;
+import com.umeng.analytics.MobclickAgent;
 import com.uuzuche.lib_zxing.activity.ZXingLibrary;
 
 import cn.jpush.android.api.JPushInterface;
@@ -33,6 +33,7 @@ public static WebView webView;
 
     public String registrationId;
 
+    public  boolean openBluetooth=true;
 
     public  Tencent mTencent;
 
@@ -40,6 +41,7 @@ public static WebView webView;
 
     public static final String sinamAppid = "4db46388e95774dd60e37e5baeace63e";
 
+    public  boolean boolchoosePaocha=true;
 
     public static int boolupdateSuccess=0;
     @Override
@@ -63,8 +65,8 @@ api.registerApp(WX_APP_ID);
        // strictModeBuild();
         initImageLoader(getApplicationContext());
 
-        QbSdk.allowThirdPartyAppDownload(true);
-        QbSdk.initX5Environment(this, QbSdk.WebviewInitType.FIRSTUSE_AND_PRELOAD, null);
+//        QbSdk.allowThirdPartyAppDownload(true);
+//        QbSdk.initX5Environment(this, QbSdk.WebviewInitType.FIRSTUSE_AND_PRELOAD, null);
 
 //        JPushInterface.setDebugMode(true);
         JPushInterface.init(this);
@@ -72,6 +74,8 @@ api.registerApp(WX_APP_ID);
         registrationId = JPushInterface.getRegistrationID(this);
         Log.e("1099", "run:--------->registrationId： " + registrationId );
         ZXingLibrary.initDisplayOpinion(this);
+
+        MobclickAgent.setScenarioType(this, MobclickAgent.EScenarioType.E_UM_NORMAL);
 
 
 

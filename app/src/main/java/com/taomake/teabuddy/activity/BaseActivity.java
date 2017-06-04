@@ -10,6 +10,7 @@ import android.widget.ImageView;
 
 import com.taomake.teabuddy.R;
 import com.taomake.teabuddy.util.MyPreferences;
+import com.umeng.analytics.MobclickAgent;
 
 /**
  * Created by zhang on 2015/8/21.
@@ -38,13 +39,13 @@ public abstract class BaseActivity extends Activity {
         super.onResume();
         setActivityBg();
 //        MobclickAgent.onPageStart(activityName); //统计页面(仅有Activity的应用中SDK自动调用，不需要单独写)
-//        MobclickAgent.onResume(this);          //统计时长
+        MobclickAgent.onResume(this);          //统计时长
     }
 
     protected void onPause() {
         super.onPause();
 //        MobclickAgent.onPageEnd(activityName); // （仅有Activity的应用中SDK自动调用，不需要单独写）保证 onPageEnd 在onPause 之前调用,因为 onPause 中会保存信息
-//        MobclickAgent.onPause(this);
+        MobclickAgent.onPause(this);
     }
 
 

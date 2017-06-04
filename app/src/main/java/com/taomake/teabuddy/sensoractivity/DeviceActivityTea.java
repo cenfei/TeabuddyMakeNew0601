@@ -80,12 +80,14 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ti.ble.btsig.profiles.DeviceInformationServiceProfile;
@@ -114,6 +116,7 @@ import com.example.ti.ble.ti.profiles.TIOADProfile;
 import com.example.ti.util.CustomToast;
 import com.example.ti.util.PreferenceWR;
 import com.google.gson.Gson;
+import com.taomake.teabuddy.R;
 import com.taomake.teabuddy.object.DeviceVersionObj;
 import com.taomake.teabuddy.util.Constant;
 
@@ -506,7 +509,7 @@ import quinticble.QuinticBleAPISdkBase;
     public static DeviceActivityTea getInstance() {
         return (DeviceActivityTea) mThis;
     }
-
+String upversion;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
@@ -516,7 +519,21 @@ import quinticble.QuinticBleAPISdkBase;
 
 
 
+        TextView tea_os_version = (TextView) findViewById(R.id.tea_os_version);
+        TextView text_db_size = (TextView) findViewById(R.id.text_db_size);
 
+
+         upversion=getIntent().getStringExtra("upversion");
+      String  sysdownloadsize=getIntent().getStringExtra("sysdownloadsize");
+
+        if(!TextUtils.isEmpty(upversion)) {
+            tea_os_version.setText("Cha OS " +upversion);
+            text_db_size.setText(sysdownloadsize);
+        }else{
+            tea_os_version.setText("Cha OS 1.0");
+            text_db_size.setText("0kb");
+
+        }
 
         getLeservice();
         // BLE
@@ -1141,6 +1158,7 @@ import quinticble.QuinticBleAPISdkBase;
             }
             else {
                 final Intent i = new Intent(this.con,FwUpdateActivityTea.class);
+                i.putExtra("upversion",upversion);
                 startActivityForResult(i, FWUPDATE_ACT_REQ);
             }
             return null;

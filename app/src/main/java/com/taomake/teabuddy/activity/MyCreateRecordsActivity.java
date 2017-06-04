@@ -2,6 +2,7 @@ package com.taomake.teabuddy.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -33,7 +34,6 @@ import com.taomake.teabuddy.util.MyStringUtils;
 import com.taomake.teabuddy.util.Util;
 import com.taomake.teabuddy.wxapi.WechatShareManager;
 import com.tencent.connect.share.QQShare;
-import com.tencent.open.utils.ThreadManager;
 import com.tencent.tauth.IUiListener;
 import com.tencent.tauth.Tencent;
 import com.tencent.tauth.UiError;
@@ -394,8 +394,10 @@ public class MyCreateRecordsActivity extends BaseActivity {
 
                     @Override
                     public void handleCallBackApply() {
+                        if(!MyStringUtils.isopenBluetooth(MyCreateRecordsActivity.this)) return;
 
-if(!perssion_func()){
+
+                        if(!perssion_func()){
     return;
 }
                         String   blindDeviceId = configPref.userDeviceMac().get();
@@ -482,7 +484,7 @@ if(!perssion_func()){
             return;
         }
 
-        ThreadManager.getMainHandler().post(new Runnable() {
+        new Handler(getMainLooper()).post(new Runnable() {
 
             @Override
             public void run() {

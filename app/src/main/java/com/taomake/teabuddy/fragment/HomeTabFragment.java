@@ -34,7 +34,6 @@ import org.androidannotations.annotations.sharedpreferences.Pref;
 
 import quinticble.QuinticBleAPISdkBase;
 import quinticble.QuinticCallbackTea;
-import quinticble.QuinticCommon;
 import quinticble.QuinticDeviceFactoryTea;
 import quinticble.QuinticDeviceTea;
 import quinticble.QuinticException;
@@ -175,6 +174,8 @@ public class HomeTabFragment extends Fragment{
     FoxProgressbarInterface foxProgressbarInterface;
 
     public void connectFindDevice() {
+        if(!MyStringUtils.isopenBluetooth(getActivity())) return;
+
         blindDeviceId = configPref.userDeviceMac().get();
         if(TextUtils.isEmpty(blindDeviceId)){
 
@@ -187,9 +188,9 @@ public class HomeTabFragment extends Fragment{
 
 
 
-//        foxProgressbarInterface = new FoxProgressbarInterface();
-//
-//        foxProgressbarInterface.startProgressBar(getActivity(), "主人茶密连接中...");
+        foxProgressbarInterface = new FoxProgressbarInterface();
+
+        foxProgressbarInterface.startProgressBar(getActivity(), "初始化录音数据...");
 
         if (MyStringUtils.isNotNullAndEmpty(QuinticBleAPISdkBase.resultDevice)) {
             resultDeviceAll = QuinticBleAPISdkBase.resultDevice;
@@ -252,6 +253,8 @@ closeProgress();
 
 boolean boolInitVoice=true;
     public void getCzidBle() {
+        if(!MyStringUtils.isopenBluetooth(getActivity())) return;
+
         if (resultDeviceAll == null) return;
         String code = "EA0C";
 
@@ -303,6 +306,8 @@ boolean boolInitVoice=true;
 
 
     public void setVoicePlay() {
+        if(!MyStringUtils.isopenBluetooth(getActivity())) return;
+
         if (resultDeviceAll == null) return;
 
         foxProgressbarInterface = new FoxProgressbarInterface();

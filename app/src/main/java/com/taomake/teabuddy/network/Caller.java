@@ -383,7 +383,8 @@ public class Caller {
 
             List<Map<String, String>> mapList = null;
 
-
+            String type=(String )params.get("type");
+            String step=(String )params.get("step");
 
             for (Map.Entry<String, Object> entry : params.entrySet()) {
                 String key = entry.getKey().toString();
@@ -397,9 +398,16 @@ public class Caller {
                     }
 
                 }
+                if(!TextUtils.isEmpty(type)&&!TextUtils.isEmpty(step)&&type.equals("czgl")&&step.equals("save")) {//需要post
 
+                    if(!(key.equals("obj")||key.equals("obj2"))){
 
+                        sb.append(key + "=" + value + "&");
+                    }
+                }
+                else {
                     sb.append(key + "=" + value + "&");
+                }
 //                    NameValuePair pair = new BasicNameValuePair(key, value);
 //                    list.add(pair);
 
@@ -413,19 +421,52 @@ public class Caller {
             // Thread.sleep(5000);
             URL url = new URL(urlStr);
             urlConnection = (HttpURLConnection) url.openConnection();
-            urlConnection.setConnectTimeout(20000);
-            urlConnection.setReadTimeout(20000);
+            urlConnection.setConnectTimeout(15000);
+            urlConnection.setReadTimeout(15000);
+            if(!TextUtils.isEmpty(type)&&!TextUtils.isEmpty(step)&&type.equals("czgl")&&step.equals("save")) {//需要post
+
+                urlConnection.setRequestMethod("POST");
+                urlConnection.setDoOutput(true);
+                urlConnection.setDoInput(true);
+                urlConnection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+
+
+            }else{
+                urlConnection.setDoOutput(false);
 
                 urlConnection.setRequestMethod("GET");
-            urlConnection.setRequestProperty("Content-Type",
-                    "text/plain; charset=utf-8"); // "application/json"
+                urlConnection.setRequestProperty("Content-Type",
+                        "text/plain; charset=utf-8"); // "application/json"
+            }
 
 
-                urlConnection.setDoOutput(false);
+
             urlConnection.setUseCaches(false);
 
 
             urlConnection.connect();
+
+
+
+            if(!TextUtils.isEmpty(type)&&!TextUtils.isEmpty(step)&&type.equals("czgl")&&step.equals("save")){//需要post
+                DataOutputStream out = new DataOutputStream(urlConnection
+                        .getOutputStream());
+                // The URL-encoded contend
+                // 正文，正文内容其实跟get的URL中 '? '后的参数字符串一致
+                String content = "obj=" + params.get("obj");
+                content +="&obj2="+params.get("obj2");
+                Log.d("输入post参数", content);
+
+                // DataOutputStream.writeBytes将字符串中的16位的unicode字符以8位的字符形式写到流里面
+                out.writeBytes(content);
+                out.flush();
+                out.close();
+            }
+
+
+
+
+
             int code = urlConnection.getResponseCode();
             Log.d("STATUS code", String.format("%d", code));
             // String string = urlConnection.getResponseMessage();

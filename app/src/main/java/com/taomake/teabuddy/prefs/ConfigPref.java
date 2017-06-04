@@ -114,7 +114,7 @@ public interface ConfigPref {
     @DefaultString("18:00")
     public String sedentaryEndTime();
 
-    @DefaultInt(30)
+    @DefaultInt(0)
     public int sedentaryInterval();
 
     @DefaultString("")

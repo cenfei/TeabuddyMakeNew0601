@@ -217,6 +217,7 @@ public class ChooseTeaActivity extends BaseActivity {
             if (a.equals(initValue)) {
                 break;
             } else {
+                if(temp!=PLANETS.length)
                 temp++;
             }
         }
@@ -226,7 +227,7 @@ public class ChooseTeaActivity extends BaseActivity {
         arrayWheel.setCurrentItem(temp);
         arrayWheel.addChangingListener(wheellistener);
         arrayWheel.addScrollingListener(onWheelScrollListener);
-        setTextviewSize(PLANETS[temp], monthAdapter);
+        setTextviewSize(PLANETS[temp-1], monthAdapter);
 
     }
 
@@ -373,7 +374,7 @@ public class ChooseTeaActivity extends BaseActivity {
                 List<TeaDetailTimeObj> teaDetailTimeObjs = teaDetailJsonGloabl.obj2;
 
                 //指令
-                if (teaDetailTimeObjs.size() > 1 && teaDetailTimeObjs.size() < 10) {
+                if (!(teaDetailTimeObjs.size() > 1 && teaDetailTimeObjs.size() < 11)) {
                     //蓝牙设置失败，不符合
                     Util.Toast(ChooseTeaActivity.this, "主人当前泡茶数为" + teaDetailTimeObjs.size() + "不符合1到10泡的范围，请前往编辑");
                     return;

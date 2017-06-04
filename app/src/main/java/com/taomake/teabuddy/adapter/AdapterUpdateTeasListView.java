@@ -54,6 +54,11 @@ private UpdateGridViewCallBack updateGridViewCallBack;
     }
 
 
+    int clickpostion=0;
+    public void setClickpostion(int clickpostion1){
+        this.clickpostion=clickpostion1;
+    }
+
     @Override
     public int getCount() {
         return this.mPersonal != null ? this.mPersonal.size() : 0;
@@ -116,6 +121,14 @@ private UpdateGridViewCallBack updateGridViewCallBack;
         } else {
             viewholder = (ViewHolder) convertView.getTag();
         }
+
+        if(position==clickpostion){
+            convertView.setBackgroundColor(context.getResources().getColor(R.color.white_alpha60));
+        }else{
+            convertView.setBackgroundColor(context.getResources().getColor(R.color.white_alpha000));
+
+        }
+
         viewholder.num_pc_id.setText("第"+(position+1)+"泡");
         Integer  minute=Integer.valueOf(personalRanking.p_second)/60;
         Integer  second=Integer.valueOf(personalRanking.p_second)%60;

@@ -293,6 +293,16 @@ public class BleConnection {
                     writeDataQueue.poll();
                     doWrite();
                     bleStateChangeCallback.onWrite(characteristic.getValue());
+
+
+                    String trimResult = writedata.replace(" ", "");
+if(trimResult.equals("eb0501")){
+    bleStateChangeCallback.onNotify(characteristic.getValue());
+
+
+}
+
+
                 } else {
                     errorWhenConnecting(new BleException(BleException.DEVICE_UNREACHABLE, "写入时发生错误"));
                 }

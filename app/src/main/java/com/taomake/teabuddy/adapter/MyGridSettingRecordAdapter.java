@@ -93,16 +93,16 @@ public class MyGridSettingRecordAdapter extends BaseAdapter {
 			db_img_select_id.setVisibility(View.VISIBLE);
 			db_img_select_id.setImageDrawable(mContext.getResources().getDrawable(R.drawable.rc_voice_s));
 			if(clicksum>1) {
-				if(lastSelectImageview!=null){
-					lastSelectImageview.clearAnimation();
-				}
-
-				if (operatingAnim != null) {
-					iv.startAnimation(operatingAnim);
-				}
-				lastSelectImageview = iv;
-
-				writehandler.post(runnable);
+//				if(lastSelectImageview!=null){
+//					lastSelectImageview.clearAnimation();
+//				}
+//
+//				if (operatingAnim != null) {
+//					iv.startAnimation(operatingAnim);
+//				}
+//				lastSelectImageview = iv;
+//
+//				writehandler.post(runnable);
 			}
 
 		} else {

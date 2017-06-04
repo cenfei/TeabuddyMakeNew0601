@@ -1,13 +1,17 @@
 package com.taomake.teabuddy.util;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -34,6 +38,36 @@ import java.util.List;
  */
 @SuppressLint("SimpleDateFormat")
 public class MyStringUtils {
+
+
+
+public static boolean isopenBluetooth(Activity context){
+    BluetoothAdapter mBluetoothAdapter = BluetoothAdapter
+            .getDefaultAdapter();
+    if (mBluetoothAdapter == null) {
+        Toast.makeText(context, "本机没有找到蓝牙硬件或驱动！", Toast.LENGTH_SHORT).show();
+//        finish();
+        return false;
+    }
+    // 如果本地蓝牙没有开启，则开启
+    if (!mBluetoothAdapter.isEnabled()) {
+        // 我们通过startActivityForResult()方法发起的Intent将会在onActivityResult()回调方法中获取用户的选择，比如用户单击了Yes开启，
+        // 那么将会收到RESULT_OK的结果，
+        // 如果RESULT_CANCELED则代表用户不愿意开启蓝牙
+        Intent mIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+        context.startActivityForResult(mIntent, 1);
+        // 用enable()方法来开启，无需询问用户(实惠无声息的开启蓝牙设备),这时就需要用到android.permission.BLUETOOTH_ADMIN权限。
+        // mBluetoothAdapter.enable();
+        // mBluetoothAdapter.disable();//关闭蓝牙
+        return false;
+    }
+    return  true;
+}
+
+
+
+
+
     public static boolean isQQClientAvailable(Context context) {
         final PackageManager packageManager = context.getPackageManager();
         List<PackageInfo> pinfo = packageManager.getInstalledPackages(0);
@@ -80,7 +114,37 @@ if(mac.contains(":")) return mac;
 return  sb.toString();
     }
 
+    /**
+     * 将字符串转成unicode
+     * @param str 待转字符串
+     * @return unicode字符串
+     */
+    public static String convertToUnicode(String str)
+    {
+        str = (str == null ? "" : str);
+        String tmp;
+        StringBuffer sb = new StringBuffer(1000);
+        char c;
+        int i, j;
+        sb.setLength(0);
+        for (i = 0; i < str.length(); i++)
+        {
+            c = str.charAt(i);
+            sb.append("\\u");
+            j = (c >>>8); //取出高8位
+            tmp = Integer.toHexString(j);
+            if (tmp.length() == 1)
+                sb.append("0");
+            sb.append(tmp);
+            j = (c & 0xFF); //取出低8位
+            tmp = Integer.toHexString(j);
+            if (tmp.length() == 1)
+                sb.append("0");
+            sb.append(tmp);
 
+        }
+        return (new String(sb));
+    }
     /**
      * 获得指定文件的byte数组
      */
@@ -104,6 +168,23 @@ return  sb.toString();
             e.printStackTrace();
         }
         return buffer;
+    }/**
+     * 字符串转换unicode
+     */
+    public static String string2Unicode(String string) {
+
+        StringBuffer unicode = new StringBuffer();
+
+        for (int i = 0; i < string.length(); i++) {
+
+            // 取出每一个字符
+            char c = string.charAt(i);
+
+            // 转换为unicode
+            unicode.append("\\u" + Integer.toHexString(c));
+        }
+
+        return unicode.toString();
     }
 
     public static String decodeUnicode(String theString) {

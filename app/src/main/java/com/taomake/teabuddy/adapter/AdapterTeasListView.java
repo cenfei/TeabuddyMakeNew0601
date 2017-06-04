@@ -104,8 +104,8 @@ private UpdateGridViewCallBack updateGridViewCallBack;
 
 if(personalRanking.cz_type.equals("9")){
 
-    viewholder.img_record_id.setVisibility(View.GONE);
-    viewholder.img_play_id.setVisibility(View.GONE);
+    viewholder.img_record_id.setVisibility(View.INVISIBLE);
+//    viewholder.img_play_id.setVisibility(View.GONE);
 
 }else{
     viewholder.img_record_id.setVisibility(View.VISIBLE);

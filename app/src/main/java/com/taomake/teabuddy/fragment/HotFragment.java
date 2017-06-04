@@ -4,6 +4,7 @@ package com.taomake.teabuddy.fragment;
  * Created by foxcen on 16/7/29.
  */
 
+import android.bluetooth.BluetoothAdapter;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -22,6 +23,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.taomake.teabuddy.R;
 import com.taomake.teabuddy.activity.ChooseTeaActivity;
 import com.taomake.teabuddy.activity.ChooseTeaActivity_;
@@ -51,6 +53,7 @@ import org.androidannotations.annotations.ViewById;
 import org.androidannotations.annotations.sharedpreferences.Pref;
 
 import java.util.List;
+import java.util.Map;
 
 import quinticble.QuinticBleAPISdkBase;
 import quinticble.QuinticCallbackTea;
@@ -70,6 +73,21 @@ public class HotFragment extends Fragment {
     LinearLayout tea_name_line;
 
     ImageView update_device_id;
+
+
+    @ViewById(R.id.bluetooth_rel)
+    RelativeLayout bluetooth_rel;
+
+
+    @Click(R.id.test_id)
+    void ontest_id() {//测试
+//        Intent intent = new Intent(getActivity(), ChooseTeaActivity_.class);
+//
+//        intent.putExtra("Tea_Name", tea_name_id.getText().toString());
+//
+//        startActivity(intent);
+
+    }
 
 
     @Click(R.id.pc_tea_choose_line)
@@ -95,7 +113,12 @@ public class HotFragment extends Fragment {
     void ontea_main_set_mg() {
 
         if (needupdate) {
-            Util.startActivity(getActivity(), DeviceUpdateTwoActivity_.class);
+
+            Intent intent = new Intent(getActivity(), DeviceUpdateTwoActivity_.class);
+
+            intent.putExtra("sysdownloadsize", sysdownloadsize);
+
+            startActivity(intent);
 
         } else {
             Util.startActivity(getActivity(), DeviceUpdateActivity_.class);
@@ -183,6 +206,8 @@ public class HotFragment extends Fragment {
         filterHot.addAction(MYACTION_UPDATE);
         getActivity().registerReceiver(receiverHot, filterHot);
 
+        getActivity().registerReceiver(mReceiver, makeFilter());
+
 
 //        updateUiResume();
 
@@ -196,6 +221,7 @@ public class HotFragment extends Fragment {
         super.onDestroyView();
         getActivity().unregisterReceiver(receiver);
         getActivity().unregisterReceiver(receiverHot);
+        getActivity().unregisterReceiver(mReceiver);
     }
 
     @Override
@@ -307,7 +333,10 @@ public class HotFragment extends Fragment {
     TextView connect_status_commnet_id, tea_sum_cub_text_id, tea_tryagainconnect_comment, tea_unconnect_comment;
     ImageView tea_bat_img_id;
 
+    boolean showcontnect = true;
+
     public void connectUi() {
+        showcontnect = true;
         pc_connecting_rel.setVisibility(View.VISIBLE);
         pc_unconnected_rel.setVisibility(View.GONE);
         pc_tryagain_rel.setVisibility(View.GONE);
@@ -318,6 +347,7 @@ public class HotFragment extends Fragment {
     public static boolean canChangePager = true;
 
     public void unconnectUi() {
+        showcontnect = false;
         cicrle_line_id.setVisibility(View.GONE);
         canChangePager = false;
         pc_connecting_rel.setVisibility(View.GONE);
@@ -328,6 +358,8 @@ public class HotFragment extends Fragment {
     }
 
     public void tryconnectUi() {
+        showcontnect = false;
+
         pc_connecting_rel.setVisibility(View.GONE);
         pc_unconnected_rel.setVisibility(View.GONE);
         pc_tryagain_rel.setVisibility(View.VISIBLE);
@@ -542,6 +574,25 @@ public class HotFragment extends Fragment {
         if (resp != null && !resp.equals("")) {
 
             //解析返回json 数据
+            Map<String, Object> orderMap = new Gson().fromJson(resp,
+                    new TypeToken<Map<String, Object>>() {
+                    }.getType());
+            // 将 infomation 转成需要的 order信息
+
+            Double return_code_int = (Double) orderMap.get("rcode");
+            if (return_code_int == 0) {
+                configPref.userDeviceVersion().put(deviceVersion);
+
+                MainApp mainApp = (MainApp) getActivity().getApplicationContext();
+
+                mainApp.boolupdateSuccess = 2;
+                needupdate = false;
+
+                update_device_id.setBackgroundResource(R.drawable.cm_update_device);
+
+
+                return;
+            }
 
 
             DeviceVersionJson baseJson = new Gson().fromJson(resp, DeviceVersionJson.class);
@@ -558,19 +609,22 @@ public class HotFragment extends Fragment {
                     //将固件升级信息保存起来
 
 //                    configPref.
-                    MainApp mainApp=(MainApp)getActivity().getApplicationContext();
+                    MainApp mainApp = (MainApp) getActivity().getApplicationContext();
 
-                    mainApp.boolupdateSuccess=2;
+                    mainApp.boolupdateSuccess = 0;
                     needupdate = true;
+                    sysUpdateVersion = deviceVersionObj.ver;
+                    sysdownloadsize = deviceVersionObj.downloadsize;
                     configPref.deviceUpdateInfo().put(new Gson().toJson(deviceVersionObj));
                     update_device_id.setBackgroundResource(R.drawable.cm_update_device_c);
                     perssion_func(update_device_id, "您的茶密有固件了", "立即更新", "取消");
 
                 } else {
+                    configPref.userDeviceVersion().put(deviceVersion);
 
-                    MainApp mainApp=(MainApp)getActivity().getApplicationContext();
+                    MainApp mainApp = (MainApp) getActivity().getApplicationContext();
 
-                    mainApp.boolupdateSuccess=0;
+                    mainApp.boolupdateSuccess = 2;
                     needupdate = false;
 
                     update_device_id.setBackgroundResource(R.drawable.cm_update_device);
@@ -587,7 +641,8 @@ public class HotFragment extends Fragment {
     }
     //************************服务器接口*********************************
 
-
+    String sysUpdateVersion = "";
+    String sysdownloadsize = "";
     //************************蓝牙操作*********************************
 
     /**
@@ -605,17 +660,22 @@ public class HotFragment extends Fragment {
     }
 
     boolean mustUpdate = false;
-
     public void connectFindDevice() {
+
+        if (!MyStringUtils.isopenBluetooth(getActivity())) return;
+
+
         blindDeviceId = configPref.userDeviceMac().get();
         blindDeviceId = MyStringUtils.macStringToUpper(blindDeviceId);
-//        blindDeviceId="88:4A:EA:83:A5:62";
+
+
+//        blindDeviceId = "88:4A:EA:83:A5:62";
 //        configPref.userDeviceMac().put("884AEA83A562");
         Log.e("blindDeviceId:", blindDeviceId);
 //            getTeaInfoByUnionid();
         foxProgressbarInterface = new FoxProgressbarInterface();
 
-        foxProgressbarInterface.startProgressBar(getActivity(), "主人茶密连接中...");
+        foxProgressbarInterface.startProgressBar(getActivity(), "主人茶密加载中...");
 
         if (MyStringUtils.isNotNullAndEmpty(QuinticBleAPISdkBase.resultDevice)) {
             resultDeviceAll = QuinticBleAPISdkBase.resultDevice;
@@ -919,7 +979,7 @@ public class HotFragment extends Fragment {
                                     teaingIsNull = QuinticCommon.unsignedByteToInt(data[2]);
                                     Log.d("是否空杯", teaingIsNull + "");
 
-                                    connectSuccessUi();
+//                                    connectSuccessUi();
                                     if (deviceVersion == null) {
                                         getDeviceUpdate();
                                     } else {
@@ -982,11 +1042,11 @@ public class HotFragment extends Fragment {
                                     int lVersion = QuinticCommon.unsignedByteToInt(data[4]);
 
                                     Log.d("当前固件版本", hVersion + "," + lVersion);
-                                    double versionD = (hVersion * 100 + lVersion) / 100;
+                                    double versionD = (double) (hVersion * 100 + lVersion) / (double) 100;
                                     Log.d("当前固件版本versionD", versionD + "");
 
                                     deviceVersion = versionD + "";
-
+//                                    deviceVersion="2.45";//fox测试
                                     configPref.userDeviceVersion().put(deviceVersion);
                                     checkDeviceUpdateToServer();
                                     getLogHistory();//同时获取log日志  2.并且向网络判断当前版本更新ui
@@ -1046,7 +1106,7 @@ public class HotFragment extends Fragment {
                                     Log.d("是否空杯", teaingIsNull + "");
                                     Log.d("log总数", logValue + "");
 
-//                                    connectSuccessUi();
+                                    connectSuccessUi();
                                 } else {
                                     connectSendCodeFailUi(failMsg);
                                 }
@@ -1080,7 +1140,12 @@ public class HotFragment extends Fragment {
 
                         MainApp mainApp = (MainApp) getActivity().getApplicationContext();
 
-                        if (mainApp.boolupdateSuccess == 1) deviceVersion = null;
+                        if (mainApp.boolupdateSuccess == 1) {
+                            deviceVersion = null;
+                        } else if (mainApp.boolupdateSuccess == 2) {
+
+                            configPref.userDeviceVersion().put(sysUpdateVersion);
+                        }
 
                         needupdate = mainApp.boolupdateSuccess == 2 ? false : true;
                         if (!needupdate) {
@@ -1112,7 +1177,11 @@ public class HotFragment extends Fragment {
                     mustUpdate = false;
                     Intent intent = new Intent(getActivity(), DeviceActivityTea.class);
                     intent.putExtra("MAC_DEVICE", blindDeviceId);
+                    String version = configPref.userDeviceVersion().get();
+                    intent.putExtra("upversion", version);
                     intent.putExtra("deviceVersionObj", configPref.deviceUpdateInfo().get());
+                    intent.putExtra("sysdownloadsize", sysdownloadsize);
+
 
                     startActivity(intent);
                 } else {
@@ -1133,4 +1202,56 @@ public class HotFragment extends Fragment {
         });
 
     }
+
+
+    //蓝牙监听广播
+    private IntentFilter makeFilter() {
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
+        return filter;
+    }
+
+    private BroadcastReceiver mReceiver = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.e("HOT", "onReceive---------");
+            switch (intent.getAction()) {
+                case BluetoothAdapter.ACTION_STATE_CHANGED:
+                    MainApp mainApp = (MainApp) getActivity().getApplicationContext();
+                    int blueState = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, 0);
+                    switch (blueState) {
+                        case BluetoothAdapter.STATE_TURNING_ON:
+                            Log.e("HOT", "onReceive---------STATE_TURNING_ON");
+                            if (showcontnect) {
+                                bluetooth_rel.setVisibility(View.GONE);
+                                unconnectUi();
+                            }
+
+                            break;
+                        case BluetoothAdapter.STATE_ON:
+                            Log.e("HOT", "onReceive---------STATE_ON");
+
+                            break;
+                        case BluetoothAdapter.STATE_TURNING_OFF://蓝牙关掉---切换到没有连接页面
+                            Log.e("HOT", "onReceive---------STATE_TURNING_OFF");
+
+                            unconnectUi();
+//                            BleUtil.toReset(mContext);
+                            break;
+                        case BluetoothAdapter.STATE_OFF:
+                            if (showcontnect) {
+                                bluetooth_rel.setVisibility(View.VISIBLE);
+                                //应该提示打开蓝牙
+                            }
+
+                            Log.e("HOT", "onReceive---------STATE_OFF");
+//                            BleUtil.toReset(mContext);
+                            break;
+                    }
+                    break;
+            }
+        }
+    };
+
 }

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -107,6 +108,22 @@ connectFindDevice();
         Log.e("blindDeviceId:", blindDeviceId);
 
 
+        TextView tea_os_version = (TextView) findViewById(R.id.tea_os_version);
+        TextView text_db_size = (TextView) findViewById(R.id.text_db_size);
+
+
+        String  sysdownloadsize=getIntent().getStringExtra("sysdownloadsize");
+
+        String version=configPref.userDeviceVersion().get();
+
+        if(!TextUtils.isEmpty(version)) {
+            tea_os_version.setText("Cha OS " +version);
+            text_db_size.setText(sysdownloadsize);
+        }else{
+            tea_os_version.setText("Cha OS 1.0");
+            text_db_size.setText("0kb");
+
+        }
 
 //        initdata();
     }
@@ -368,6 +385,9 @@ connectFindDevice();
 //                                    Util.startActivity(DeviceUpdateTwoActivity.this, DeviceActivityTea.class);
                                     Intent intent = new Intent(DeviceUpdateTwoActivity.this, DeviceActivityTea.class);
                                     intent.putExtra("deviceVersionObj", configPref.deviceUpdateInfo().get());
+
+                                    String version=configPref.userDeviceVersion().get();
+                                    intent.putExtra("upversion",version);
 
                                     intent.putExtra("MAC_DEVICE",blindDeviceId);
                                     startActivity(intent);

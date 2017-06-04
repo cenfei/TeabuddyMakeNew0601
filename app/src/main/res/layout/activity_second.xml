@@ -24,9 +24,9 @@
             android:layout_marginTop="32dp"
             android:background="@drawable/logo" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <ImageView
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
             android:layout_marginRight="26dp"
@@ -36,7 +36,7 @@
 
             android:textSize="15sp"
             android:gravity="center"
-            android:text="相册"
+            android:src="@drawable/second_code_image"
             android:textColor="@color/white" />
 
 

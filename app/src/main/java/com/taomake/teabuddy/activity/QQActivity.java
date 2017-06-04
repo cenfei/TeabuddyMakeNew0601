@@ -7,11 +7,11 @@ package com.taomake.teabuddy.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.tencent.connect.share.QQShare;
-import com.tencent.open.utils.ThreadManager;
 import com.tencent.tauth.IUiListener;
 import com.tencent.tauth.Tencent;
 import com.tencent.tauth.UiError;
@@ -69,7 +69,7 @@ public class QQActivity extends AppCompatActivity {
 
     private void doShareToQQ(final Bundle params) {
         // QQ分享要在主线程做
-        ThreadManager.getMainHandler().post(new Runnable() {
+        new Handler(getMainLooper()).post(new Runnable() {
 
             @Override
             public void run() {

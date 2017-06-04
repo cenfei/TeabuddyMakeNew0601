@@ -449,10 +449,16 @@ public class Apply_Record_Popwindow {
 
 
     List<UpdateRecordInfoObj> recordInfoObjGloabl;
+    boolean boolConntect=true;
 
     public void getBcNineRecordsHandler(String resp) {
+
+
         if (foxProgressbarInterface != null)
             foxProgressbarInterface.stopProgressBar();
+        if(!boolConntect) return;
+
+        boolConntect=false;
         if (resp != null && !resp.equals("")) {
             UpdateNineRecordsJson teaDetailJsonGloabl = new Gson().fromJson(resp, UpdateNineRecordsJson.class);
 //            if ((teaDetailJsonGloabl.rcode + "").equals(Constant.RES_SUCCESS)) {

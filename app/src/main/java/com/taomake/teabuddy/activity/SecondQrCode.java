@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -67,7 +68,7 @@ public class SecondQrCode extends AppCompatActivity {
             }
         });
 
-        TextView right_img_text = (TextView) findViewById(R.id.right_img_text);
+        ImageView right_img_text = (ImageView) findViewById(R.id.right_img_text);
         right_img_text.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -19,6 +19,7 @@ public class FoxProgressbarInterface {
 
     final Handler writehandler = new Handler();
 
+
     int process = 1;
     protected Runnable runnable = new Runnable() {
         @Override

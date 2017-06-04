@@ -194,6 +194,22 @@ public class ProtocolUtil {
         new Protocol(context, API.GET_PHONE_CHECK_CODE, parmaMap, callBack);
     }
 
+
+    public static void delTeaListInfo(Context context,
+                                      Protocol.CallBack callBack,
+                                      String unionid,String czid
+    ) {
+        Map<String, Object> parmaMap = new HashMap<String, Object>();
+        parmaMap.put("type", "czgl");
+
+        parmaMap.put("step", "delete");
+        parmaMap.put("unionid", unionid);
+        parmaMap.put("czid", czid);
+
+
+        new Protocol(context, API.GET_PHONE_CHECK_CODE, parmaMap, callBack);
+    }
+
     public static void getTeaDetailInfo(Context context,
                                       Protocol.CallBack callBack,
                                       String unionid,String czid

@@ -1,6 +1,7 @@
 package com.taomake.teabuddy.activity;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -81,9 +82,16 @@ finish();
         title.setTextColor(getResources().getColor(R.color.white));
         View title_line_id = (View) findViewById(R.id.title_line_id);
         title_line_id.setVisibility(View.GONE);
+        TextView tea_os_version = (TextView) findViewById(R.id.tea_os_version);
 
+        String version=configPref.userDeviceVersion().get();
 
+        if(!TextUtils.isEmpty(version)) {
+            tea_os_version.setText("Cha OS " +version);
+        }else{
+            tea_os_version.setText("Cha OS 1.0");
 
+        }
 
 
 //        initdata();

@@ -18,6 +18,7 @@ import com.taomake.teabuddy.adapter.AdapterTeasListView;
 import com.taomake.teabuddy.component.FoxProgressbarInterface;
 import com.taomake.teabuddy.network.ProtocolUtil;
 import com.taomake.teabuddy.network.RowMessageHandler;
+import com.taomake.teabuddy.object.BaseJson;
 import com.taomake.teabuddy.object.TeaInfoObj;
 import com.taomake.teabuddy.object.TeaListJson;
 import com.taomake.teabuddy.prefs.ConfigPref_;
@@ -164,11 +165,13 @@ public class ControlTeaActivity extends BaseActivity {
 
             @Override
             public void deleteCallFunc(int postion) {
+             TeaInfoObj teaInfoObj=   designRoomInfos.get(postion);
 
-                designRoomInfos.remove(postion);
-                adapterHomeDesignListView.notifyDataSetChanged();
-                pullToRefreshListView.onRefreshComplete();
-                pullToRefreshListView.getRefreshableView().setSelection(y);
+                delTeaListInfo(teaInfoObj.id);
+//                designRoomInfos.remove(postion);
+//                adapterHomeDesignListView.notifyDataSetChanged();
+//                pullToRefreshListView.onRefreshComplete();
+//                pullToRefreshListView.getRefreshableView().setSelection(y);
 
             }
         });
@@ -340,6 +343,40 @@ public class ControlTeaActivity extends BaseActivity {
         }
     }
 
+
+
+
+    public void delTeaListInfo(String czid) {
+        foxProgressbarInterface = new FoxProgressbarInterface();
+        foxProgressbarInterface.startProgressBar(this, "加载中...");
+
+        ProtocolUtil.delTeaListInfo(this, new DelTeaListInfoHandler(), configPref.userUnion().get(), czid);//devno 空表示所有
+
+
+    }
+
+
+    private class DelTeaListInfoHandler extends RowMessageHandler {
+        @Override
+        protected void handleResp(String resp) {
+            delTeaListInfoHandler(resp);
+        }
+    }
+
+
+
+    public void delTeaListInfoHandler(String resp) {
+        foxProgressbarInterface.stopProgressBar();
+        if (resp != null && !resp.equals("")) {
+            BaseJson baseJson = new Gson().fromJson(resp, BaseJson.class);
+            if ((baseJson.rcode + "").equals(Constant.RES_SUCCESS)) {
+
+
+                getTeaListInfo();
+            }
+
+        }
+    }
 
 
     public List<String > setTestData() {

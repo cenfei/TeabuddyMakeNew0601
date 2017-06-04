@@ -391,6 +391,8 @@ public class MineTabFragment extends Fragment implements SwipeRefreshLayout.OnRe
     private Integer countError = 0;
 
     public void connectFindDevice() {
+        if(!MyStringUtils.isopenBluetooth(getActivity())) return;
+
         foxProgressbarInterface = new FoxProgressbarInterface();
 
         foxProgressbarInterface.startProgressBar(getActivity(), "数据读取中...");
@@ -458,6 +460,8 @@ public void connectSendCodeFailUi(String failMsg){
 
 }
     public void getLogHistory() {
+        if(!MyStringUtils.isopenBluetooth(getActivity())) return;
+
         if(foxProgressbarInterface!=null) foxProgressbarInterface.stopProgressBar();
 
         if (resultDeviceAll == null) return;

@@ -1,11 +1,17 @@
 package com.taomake.teabuddy.activity;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.taomake.teabuddy.R;
@@ -16,10 +22,12 @@ import com.taomake.teabuddy.object.BindDeviceCodeJson;
 import com.taomake.teabuddy.object.BindDeviceObj;
 import com.taomake.teabuddy.prefs.ConfigPref_;
 import com.taomake.teabuddy.util.Constant;
+import com.taomake.teabuddy.util.ImageUtil;
 import com.uuzuche.lib_zxing.activity.CaptureFragment;
 import com.uuzuche.lib_zxing.activity.CodeUtils;
 
 import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.sharedpreferences.Pref;
 
@@ -33,6 +41,20 @@ public class SecondQrCodeAddDevice extends AppCompatActivity {
 
     @Pref
     ConfigPref_ configPref;
+    @Click(R.id.left_title_line)
+    void onLeftTitleLine() {
+        finish();
+    }
+
+
+    @Click(R.id.right_title_line)
+    void onright_title_line() {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType("image/*");
+        startActivityForResult(intent, REQUEST_IMAGE);
+
+    }
 
 
     private CaptureFragment captureFragment;
@@ -67,6 +89,11 @@ public class SecondQrCodeAddDevice extends AppCompatActivity {
     public static boolean isOpen = false;
 
     private void initView() {
+
+        ImageView right_title_icon2 = (ImageView) findViewById(R.id.right_title_icon);
+        right_title_icon2.setVisibility(View.VISIBLE);
+        right_title_icon2.setImageDrawable(getResources().getDrawable(R.drawable.second_code_image));
+
         LinearLayout linearLayout = (LinearLayout) findViewById(R.id.linear1);
         linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,6 +108,21 @@ public class SecondQrCodeAddDevice extends AppCompatActivity {
 
             }
         });
+
+
+        TextView pay_button_id = (TextView) findViewById(R.id.record_first_id);
+        final String payUrl = configPref.payUrl().get();
+        if (payUrl != null && !payUrl.equals("")) {
+            pay_button_id.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(SecondQrCodeAddDevice.this, WebViewActivity_.class);
+                    intent.putExtra("url", payUrl);
+                    intent.putExtra("title", "购买");
+                    startActivity(intent);
+                }
+            });
+        }
     }
 
 
@@ -157,4 +199,52 @@ public class SecondQrCodeAddDevice extends AppCompatActivity {
         }
     }
 
+
+
+    public static final int REQUEST_IMAGE = 112;
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        /**
+         * 处理二维码扫描结果
+         */
+
+
+        /**
+         * 选择系统图片并解析
+         */
+        if (requestCode == REQUEST_IMAGE) {
+            if (data != null) {
+                Uri uri = data.getData();
+                try {
+                    CodeUtils.analyzeBitmap(ImageUtil.getImageAbsolutePath(this, uri), new CodeUtils.AnalyzeCallback() {
+                        @Override
+                        public void onAnalyzeSuccess(Bitmap mBitmap, String result) {
+                            Log.e("Recv QRcode result", result);
+                            getOnlineCode(configPref.userUnion().get(), result);
+
+
+//                            Toast.makeText(SecondQrCode.this, "解析结果:" + result, Toast.LENGTH_LONG).show();
+                        }
+
+                        @Override
+                        public void onAnalyzeFailed() {
+                            Toast.makeText(SecondQrCodeAddDevice.this, "解析二维码失败", Toast.LENGTH_LONG).show();
+                        }
+                    });
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+
+    }
+
+
+    /**
+     * 请求CAMERA权限码
+     */
+    public static final int REQUEST_CAMERA_PERM = 101;
 }

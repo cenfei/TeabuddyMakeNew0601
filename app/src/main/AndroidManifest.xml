@@ -305,6 +305,11 @@
             android:configChanges="keyboard|screenSize|orientation|layoutDirection"/>
 
 
+        <activity
+            android:name="com.taomake.teabuddy.activity.PermissionActivity"
+            android:screenOrientation="portrait"
+
+            android:configChanges="keyboard|screenSize|orientation|layoutDirection"/>
 
 
 
@@ -508,6 +513,12 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+
+
+
+        <meta-data android:value="58f47e4145297d424b0007f1" android:name="UMENG_APPKEY"/>
+        <meta-data android:value="teabuddy" android:name="UMENG_CHANNEL"/>
+
 
     </application>
 

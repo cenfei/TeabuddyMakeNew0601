@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.taomake.teabuddy.R;
 import com.taomake.teabuddy.base.BaseFragmentActivity;
+import com.taomake.teabuddy.base.MainApp;
 import com.taomake.teabuddy.component.One_Permission_Popwindow;
 import com.taomake.teabuddy.fragment.DesignTabFragment_;
 import com.taomake.teabuddy.fragment.HomeTabFragment;
@@ -248,15 +249,20 @@ boolean firstSelect=false;
             resetTab(currentTab);
             selectTab(tab_paocha);
             changePage(fragmentPaocha);
+
             tab_paocha_img.setVisibility(View.GONE);
             tab_paocha_img_c.setVisibility(View.VISIBLE);
             tab_paocha_text.setTextColor(getResources().getColor(R.color.white));
-    Intent intent = new Intent(HotFragment.MYACTION_UPDATE);
-    Log.i("Broadcast Change Hot", "change hot fragment");
 
-    sendBroadcast(intent);
+            MainApp mainApp=(MainApp)getApplicationContext();
+         if(mainApp.boolchoosePaocha) {
 
+             Intent intent = new Intent(HotFragment.MYACTION_UPDATE);
+             Log.i("Broadcast Change Hot", "change hot fragment");
 
+             sendBroadcast(intent);
+
+         }
         } else {//弹出选择对话框
 
             perssion_func();

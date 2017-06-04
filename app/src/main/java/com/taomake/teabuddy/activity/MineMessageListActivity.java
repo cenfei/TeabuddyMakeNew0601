@@ -390,7 +390,10 @@ public class MineMessageListActivity extends BaseActivity {
                 }
 
                 if(setNoReadBool){//说明有未读消息  需要设置
-                    connectFindDevice();
+                    connectFindDevice(true);
+                }else{
+                    connectFindDevice(false);
+
                 }
             }
 
@@ -411,14 +414,19 @@ public class MineMessageListActivity extends BaseActivity {
     private QuinticDeviceTea resultDeviceAll;
     private Integer countError = 0;
 
-    public void connectFindDevice() {
+    public void connectFindDevice(final boolean boolRead) {
 //        foxProgressbarInterface = new FoxProgressbarInterface();
 //
 //        foxProgressbarInterface.startProgressBar(getActivity(), "蓝牙读取中...");
         if (MyStringUtils.isNotNullAndEmpty(QuinticBleAPISdkBase.resultDevice)) {
             resultDeviceAll = QuinticBleAPISdkBase.resultDevice;
             // ************处理动作
-            setHaveMsgNoRead();
+            if(boolRead) {
+                setHaveMsgNoRead();
+            }
+            else{
+              setMsgIsReadDevice();
+            }
         } else {
             final Context context = MineMessageListActivity.this;
             QuinticDeviceFactoryTea quinticDeviceFactory = QuinticBleAPISdkBase
@@ -437,7 +445,12 @@ public class MineMessageListActivity extends BaseActivity {
                                             resultDeviceAll = resultDevice;
                                             QuinticBleAPISdkBase.resultDevice = resultDeviceAll;
                                             // ************处理动作
-                                            setHaveMsgNoRead();
+                                            if(boolRead) {
+                                                setHaveMsgNoRead();
+                                            }
+                                            else{
+                                                setMsgIsReadDevice();
+                                            }
 
                                         }
                                     });
@@ -454,7 +467,7 @@ public class MineMessageListActivity extends BaseActivity {
                                                         ex.getCode()
                                                                 + ""
                                                                 + ex.getMessage());
-                                                connectFindDevice();
+                                                connectFindDevice(boolRead);
                                                 countError++;
                                             } else {
 //                                            unconnectUi();

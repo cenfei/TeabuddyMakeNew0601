@@ -352,9 +352,9 @@ myGridDbRecordAdapter.notifyDataSetChanged();
                                     gridview.invalidate();
                                     connectSendCodeSuccesslUi();
 
-                                    if(boolplay){
-                                        playbatteryLevel(context);
-                                    }
+//                                    if(boolplay){
+//                                        playbatteryLevel(context);
+//                                    }
 
 //                                    seekbar_first.setProgress(first_value * 100 / 15);
 //
@@ -405,7 +405,8 @@ myGridDbRecordAdapter.notifyDataSetChanged();
                                 if (trimResult.contains("eb13")) {
 
                                     connectSendCodeSuccesslUi();
-                                    getbatteryLevel(context,true);
+//                                    getbatteryLevel(context,true);
+                                        playbatteryLevel(context);
 
                                 } else {
                                     connectSendCodeFailUi(msg);
