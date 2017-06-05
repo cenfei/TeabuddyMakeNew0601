@@ -11,6 +11,8 @@ import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
+import android.view.Display;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
@@ -26,6 +28,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import static android.content.Context.WINDOW_SERVICE;
+
 
 /**
  * @类名：StringUtils.java
@@ -40,33 +44,45 @@ import java.util.List;
 public class MyStringUtils {
 
 
-
-public static boolean isopenBluetooth(Activity context){
-    BluetoothAdapter mBluetoothAdapter = BluetoothAdapter
-            .getDefaultAdapter();
-    if (mBluetoothAdapter == null) {
-        Toast.makeText(context, "本机没有找到蓝牙硬件或驱动！", Toast.LENGTH_SHORT).show();
+    public static boolean isopenBluetooth(Activity context) {
+        BluetoothAdapter mBluetoothAdapter = BluetoothAdapter
+                .getDefaultAdapter();
+        if (mBluetoothAdapter == null) {
+            Toast.makeText(context, "本机没有找到蓝牙硬件或驱动！", Toast.LENGTH_SHORT).show();
 //        finish();
+            return false;
+        }
+        // 如果本地蓝牙没有开启，则开启
+        if (!mBluetoothAdapter.isEnabled()) {
+            // 我们通过startActivityForResult()方法发起的Intent将会在onActivityResult()回调方法中获取用户的选择，比如用户单击了Yes开启，
+            // 那么将会收到RESULT_OK的结果，
+            // 如果RESULT_CANCELED则代表用户不愿意开启蓝牙
+            Intent mIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            context.startActivityForResult(mIntent, 1);
+            // 用enable()方法来开启，无需询问用户(实惠无声息的开启蓝牙设备),这时就需要用到android.permission.BLUETOOTH_ADMIN权限。
+            // mBluetoothAdapter.enable();
+            // mBluetoothAdapter.disable();//关闭蓝牙
+            return false;
+        }
+        return true;
+    }
+
+    public static boolean checkAndroidSex(Context context) {
+
+
+        WindowManager wm = (WindowManager) context.getSystemService(WINDOW_SERVICE);
+
+        Display d = wm.getDefaultDisplay();
+
+        int width = d.getWidth();
+
+        int height = d.getHeight();
+        if (height >= 2560 && width >= 1440) {
+            return true;
+        }
+
         return false;
     }
-    // 如果本地蓝牙没有开启，则开启
-    if (!mBluetoothAdapter.isEnabled()) {
-        // 我们通过startActivityForResult()方法发起的Intent将会在onActivityResult()回调方法中获取用户的选择，比如用户单击了Yes开启，
-        // 那么将会收到RESULT_OK的结果，
-        // 如果RESULT_CANCELED则代表用户不愿意开启蓝牙
-        Intent mIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-        context.startActivityForResult(mIntent, 1);
-        // 用enable()方法来开启，无需询问用户(实惠无声息的开启蓝牙设备),这时就需要用到android.permission.BLUETOOTH_ADMIN权限。
-        // mBluetoothAdapter.enable();
-        // mBluetoothAdapter.disable();//关闭蓝牙
-        return false;
-    }
-    return  true;
-}
-
-
-
-
 
     public static boolean isQQClientAvailable(Context context) {
         final PackageManager packageManager = context.getPackageManager();
@@ -98,40 +114,40 @@ public static boolean isopenBluetooth(Activity context){
         }
         return false;
     }
-    public  static String  macStringToUpper(String mac){
-if(mac.contains(":")) return mac;
-        String  macUpper=mac.toUpperCase();
-        StringBuffer sb=new StringBuffer();
 
-        sb.append(macUpper.substring(0,2)+":");
-        sb.append(macUpper.substring(2,4)+":");
-        sb.append(macUpper.substring(4,6)+":");
-        sb.append(macUpper.substring(6,8)+":");
-        sb.append(macUpper.substring(8,10)+":");
-        sb.append(macUpper.substring(10,12));
+    public static String macStringToUpper(String mac) {
+        if (mac.contains(":")) return mac;
+        String macUpper = mac.toUpperCase();
+        StringBuffer sb = new StringBuffer();
+
+        sb.append(macUpper.substring(0, 2) + ":");
+        sb.append(macUpper.substring(2, 4) + ":");
+        sb.append(macUpper.substring(4, 6) + ":");
+        sb.append(macUpper.substring(6, 8) + ":");
+        sb.append(macUpper.substring(8, 10) + ":");
+        sb.append(macUpper.substring(10, 12));
 
 
-return  sb.toString();
+        return sb.toString();
     }
 
     /**
      * 将字符串转成unicode
+     *
      * @param str 待转字符串
      * @return unicode字符串
      */
-    public static String convertToUnicode(String str)
-    {
+    public static String convertToUnicode(String str) {
         str = (str == null ? "" : str);
         String tmp;
         StringBuffer sb = new StringBuffer(1000);
         char c;
         int i, j;
         sb.setLength(0);
-        for (i = 0; i < str.length(); i++)
-        {
+        for (i = 0; i < str.length(); i++) {
             c = str.charAt(i);
             sb.append("\\u");
-            j = (c >>>8); //取出高8位
+            j = (c >>> 8); //取出高8位
             tmp = Integer.toHexString(j);
             if (tmp.length() == 1)
                 sb.append("0");
@@ -145,10 +161,11 @@ return  sb.toString();
         }
         return (new String(sb));
     }
+
     /**
      * 获得指定文件的byte数组
      */
-    public static byte[] getBytes(String filePath){
+    public static byte[] getBytes(String filePath) {
         byte[] buffer = null;
         try {
             File file = new File(filePath);
@@ -168,7 +185,9 @@ return  sb.toString();
             e.printStackTrace();
         }
         return buffer;
-    }/**
+    }
+
+    /**
      * 字符串转换unicode
      */
     public static String string2Unicode(String string) {

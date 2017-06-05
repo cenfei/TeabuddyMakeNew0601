@@ -4,6 +4,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -24,6 +26,7 @@ import com.taomake.teabuddy.activity.WelcomeActivity_;
 import com.taomake.teabuddy.component.FoxProgressbarInterface;
 import com.taomake.teabuddy.component.One_Permission_Popwindow;
 import com.taomake.teabuddy.prefs.ConfigPref_;
+import com.taomake.teabuddy.util.FileUtilQq;
 import com.taomake.teabuddy.util.MyStringUtils;
 import com.taomake.teabuddy.util.Util;
 
@@ -142,6 +145,21 @@ public class HomeTabFragment extends Fragment{
         filterhome.addAction(MYACTION_UPDATE_HOME);
         getActivity().registerReceiver(receiverHome, filterhome);
 
+
+        if(TextUtils.isEmpty(FileUtilQq.existQQshareIcon())){
+            new Handler().post(new Runnable() {
+                @Override
+                public void run() {
+               Log.e("qqshare","下载qq图标到本地");
+                    Bitmap bmp= BitmapFactory.decodeResource(getResources(), R.drawable.app_logo);
+
+                    FileUtilQq.saveBitmap(bmp);
+
+                }
+            });
+        }
+
+
         return chatView;
     }
 
@@ -165,7 +183,7 @@ public class HomeTabFragment extends Fragment{
     private Integer countError = 0;
 
 
-    public void closeProgress() {
+    public void  closeProgress() {
         if (foxProgressbarInterface != null) {
             foxProgressbarInterface.stopProgressBar();
         }
@@ -188,54 +206,56 @@ public class HomeTabFragment extends Fragment{
 
 
 
-        foxProgressbarInterface = new FoxProgressbarInterface();
 
-        foxProgressbarInterface.startProgressBar(getActivity(), "初始化录音数据...");
 
         if (MyStringUtils.isNotNullAndEmpty(QuinticBleAPISdkBase.resultDevice)) {
+//            foxProgressbarInterface = new FoxProgressbarInterface();
+//
+//            foxProgressbarInterface.startProgressBar(getActivity(), "初始化录音数据...");
             resultDeviceAll = QuinticBleAPISdkBase.resultDevice;
             // ************处理动作
             getCzidBle();
-        } else {
-            final Context context = getActivity();
-            QuinticDeviceFactoryTea quinticDeviceFactory = QuinticBleAPISdkBase
-                    .getInstanceFactory(context);
-
-            quinticDeviceFactory.findDevice(blindDeviceId,
-                    new QuinticCallbackTea<QuinticDeviceTea>() {
-
-
-                        @Override
-                        public void onComplete(final QuinticDeviceTea resultDevice) {
-                            super.onComplete(resultDevice);
-                            new Handler(context.getMainLooper())
-                                    .post(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            closeProgress();
-                                            resultDeviceAll = resultDevice;
-                                            QuinticBleAPISdkBase.resultDevice = resultDeviceAll;
-                                            // ************处理动作
-                                            getCzidBle();
-
-                                        }
-                                    });
-                        }
-
-                        @Override
-                        public void onError(final QuinticException ex) {
-                            new Handler(context.getMainLooper())
-                                    .post(new Runnable() {
-                                        @Override
-                                        public void run() {
-
-                                            closeProgress();
-
-                                        }
-                                    });
-                        }
-                    });
         }
+//        else {
+//            final Context context = getActivity();
+//            QuinticDeviceFactoryTea quinticDeviceFactory = QuinticBleAPISdkBase
+//                    .getInstanceFactory(context);
+//
+//            quinticDeviceFactory.findDevice(blindDeviceId,
+//                    new QuinticCallbackTea<QuinticDeviceTea>() {
+//
+//
+//                        @Override
+//                        public void onComplete(final QuinticDeviceTea resultDevice) {
+//                            super.onComplete(resultDevice);
+//                            new Handler(context.getMainLooper())
+//                                    .post(new Runnable() {
+//                                        @Override
+//                                        public void run() {
+//                                            closeProgress();
+//                                            resultDeviceAll = resultDevice;
+//                                            QuinticBleAPISdkBase.resultDevice = resultDeviceAll;
+//                                            // ************处理动作
+//                                            getCzidBle();
+//
+//                                        }
+//                                    });
+//                        }
+//
+//                        @Override
+//                        public void onError(final QuinticException ex) {
+//                            new Handler(context.getMainLooper())
+//                                    .post(new Runnable() {
+//                                        @Override
+//                                        public void run() {
+//
+//                                            closeProgress();
+//
+//                                        }
+//                                    });
+//                        }
+//                    });
+//        }
     }
 public void connectSendCodeFailUi(String msg){
 closeProgress();

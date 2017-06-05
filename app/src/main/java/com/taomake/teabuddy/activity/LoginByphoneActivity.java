@@ -49,12 +49,34 @@ public class LoginByphoneActivity extends BaseActivity {
     @ViewById(R.id.age_edittext_id)
     EditText age_edittext_id;
 
-    @ViewById(R.id.sex_switch_id)
-    Switch sex_switch_id;
+//    @ViewById(R.id.sex_switch_id)
+//    Switch sex_switch_id;
+@ViewById(R.id.sex_man_id)
+TextView sex_man_id;
 
+    @ViewById(R.id.sex_women_id)
+    TextView sex_women_id;
     int y = 0;
     int limit = 10;
+    boolean  sexType=true;//默认男
+    @Click(R.id.sex_man_id)
+    void onsex_man_id() {//点击
+if(!sexType){
+    sex_man_id.setBackground(getResources().getDrawable(R.drawable.rounded_black));
+    sex_women_id.setBackground(getResources().getDrawable(R.drawable.rounded_white));
+    sexType=true;
+}
 
+    }
+    @Click(R.id.sex_women_id)
+    void onsex_women_id() {//点击
+        if(sexType){
+            sex_women_id.setBackground(getResources().getDrawable(R.drawable.rounded_black));
+            sex_man_id.setBackground(getResources().getDrawable(R.drawable.rounded_white));
+            sexType=false;
+        }
+
+    }
 
     final Handler writehandler = new Handler();
 
@@ -149,7 +171,7 @@ public class LoginByphoneActivity extends BaseActivity {
             finish();
             return;
         }
-boolean boolman=sex_switch_id.isChecked();
+boolean boolman=sexType;
 
         try {
             Log.d("no encode ticket",ticket);

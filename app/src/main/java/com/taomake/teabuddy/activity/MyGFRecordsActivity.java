@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.PowerManager;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -41,6 +42,7 @@ import com.taomake.teabuddy.object.VoiceGroupJson;
 import com.taomake.teabuddy.object.VoiceGroupObj;
 import com.taomake.teabuddy.prefs.ConfigPref_;
 import com.taomake.teabuddy.util.Constant;
+import com.taomake.teabuddy.util.FileUtilQq;
 import com.taomake.teabuddy.util.MyStringUtils;
 import com.taomake.teabuddy.util.Util;
 import com.taomake.teabuddy.wxapi.WechatShareManager;
@@ -80,7 +82,9 @@ public class MyGFRecordsActivity extends BaseActivity implements IWeiboHandler.R
         finish();
 
     }
+
     PowerManager.WakeLock mWakeLock;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -170,8 +174,7 @@ public class MyGFRecordsActivity extends BaseActivity implements IWeiboHandler.R
         gridview = (GridView) findViewById(R.id.gridview);
 
 
-
-        myGridCreateRecordAdapter = new MyGridCreateRecordAdapter(this, voiceGroupObjList,false);
+        myGridCreateRecordAdapter = new MyGridCreateRecordAdapter(this, voiceGroupObjList, false);
         gridview.setAdapter(myGridCreateRecordAdapter);
         gridview.setOnItemClickListener(new ItemClickListener());
 
@@ -268,7 +271,7 @@ public class MyGFRecordsActivity extends BaseActivity implements IWeiboHandler.R
             BaseJson dbRecordsJson = new Gson().fromJson(resp, BaseJson.class);
             if ((dbRecordsJson.rcode + "").equals(Constant.RES_SUCCESS)) {
                 Util.Toast(MyGFRecordsActivity.this, "收藏成功");
-                collectBool=false;
+                collectBool = false;
 //                getMyCreateRecordListInfo();
             }
         }
@@ -285,6 +288,7 @@ public class MyGFRecordsActivity extends BaseActivity implements IWeiboHandler.R
 
         return jobJsons;
     }
+
     public void delcollectMyCreateRecordListInfo(String indexID) {
         foxProgressbarInterface = new FoxProgressbarInterface();
         foxProgressbarInterface.startProgressBar(this, "加载中...");
@@ -308,21 +312,21 @@ public class MyGFRecordsActivity extends BaseActivity implements IWeiboHandler.R
             BaseJson dbRecordsJson = new Gson().fromJson(resp, BaseJson.class);
             if ((dbRecordsJson.rcode + "").equals(Constant.RES_SUCCESS)) {
                 Util.Toast(MyGFRecordsActivity.this, "已取消收藏");
-                collectBool=true;
+                collectBool = true;
 //                getMyCreateRecordListInfo();
             }
         }
     }
 
 
+    int selectTemp = -1;
+    boolean collectBool = true;
 
-    int selectTemp=-1;
-    boolean collectBool=true;
     class ItemClickListener implements AdapterView.OnItemClickListener {
         public void onItemClick(AdapterView<?> arg0,// The AdapterView where the
                                 // click happened
                                 View view,// The view within the AdapterView that was clicked
-                               final int postion,// The position of the view in the adapter
+                                final int postion,// The position of the view in the adapter
                                 long arg3// The row id of the item that was clicked
         ) {
             selectTemp = postion;
@@ -330,119 +334,116 @@ public class MyGFRecordsActivity extends BaseActivity implements IWeiboHandler.R
             //跳转到
 
 
+            final VoiceGroupObj voiceGroupObj = voiceGroupObjList.get(postion);
 
-                final VoiceGroupObj voiceGroupObj = voiceGroupObjList.get(postion);
+            final ImageView imageView = (ImageView) view.findViewById(R.id.db_img_select_id);
 
-                final ImageView imageView = (ImageView) view.findViewById(R.id.db_img_select_id);
-
-                myGridCreateRecordAdapter.setSeclection(postion);
-                myGridCreateRecordAdapter.notifyDataSetChanged();
-            collectBool=true;
-            if(voiceGroupObj.fav!=null&&voiceGroupObj.fav.equals("1")){
-                collectBool=false;
+            myGridCreateRecordAdapter.setSeclection(postion);
+            myGridCreateRecordAdapter.notifyDataSetChanged();
+            collectBool = true;
+            if (voiceGroupObj.fav != null && voiceGroupObj.fav.equals("1")) {
+                collectBool = false;
             }
 
-                new SZ_PayPopwindow_RecordBottom().showPopwindow(MyGFRecordsActivity.this, imageView,collectBool, new SZ_PayPopwindow_RecordBottom.CallBackPayWindow() {
-                    @Override
-                    public void handleCallBackPlay() {
+            new SZ_PayPopwindow_RecordBottom().showPopwindow(MyGFRecordsActivity.this, imageView, collectBool, new SZ_PayPopwindow_RecordBottom.CallBackPayWindow() {
+                @Override
+                public void handleCallBackPlay() {
 
-                        new Record_Play_Popwindow().showPopwindow(MyGFRecordsActivity.this,
-                                imageView,voiceGroupObj.voicefile_index, configPref.userUnion().get(), new Record_Play_Popwindow.CallBackPayWindow() {
-                            @Override
-                            public void handleCallBackDbSelect(String recorddir) {
+                    new Record_Play_Popwindow().showPopwindow(MyGFRecordsActivity.this,
+                            imageView, voiceGroupObj.voicefile_index, configPref.userUnion().get(), new Record_Play_Popwindow.CallBackPayWindow() {
+                                @Override
+                                public void handleCallBackDbSelect(String recorddir) {
 
-                            }
-                        });
+                                }
+                            });
+
+                }
+
+                @Override
+                public void handleCallBackCollect() {
+                    if (collectBool) {
+                        voiceGroupObj.fav = "1";
+                        collectMyCreateRecordListInfo(voiceGroupObj.voicefile_index);
+                    } else {
+                        voiceGroupObj.fav = "0";
+                        delcollectMyCreateRecordListInfo(voiceGroupObj.voicefile_index);
 
                     }
+                }
 
-                    @Override
-                    public void handleCallBackCollect() {
-                        if(collectBool) {
-                            voiceGroupObj.fav="1";
-                            collectMyCreateRecordListInfo(voiceGroupObj.voicefile_index);
-                        }else{
-                            voiceGroupObj.fav="0";
-                            delcollectMyCreateRecordListInfo(voiceGroupObj.voicefile_index);
+                @Override
+                public void handleCallBackShare() {
+
+
+                    new SZ_PayPopwindow_ShareBottom().showPopwindow(MyGFRecordsActivity.this, imageView, new SZ_PayPopwindow_ShareBottom.CallBackPayWindow() {
+                        @Override
+                        public void handleCallBackPlay() {//微信好友
+                            if (!Util.isWebchatAvaliable(MyGFRecordsActivity.this)) {
+                                Toast.makeText(MyGFRecordsActivity.this, "请先安装微信", Toast.LENGTH_LONG).show();
+                                return;
+                            }
+
+                            WechatShareManager.ShareContentWebpage webpage = (WechatShareManager.ShareContentWebpage) mShareManager.getShareContentWebpag("茶密", "茶密分享最动听的茶道秘书",
+                                    API.share_url + voiceGroupObj.voicefile_index, R.drawable.app_logo);
+                            mShareManager.shareByWebchat(webpage, WechatShareManager.WECHAT_SHARE_TYPE_TALK);
 
                         }
-                    }
 
-                    @Override
-                    public void handleCallBackShare() {
-
-
-                        new SZ_PayPopwindow_ShareBottom().showPopwindow(MyGFRecordsActivity.this, imageView, new SZ_PayPopwindow_ShareBottom.CallBackPayWindow() {
-                            @Override
-                            public void handleCallBackPlay() {//微信好友
-                                if (!Util.isWebchatAvaliable(MyGFRecordsActivity.this)) {
-                                    Toast.makeText(MyGFRecordsActivity.this, "请先安装微信", Toast.LENGTH_LONG).show();
-                                    return;
-                                }
-
-                                WechatShareManager.ShareContentWebpage webpage = (WechatShareManager.ShareContentWebpage) mShareManager.getShareContentWebpag("茶密", "茶密分享最动听的茶道秘书",
-                                        API.share_url+voiceGroupObj.voicefile_index,R.drawable.logo);
-                                mShareManager.shareByWebchat(webpage, WechatShareManager.WECHAT_SHARE_TYPE_TALK);
-
+                        @Override
+                        public void handleCallBackCollect() {//朋友圈
+                            if (!Util.isWebchatAvaliable(MyGFRecordsActivity.this)) {
+                                Toast.makeText(MyGFRecordsActivity.this, "请先安装微信", Toast.LENGTH_LONG).show();
+                                return;
                             }
 
-                            @Override
-                            public void handleCallBackCollect() {//朋友圈
-                                if (!Util.isWebchatAvaliable(MyGFRecordsActivity.this)) {
-                                    Toast.makeText(MyGFRecordsActivity.this, "请先安装微信", Toast.LENGTH_LONG).show();
-                                    return;
-                                }
+                            WechatShareManager.ShareContentWebpage webpage = (WechatShareManager.ShareContentWebpage) mShareManager.getShareContentWebpag("茶密", "茶密分享最动听的茶道秘书",
+                                    API.share_url + voiceGroupObj.voicefile_index, R.drawable.app_logo);
+                            mShareManager.shareByWebchat(webpage, WechatShareManager.WECHAT_SHARE_TYPE_FRENDS);
 
-                                WechatShareManager.ShareContentWebpage webpage = (WechatShareManager.ShareContentWebpage) mShareManager.getShareContentWebpag("茶密","茶密分享最动听的茶道秘书",
-                                        API.share_url+voiceGroupObj.voicefile_index,R.drawable.logo);
-                                mShareManager.shareByWebchat(webpage, WechatShareManager.WECHAT_SHARE_TYPE_FRENDS);
+                        }
 
-                            }
+                        @Override
+                        public void handleCallBackShare() {//新浪微博
+                            testShareWebUrl(API.share_url + voiceGroupObj.voicefile_index, "茶密", "茶密分享最动听的茶道秘书");
+                        }
 
-                            @Override
-                            public void handleCallBackShare() {//新浪微博
-                                testShareWebUrl(API.share_url+voiceGroupObj.voicefile_index,"茶密","茶密分享最动听的茶道秘书");
-                            }
+                        @Override
+                        public void handleCallBackApply() {//qq好友
+                            shareOnlyUrlOnQQorZone(false, API.share_url + voiceGroupObj.voicefile_index);
+                        }
 
-                            @Override
-                            public void handleCallBackApply() {//qq好友
-                                shareOnlyUrlOnQQorZone(false,API.share_url+voiceGroupObj.voicefile_index);
-                            }
+                        @Override
+                        public void handleCallBackQqZone() {//qq空间
+                            shareOnlyUrlOnQQorZone(true, API.share_url + voiceGroupObj.voicefile_index);
 
-                            @Override
-                            public void handleCallBackQqZone() {//qq空间
-                                shareOnlyUrlOnQQorZone(true,API.share_url+voiceGroupObj.voicefile_index);
-
-                            }
-                        });
+                        }
+                    });
 
 
+                }
 
+                @Override
+                public void handleCallBackApply() {
+                    if (!MyStringUtils.isopenBluetooth(MyGFRecordsActivity.this)) return;
 
-                    }
-
-                    @Override
-                    public void handleCallBackApply() {
-                        if(!MyStringUtils.isopenBluetooth(MyGFRecordsActivity.this)) return;
-
-                        String   blindDeviceId = configPref.userDeviceMac().get();
-                        blindDeviceId = MyStringUtils.macStringToUpper(blindDeviceId);
-                        Log.e("blindDeviceId:", blindDeviceId);
+                    String blindDeviceId = configPref.userDeviceMac().get();
+                    blindDeviceId = MyStringUtils.macStringToUpper(blindDeviceId);
+                    Log.e("blindDeviceId:", blindDeviceId);
 //                        mWakeLock.acquire();
-                        new Apply_Record_Popwindow().showPopwindow(MyGFRecordsActivity.this, imageView,blindDeviceId,
-                                 configPref.userUnion().get(),voiceGroupObj.voicefile_index, new Apply_Record_Popwindow.CallBackPayWindow() {
-                            @Override
-                            public void handleCallBackPayWindowFromStop(String recorddir) {
+                    new Apply_Record_Popwindow().showPopwindow(MyGFRecordsActivity.this, imageView, blindDeviceId,
+                            configPref.userUnion().get(), voiceGroupObj.voicefile_index, new Apply_Record_Popwindow.CallBackPayWindow() {
+                                @Override
+                                public void handleCallBackPayWindowFromStop(String recorddir) {
 //                                mWakeLock.release();
-                            }
+                                }
 
-                            @Override
-                            public void handleCallBackPayWindowFromStart(String recorddir) {
+                                @Override
+                                public void handleCallBackPayWindowFromStart(String recorddir) {
 
-                            }
-                        });
-                    }
-                });
+                                }
+                            });
+                }
+            });
 
 
         }
@@ -450,20 +451,23 @@ public class MyGFRecordsActivity extends BaseActivity implements IWeiboHandler.R
     }
 
 
-
-
-
-
     //qq 分享
-    public void shareOnlyUrlOnQQorZone(boolean qqzone,String url) {
+    public void shareOnlyUrlOnQQorZone(boolean qqzone, String url) {
         final Bundle params = new Bundle();
-        params.putString(QQShare.SHARE_TO_QQ_TARGET_URL,url);
+        params.putString(QQShare.SHARE_TO_QQ_TARGET_URL, url);
         params.putString(QQShare.SHARE_TO_QQ_APP_NAME, "茶密录音机");
         params.putString(QQShare.SHARE_TO_QQ_TITLE, "茶密");
-        params.putString(QQShare.SHARE_TO_QQ_SUMMARY,"茶密分享最动听的茶道秘书");
+        params.putString(QQShare.SHARE_TO_QQ_SUMMARY, "茶密分享最动听的茶道秘书");
         params.putInt(QQShare.SHARE_TO_QQ_KEY_TYPE, QQShare.SHARE_TO_QQ_TYPE_DEFAULT);
-        if(qqzone) {
-        params.putInt(QQShare.SHARE_TO_QQ_EXT_INT, QQShare.SHARE_TO_QQ_FLAG_QZONE_AUTO_OPEN); //打开这句话，可以实现分享纯图到QQ空间
+        String iconlocalurl = FileUtilQq.existQQshareIcon();
+        if (!TextUtils.isEmpty(iconlocalurl)) {
+            params.putString(QQShare.SHARE_TO_QQ_IMAGE_LOCAL_URL,
+                    iconlocalurl);
+
+        }
+
+        if (qqzone) {
+            params.putInt(QQShare.SHARE_TO_QQ_EXT_INT, QQShare.SHARE_TO_QQ_FLAG_QZONE_AUTO_OPEN); //打开这句话，可以实现分享纯图到QQ空间
         }
         doShareToQQ(params);
     }
@@ -472,8 +476,8 @@ public class MyGFRecordsActivity extends BaseActivity implements IWeiboHandler.R
         // QQ分享要在主线程做
 
 
-              MainApp mainApp= (MainApp)      getApplicationContext();
-     final   Tencent mTencent = mainApp.mTencent;
+        MainApp mainApp = (MainApp) getApplicationContext();
+        final Tencent mTencent = mainApp.mTencent;
 
 
         if (!MyStringUtils.isQQClientAvailable(MyGFRecordsActivity.this)) {
@@ -519,27 +523,25 @@ public class MyGFRecordsActivity extends BaseActivity implements IWeiboHandler.R
     }
 
 
-
-
-
-
     //分享到微博
     private WebpageObject getWebpageObj(String url, String title, String description) {
         WebpageObject mediaObject = new WebpageObject();
         mediaObject.identify = Utility.generateGUID();
         mediaObject.title = title;
-        mediaObject.description =description;
+        mediaObject.description = description;
 
 //// 设置 Bitmap 类型的图片到视频对象里
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.app_logo);
 
         mediaObject.thumbData = Util.Bitmap2Bytes(bitmap);
-        mediaObject.actionUrl =url;
+        mediaObject.actionUrl = url;
         mediaObject.defaultText = "照片分享";
         return mediaObject;
     }
-       IWeiboShareAPI mWeiboShareAPI;
-    public void testShareWebUrl(String url,String title,String description) {
+
+    IWeiboShareAPI mWeiboShareAPI;
+
+    public void testShareWebUrl(String url, String title, String description) {
 
         if (!MyStringUtils.isWeiboClientAvailable(MyGFRecordsActivity.this)) {
             //提醒用户没有按照微信
@@ -547,11 +549,11 @@ public class MyGFRecordsActivity extends BaseActivity implements IWeiboHandler.R
             return;
         }
 
-        MainApp mainApp= (MainApp)      getApplicationContext();
+        MainApp mainApp = (MainApp) getApplicationContext();
         mWeiboShareAPI = mainApp.mWeiboShareAPI;
 
         WeiboMultiMessage weiboMessage = new WeiboMultiMessage();
-        weiboMessage.mediaObject = getWebpageObj(url,title,description);
+        weiboMessage.mediaObject = getWebpageObj(url, title, description);
 // 2. 初始化从第三方到微博的消息请求
         SendMultiMessageToWeiboRequest request = new SendMultiMessageToWeiboRequest();
 // 用transaction唯一标识一个请求
@@ -560,7 +562,6 @@ public class MyGFRecordsActivity extends BaseActivity implements IWeiboHandler.R
 
         mWeiboShareAPI.sendRequest(MyGFRecordsActivity.this, request);
     }
-
 
 
     @Override
@@ -580,7 +581,6 @@ public class MyGFRecordsActivity extends BaseActivity implements IWeiboHandler.R
      * @param baseResp 微博请求数据对象
      * @see {@link IWeiboShareAPI#handleWeiboRequest}
      */
-
 
 
     @Override

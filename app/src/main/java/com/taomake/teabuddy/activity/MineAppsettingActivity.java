@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.taomake.teabuddy.R;
 import com.taomake.teabuddy.component.FoxProgressbarInterface;
+import com.taomake.teabuddy.component.One_Permission_Popwindow;
 import com.taomake.teabuddy.network.ProtocolUtil;
 import com.taomake.teabuddy.network.RowMessageHandler;
 import com.taomake.teabuddy.object.AppVersionJson;
@@ -25,6 +26,7 @@ import com.taomake.teabuddy.util.Util;
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.ViewById;
 import org.androidannotations.annotations.sharedpreferences.Pref;
 
 import java.util.ArrayList;
@@ -38,14 +40,29 @@ public class MineAppsettingActivity extends BaseActivity {
 
     @Pref
     ConfigPref_ configPref;
-//    @ViewById(R.id.no_data_id)
-//    RelativeLayout no_data_id;
+    @ViewById(R.id.clean_data_id)
+    TextView clean_data_id;
 
 
 
     int y = 0;
     int limit = 10;
 
+    @Click(R.id.clean_data_id)
+    void onclean_data_id() {
+        new One_Permission_Popwindow().showPopwindow(this, clean_data_id, "确定要清空缓存吗？", "确认", "取消", new One_Permission_Popwindow.CallBackPayWindow() {
+            @Override
+            public void handleCallBackChangeUser() {//确定
+
+
+            }
+
+            @Override
+            public void handleCallBackBindDevice() {
+
+            }
+        });
+    }
 
     @Click(R.id.aboutus_rel_id)
     void onaboutus_rel_id() {//关于我们

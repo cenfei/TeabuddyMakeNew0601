@@ -78,6 +78,9 @@ public class HotFragment extends Fragment {
     @ViewById(R.id.bluetooth_rel)
     RelativeLayout bluetooth_rel;
 
+    @ViewById(R.id.tea_status_id)
+    TextView tea_status_id;
+
 
     @Click(R.id.test_id)
     void ontest_id() {//测试
@@ -379,9 +382,21 @@ public class HotFragment extends Fragment {
 
         connect_status_commnet_id.setVisibility(View.GONE);
         changeBatImage();//电池电量切换
+        tea_sum_cub_text_id.setTextColor(getResources().getColor(R.color.white));
+        if (teaingCountValue == 0) {
+            tea_sum_cub_text_id.setTextColor(getResources().getColor(R.color.white_alpha60));
+
+        }
 
         if (teaingCountValue < 10) {
             tea_sum_cub_text_id.setText(teaingCountValue + "");
+            if (MyStringUtils.checkAndroidSex(getActivity())) {
+                tea_sum_cub_text_id.setTextSize(getResources().getDimension(R.dimen.font_140));
+            } else {
+                tea_sum_cub_text_id.setTextSize(getResources().getDimension(R.dimen.font_200));
+
+            }
+
 //            tea_sum_cub_text_id.setTextSize(getResources().getDimension(R.dimen.font_140));
 
         } else {
@@ -410,8 +425,26 @@ public class HotFragment extends Fragment {
         } else {
             tea_cub_dynamicwave.setVisibility(View.VISIBLE);
         }
+        if (teaStatusValue == 1) {
+            if (teaingCountValue == 0 && teaStatusValue == 1) {
+                tea_status_id.setText("请洗茶");
+
+            } else {
+                tea_status_id.setText("泡茶中");
+            }
+        } else if (teaStatusValue == 0 && teaingIsNull == 0) {
+            tea_status_id.setText("茶泡好了");
+        } else {
+            tea_status_id.setText("");
+        }
+
 
     }
+
+    int teaStatusValue = 0;//0非泡茶  1泡茶中
+    int teaingCountValue = 0;//第几泡
+    int teaingTimeValue = 0;//当前泡茶第几秒
+    int teaingIsNull = 1;//是否空杯 1空杯  0 非空
 
     public void connectSendCodeFailUi(String msg) {
         if (foxProgressbarInterface != null) {
@@ -660,6 +693,7 @@ public class HotFragment extends Fragment {
     }
 
     boolean mustUpdate = false;
+
     public void connectFindDevice() {
 
         if (!MyStringUtils.isopenBluetooth(getActivity())) return;
@@ -877,11 +911,6 @@ public class HotFragment extends Fragment {
 
     }
 
-
-    int teaStatusValue = 0;//0非泡茶  1泡茶中
-    int teaingCountValue = 0;//第几泡
-    int teaingTimeValue = 0;//当前泡茶第几秒
-    int teaingIsNull = 1;//是否空杯 1空杯  0 非空
 
     public void getTeaStatus() {
         if (resultDeviceAll == null) return;

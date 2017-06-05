@@ -46,7 +46,7 @@
                 android:layout_marginLeft="25dp"
 
                 android:scaleType="fitXY"
-                android:src="@drawable/test_avar"
+                android:src="@drawable/default_user_icon"
                 app:riv_border_color="@color/white"
                 app:riv_border_width="2dp"
                 app:riv_corner_radius="30dip"
@@ -374,7 +374,7 @@
                         android:layout_gravity="center"
                         android:layout_marginBottom="6dp"
                         android:scaleType="fitXY"
-                        android:src="@drawable/mine_remind"
+                        android:src="@drawable/mine_msg_icon"
                         android:id="@+id/imageView" />
 
                     <TextView

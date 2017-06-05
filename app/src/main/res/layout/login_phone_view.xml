@@ -183,9 +183,46 @@
                 android:layout_height="match_parent"
 
                 >
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:orientation="horizontal"
+                    >
+
+                    <TextView
+                        android:id="@+id/sex_man_id"
+
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:background="@drawable/rounded_black"
+                        android:text="男"
+                        android:gravity="center"
+                        android:textSize="15sp"
+                        android:textColor="@color/black"
+                        />
+
+                    <TextView
+                        android:id="@+id/sex_women_id"
+
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:background="@drawable/rounded_white"
+                        android:text="女"
+                        android:layout_marginLeft="20dp"
+                        android:gravity="center"
+                        android:textSize="15sp"
+                        android:textColor="@color/black"
+                        />
+
+                </LinearLayout>
+
+
+
                 <Switch
                     android:id="@+id/sex_switch_id"
-
+android:visibility="gone"
                     android:layout_alignParentBottom="true"
                     android:layout_width="wrap_content"
                     android:layout_gravity="bottom"

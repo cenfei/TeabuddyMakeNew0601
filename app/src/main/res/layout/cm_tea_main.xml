@@ -266,6 +266,22 @@
             </FrameLayout>
             </LinearLayout>
 
+
+            <TextView
+
+                android:id="@+id/tea_status_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:layout_above="@+id/tea_cub_num_smaller_line"
+                android:layout_marginLeft="60dp"
+                android:layout_marginBottom="30dp"
+                android:textColor="@color/white_alpha60"
+                android:textSize="15sp" />
+
+
+
+
             <LinearLayout
                 android:id="@+id/tea_cub_num_smaller_line"
                 android:layout_width="wrap_content"
@@ -291,9 +307,8 @@
                     android:layout_height="wrap_content"
                     android:text="0"
                     android:includeFontPadding="false"
-
                     android:textColor="@color/white_alpha60"
-                    android:textSize="110sp" />
+                     />
 
                 <TextView
 
@@ -561,8 +576,9 @@ android:layout_marginLeft="107dp"
         android:id="@+id/bluetooth_rel"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone"
         android:background="@color/white_alpha60"
+        android:visibility="gone"
+
         >
 
         <LinearLayout

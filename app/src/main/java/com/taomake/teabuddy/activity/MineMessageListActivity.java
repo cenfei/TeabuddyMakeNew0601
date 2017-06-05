@@ -418,6 +418,9 @@ public class MineMessageListActivity extends BaseActivity {
 //        foxProgressbarInterface = new FoxProgressbarInterface();
 //
 //        foxProgressbarInterface.startProgressBar(getActivity(), "蓝牙读取中...");
+        blindDeviceId = configPref.userDeviceMac().get();
+        blindDeviceId = MyStringUtils.macStringToUpper(blindDeviceId);
+        Log.e("blindDeviceId:", blindDeviceId);
         if (MyStringUtils.isNotNullAndEmpty(QuinticBleAPISdkBase.resultDevice)) {
             resultDeviceAll = QuinticBleAPISdkBase.resultDevice;
             // ************处理动作

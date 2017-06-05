@@ -393,71 +393,76 @@ public class MineTabFragment extends Fragment implements SwipeRefreshLayout.OnRe
     public void connectFindDevice() {
         if(!MyStringUtils.isopenBluetooth(getActivity())) return;
 
-        foxProgressbarInterface = new FoxProgressbarInterface();
 
-        foxProgressbarInterface.startProgressBar(getActivity(), "数据读取中...");
         if (MyStringUtils.isNotNullAndEmpty(QuinticBleAPISdkBase.resultDevice)) {
+            foxProgressbarInterface = new FoxProgressbarInterface();
+
+            foxProgressbarInterface.startProgressBar(getActivity(), "数据读取中...");
             resultDeviceAll = QuinticBleAPISdkBase.resultDevice;
             // ************处理动作
             getLogHistory();
-        } else {
-        final Context context = getActivity();
-        QuinticDeviceFactoryTea quinticDeviceFactory = QuinticBleAPISdkBase
-                .getInstanceFactory(context);
 
-        quinticDeviceFactory.findDevice(blindDeviceId,
-                new QuinticCallbackTea<QuinticDeviceTea>() {
-
-                    @Override
-                    public void onComplete(final QuinticDeviceTea resultDevice) {
-                        super.onComplete(resultDevice);
-                        new Handler(context.getMainLooper())
-                                .post(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        resultDeviceAll = resultDevice;
-                                        QuinticBleAPISdkBase.resultDevice = resultDeviceAll;
-                                        // ************处理动作
-                                        getLogHistory();
-
-                                    }
-                                });
-                    }
-
-                    @Override
-                    public void onError(final QuinticException ex) {
-                        new Handler(context.getMainLooper())
-                                .post(new Runnable() {
-                                    @Override
-                                    public void run() {
-
-
-//                                        if (countError < 1) {
-                                            Log.d("connectFindDevice ex",
-                                                    ex.getCode()
-                                                            + ""
-                                                            + ex.getMessage());
-//                                            connectFindDevice();
-//                                            countError++;
-//                                        } else {
-                                            if(foxProgressbarInterface!=null) foxProgressbarInterface.stopProgressBar();
-
-                                        getMinePersonInfoFunc();
-//                                            unconnectUi();
-                                            // *****************连接失败
-//                                                Util.Toast(context,
-//                                                        "");
-//                                        }
-                                    }
-                                });
-                    }
-                });
+        } else{
+            getMinePersonInfoFunc();
         }
+//        else {
+//        final Context context = getActivity();
+//        QuinticDeviceFactoryTea quinticDeviceFactory = QuinticBleAPISdkBase
+//                .getInstanceFactory(context);
+//
+//        quinticDeviceFactory.findDevice(blindDeviceId,
+//                new QuinticCallbackTea<QuinticDeviceTea>() {
+//
+//                    @Override
+//                    public void onComplete(final QuinticDeviceTea resultDevice) {
+//                        super.onComplete(resultDevice);
+//                        new Handler(context.getMainLooper())
+//                                .post(new Runnable() {
+//                                    @Override
+//                                    public void run() {
+//                                        resultDeviceAll = resultDevice;
+//                                        QuinticBleAPISdkBase.resultDevice = resultDeviceAll;
+//                                        // ************处理动作
+//                                        getLogHistory();
+//
+//                                    }
+//                                });
+//                    }
+//
+//                    @Override
+//                    public void onError(final QuinticException ex) {
+//                        new Handler(context.getMainLooper())
+//                                .post(new Runnable() {
+//                                    @Override
+//                                    public void run() {
+//
+//
+////                                        if (countError < 1) {
+//                                            Log.d("connectFindDevice ex",
+//                                                    ex.getCode()
+//                                                            + ""
+//                                                            + ex.getMessage());
+////                                            connectFindDevice();
+////                                            countError++;
+////                                        } else {
+//                                            if(foxProgressbarInterface!=null) foxProgressbarInterface.stopProgressBar();
+//
+//                                        getMinePersonInfoFunc();
+////                                            unconnectUi();
+//                                            // *****************连接失败
+////                                                Util.Toast(context,
+////                                                        "");
+////                                        }
+//                                    }
+//                                });
+//                    }
+//                });
+//        }
     }
 
 public void connectSendCodeFailUi(String failMsg){
     Log.e("getLogHistory",failMsg);
-
+    getMinePersonInfoFunc();
 }
     public void getLogHistory() {
         if(!MyStringUtils.isopenBluetooth(getActivity())) return;

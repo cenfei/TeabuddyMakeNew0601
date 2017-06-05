@@ -30,6 +30,8 @@
         android:footerDividersEnabled="false"
         android:headerDividersEnabled="false"
         android:smoothScrollbar="true"
+        ptr:ptrDrawable="@drawable/refresh_icon"
+        ptr:ptrHeaderTextColor="@color/black_alpha50"
         ptr:ptrMode="both"></com.handmark.pulltorefresh.library.PullToRefreshListView>
 
 

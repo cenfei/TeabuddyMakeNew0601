@@ -155,12 +155,11 @@ public class MineSortListActivity extends BaseActivity {
         pullToRefreshListView.getLoadingLayoutProxy(true, false)
                 .setLastUpdatedLabel("加载更多");
         pullToRefreshListView.getLoadingLayoutProxy(true, false)
-                .setPullLabel("");
+                .setPullLabel("茶密刷起来");
         pullToRefreshListView.getLoadingLayoutProxy(true, false)
-                .setRefreshingLabel("正在刷新");
+                .setRefreshingLabel("继续拉");
         pullToRefreshListView.getLoadingLayoutProxy(true, false)
                 .setReleaseLabel("放开以刷新");
-
         pullToRefreshListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {

@@ -30,13 +30,13 @@ android:textSize="15sp"
             android:id="@+id/alert_comment_id"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="主人，您还没有绑定设备，请您前往绑定设备或者切换账号，请选择"
+            android:text="主人，您还没有绑定设备，请您前往"
             android:layout_marginTop="15dp"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:layout_gravity="center"
-            android:textSize="13sp"
-            android:textColor="@color/white_alpha60"
+            android:textSize="15sp"
+            android:textColor="@color/white_alpha80"
             />
 
         <RelativeLayout

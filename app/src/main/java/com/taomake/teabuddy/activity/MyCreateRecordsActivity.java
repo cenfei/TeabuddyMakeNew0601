@@ -3,6 +3,7 @@ package com.taomake.teabuddy.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -30,6 +31,7 @@ import com.taomake.teabuddy.object.VoiceGroupJson;
 import com.taomake.teabuddy.object.VoiceGroupObj;
 import com.taomake.teabuddy.prefs.ConfigPref_;
 import com.taomake.teabuddy.util.Constant;
+import com.taomake.teabuddy.util.FileUtilQq;
 import com.taomake.teabuddy.util.MyStringUtils;
 import com.taomake.teabuddy.util.Util;
 import com.taomake.teabuddy.wxapi.WechatShareManager;
@@ -352,7 +354,7 @@ public class MyCreateRecordsActivity extends BaseActivity {
                                 }
 
                                 WechatShareManager.ShareContentWebpage webpage = (WechatShareManager.ShareContentWebpage) mShareManager.getShareContentWebpag("茶密", "茶密分享最动听的茶道秘书",
-                                        API.share_url+voiceGroupObj.voicefile_index,R.drawable.logo);
+                                        API.share_url+voiceGroupObj.voicefile_index,R.drawable.app_logo);
                                 mShareManager.shareByWebchat(webpage, WechatShareManager.WECHAT_SHARE_TYPE_TALK);
 
                             }
@@ -365,7 +367,7 @@ public class MyCreateRecordsActivity extends BaseActivity {
                                 }
 
                                 WechatShareManager.ShareContentWebpage webpage = (WechatShareManager.ShareContentWebpage) mShareManager.getShareContentWebpag("茶密","茶密分享最动听的茶道秘书",
-                                        API.share_url+voiceGroupObj.voicefile_index,R.drawable.logo);
+                                        API.share_url+voiceGroupObj.voicefile_index,R.drawable.app_logo);
                                 mShareManager.shareByWebchat(webpage, WechatShareManager.WECHAT_SHARE_TYPE_FRENDS);
 
                             }
@@ -463,6 +465,12 @@ public class MyCreateRecordsActivity extends BaseActivity {
         params.putString(QQShare.SHARE_TO_QQ_APP_NAME, "茶密录音机");
         params.putString(QQShare.SHARE_TO_QQ_TITLE, "茶密");
         params.putString(QQShare.SHARE_TO_QQ_SUMMARY,"茶密分享最动听的茶道秘书");
+        String iconlocalurl = FileUtilQq.existQQshareIcon();
+        if (!TextUtils.isEmpty(iconlocalurl)) {
+            params.putString(QQShare.SHARE_TO_QQ_IMAGE_LOCAL_URL,
+                    iconlocalurl);
+
+        }
         params.putInt(QQShare.SHARE_TO_QQ_KEY_TYPE, QQShare.SHARE_TO_QQ_TYPE_DEFAULT);
         if(qqzone) {
             params.putInt(QQShare.SHARE_TO_QQ_EXT_INT, QQShare.SHARE_TO_QQ_FLAG_QZONE_AUTO_OPEN); //打开这句话，可以实现分享纯图到QQ空间

@@ -604,8 +604,8 @@ firstStart=false;
 
     timeEstimate = ((float)(mFileImgHdr.len *4) / (float)mProgInfo.iBytes) * sec;
 
-    txt = String.format("Time: %d / %d sec\n", sec, (int)timeEstimate);
-    txt += String.format("Bytes: %d (%d/sec)", mProgInfo.iBytes, byteRate);
+    txt = String.format("Time: %d / %d s\n", sec, (int)timeEstimate);
+    txt += String.format("Bytes: %d (%d/s)", mProgInfo.iBytes, byteRate);
     mProgressInfo.setText(txt);
   }
 
