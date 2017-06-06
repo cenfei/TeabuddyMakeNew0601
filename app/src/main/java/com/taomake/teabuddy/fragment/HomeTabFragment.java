@@ -146,18 +146,18 @@ public class HomeTabFragment extends Fragment{
         getActivity().registerReceiver(receiverHome, filterhome);
 
 
-        if(TextUtils.isEmpty(FileUtilQq.existQQshareIcon())){
-            new Handler().post(new Runnable() {
-                @Override
-                public void run() {
-               Log.e("qqshare","下载qq图标到本地");
-                    Bitmap bmp= BitmapFactory.decodeResource(getResources(), R.drawable.app_logo);
-
-                    FileUtilQq.saveBitmap(bmp);
-
-                }
-            });
-        }
+//        if(TextUtils.isEmpty(FileUtilQq.existQQshareIcon())){
+//            new Handler().post(new Runnable() {
+//                @Override
+//                public void run() {
+//               Log.e("qqshare","下载qq图标到本地");
+//                    Bitmap bmp= BitmapFactory.decodeResource(getResources(), R.drawable.app_logo);
+//
+//                    FileUtilQq.saveBitmap(bmp);
+//
+//                }
+//            });
+//        }
 
 
         return chatView;

@@ -5,9 +5,15 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.taomake.teabuddy.R;
+import com.taomake.teabuddy.util.ImageLoaderUtil;
 import com.taomake.teabuddy.util.Util;
 import com.tencent.mm.opensdk.modelmsg.SendMessageToWX;
 import com.tencent.mm.opensdk.modelmsg.WXImageObject;
@@ -17,6 +23,14 @@ import com.tencent.mm.opensdk.modelmsg.WXVideoObject;
 import com.tencent.mm.opensdk.modelmsg.WXWebpageObject;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
+
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URL;
 
 
 /**
@@ -39,12 +53,17 @@ public class WechatShareManager {
     private ShareContent mShareContentText, mShareContentPicture, mShareContentWebpag, mShareContentVideo;
     private IWXAPI mWXApi;
     private Context mContext;
-
+    private ImageLoader imageLoader;
+    private DisplayImageOptions options;
     private WechatShareManager(Context context){
         this.mContext = context;
         //初始化数据
         //初始化微信分享代码
         initWechatShare(context);
+
+        imageLoader = ImageLoader.getInstance();
+        options = ImageLoaderUtil.getAvatarOptionsInstance();
+
     }
 
     /**
@@ -53,6 +72,7 @@ public class WechatShareManager {
      * @return
      */
     public static WechatShareManager getInstance(Context context){
+
         if(mInstance == null){
             mInstance = new WechatShareManager(context);
         }
@@ -68,10 +88,9 @@ public class WechatShareManager {
 
     /**
      * 通过微信分享
-     * @param shareWay 分享的方式（文本、图片、链接）
      * @param shareType 分享的类型（朋友圈，会话）
      */
-    public void shareByWebchat(ShareContent shareContent, int shareType){
+    public void shareByWebchat(ShareContent shareContent, int shareType,String iconurl){
         switch (shareContent.getShareWay()) {
             case WECHAT_SHARE_WAY_TEXT:
                 shareText(shareContent, shareType);
@@ -80,7 +99,11 @@ public class WechatShareManager {
                 sharePicture(shareContent, shareType);
                 break;
             case WECHAT_SHARE_WAY_WEBPAGE:
-                shareWebPage(shareContent, shareType);
+
+
+
+
+                newUser(shareContent, shareType,iconurl);
                 break;
             case WECHAT_SHARE_WAY_VIDEO:
                 shareVideo(shareContent, shareType);
@@ -88,6 +111,34 @@ public class WechatShareManager {
         }
     }
 
+
+    public void  newUser(final ShareContent shareContent,final int shareType,String headimgurl){
+        imageLoader.loadImage(headimgurl, new ImageLoadingListener() {
+            @Override
+            public void onLoadingStarted(String imageUri, View view) {
+
+            }
+
+            @Override
+            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+
+            }
+
+            @Override
+            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                Bitmap thumbBitmap =  Bitmap.createScaledBitmap(loadedImage, THUMB_SIZE, THUMB_SIZE, true);
+                loadedImage.recycle();
+                byte[] avarByte = Util.getBitmapByte(thumbBitmap);
+                shareWebPage(shareContent, shareType,avarByte);
+
+            }
+
+            @Override
+            public void onLoadingCancelled(String imageUri, View view) {
+
+            }
+        });
+    }
     private abstract class ShareContent {
         protected abstract int getShareWay();
         protected abstract String getContent();
@@ -106,7 +157,6 @@ public class WechatShareManager {
 
         /**
          * 构造分享文字类
-         * @param text 分享的文字内容
          */
         public ShareContentText(String content){
             this.content = content;
@@ -242,6 +292,7 @@ public class WechatShareManager {
      * 获取网页分享对象
      */
     public ShareContent getShareContentWebpag(String title, String content, String url, int pictureResource) {
+
         if (mShareContentWebpag == null) {
             mShareContentWebpag = new ShareContentWebpage(title, content, url, pictureResource);
         }
@@ -341,27 +392,60 @@ public class WechatShareManager {
     /*
      * 分享链接
      */
-    private void shareWebPage(ShareContent shareContent, int shareType) {
+    private void shareWebPage(ShareContent shareContent, int shareType, byte[] thumb) {
         WXWebpageObject webpage = new WXWebpageObject();
         webpage.webpageUrl = shareContent.getURL();
         WXMediaMessage msg = new WXMediaMessage(webpage);
         msg.title = shareContent.getTitle();
         msg.description = shareContent.getContent();
 
-        Bitmap thumb = BitmapFactory.decodeResource(mContext.getResources(), shareContent.getPictureResource());
-        if(thumb == null) {
-            Toast.makeText(mContext, "图片不能为空", Toast.LENGTH_SHORT).show();
-        } else {
-            msg.thumbData = Util.Bitmap2Bytes(thumb);
-        }
-
+//        Bitmap thumb = BitmapFactory.decodeResource(mContext.getResources(), shareContent.getPictureResource());
+//        Bitmap thumb =GetLocalOrNetBitmap(iconurl);
+//        if(thumb == null) {
+//            Toast.makeText(mContext, "图片不能为空", Toast.LENGTH_SHORT).show();
+//        } else {
+//            msg.thumbData = Util.Bitmap2Bytes(thumb);
+//        }
+        msg.thumbData=thumb;
         SendMessageToWX.Req req = new SendMessageToWX.Req();
         req.transaction = buildTransaction("webpage");
         req.message = msg;
         req.scene = shareType;
         mWXApi.sendReq(req);
     }
+    /**
+     * 把网络资源图片转化成bitmap
+     * @param url  网络资源图片
+     * @return  Bitmap
+     */
+    public static Bitmap GetLocalOrNetBitmap(String url) {
+        Bitmap bitmap = null;
+        InputStream in = null;
+        BufferedOutputStream out = null;
+        try {
+            in = new BufferedInputStream(new URL(url).openStream(), 1024);
+            final ByteArrayOutputStream dataStream = new ByteArrayOutputStream();
+            out = new BufferedOutputStream(dataStream, 1024);
+            copy(in, out);
+            out.flush();
+            byte[] data = dataStream.toByteArray();
+            bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
+            data = null;
+            return bitmap;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
+    private static void copy(InputStream in, OutputStream out)
+            throws IOException {
+        byte[] b = new byte[1024];
+        int read;
+        while ((read = in.read(b)) != -1) {
+            out.write(b, 0, read);
+        }
+    }
     /*
      * 分享视频
      */

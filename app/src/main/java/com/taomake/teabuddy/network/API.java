@@ -22,6 +22,7 @@ public interface API {
     public String GET_PHONE_CHECK_CODE = server ;
 
 
+    public String  shareTitle="想说的都在这里了，把他装进茶密里，每天陪着你!";
 
 
 }

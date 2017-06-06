@@ -383,10 +383,13 @@ public class MyGFRecordsActivity extends BaseActivity implements IWeiboHandler.R
                                 return;
                             }
 
-                            WechatShareManager.ShareContentWebpage webpage = (WechatShareManager.ShareContentWebpage) mShareManager.getShareContentWebpag("茶密", "茶密分享最动听的茶道秘书",
+//                            WechatShareManager.ShareContentWebpage webpage = (WechatShareManager.ShareContentWebpage) mShareManager.getShareContentWebpag("茶密", "茶密分享最动听的茶道秘书",
+//                                    API.share_url + voiceGroupObj.voicefile_index, R.drawable.app_logo);
+//                            mShareManager.shareByWebchat(webpage, WechatShareManager.WECHAT_SHARE_TYPE_TALK);
+                            WechatShareManager.ShareContentWebpage webpage = (WechatShareManager.ShareContentWebpage) mShareManager.getShareContentWebpag(
+                                    MyStringUtils.decodeUnicode(voiceGroupObj.voicefile_index), API.shareTitle,
                                     API.share_url + voiceGroupObj.voicefile_index, R.drawable.app_logo);
-                            mShareManager.shareByWebchat(webpage, WechatShareManager.WECHAT_SHARE_TYPE_TALK);
-
+                            mShareManager.shareByWebchat(webpage, WechatShareManager.WECHAT_SHARE_TYPE_TALK, voiceGroupObj.sys_headurl);
                         }
 
                         @Override
@@ -396,25 +399,28 @@ public class MyGFRecordsActivity extends BaseActivity implements IWeiboHandler.R
                                 return;
                             }
 
-                            WechatShareManager.ShareContentWebpage webpage = (WechatShareManager.ShareContentWebpage) mShareManager.getShareContentWebpag("茶密", "茶密分享最动听的茶道秘书",
+                            WechatShareManager.ShareContentWebpage webpage = (WechatShareManager.ShareContentWebpage) mShareManager.getShareContentWebpag(
+                                    MyStringUtils.decodeUnicode(voiceGroupObj.voicefile_index), API.shareTitle,
                                     API.share_url + voiceGroupObj.voicefile_index, R.drawable.app_logo);
-                            mShareManager.shareByWebchat(webpage, WechatShareManager.WECHAT_SHARE_TYPE_FRENDS);
+                            mShareManager.shareByWebchat(webpage, WechatShareManager.WECHAT_SHARE_TYPE_FRENDS, voiceGroupObj.sys_headurl);
 
                         }
 
                         @Override
                         public void handleCallBackShare() {//新浪微博
-                            testShareWebUrl(API.share_url + voiceGroupObj.voicefile_index, "茶密", "茶密分享最动听的茶道秘书");
+                            testShareWebUrl(API.share_url + voiceGroupObj.voicefile_index,
+                                    MyStringUtils.decodeUnicode(voiceGroupObj.voicefile_index), API.shareTitle
+                                    );
                         }
 
                         @Override
                         public void handleCallBackApply() {//qq好友
-                            shareOnlyUrlOnQQorZone(false, API.share_url + voiceGroupObj.voicefile_index);
+                            shareOnlyUrlOnQQorZone(false, API.share_url + voiceGroupObj.voicefile_index,MyStringUtils.decodeUnicode(voiceGroupObj.voicefile_index), API.shareTitle,voiceGroupObj.sys_headurl);
                         }
 
                         @Override
                         public void handleCallBackQqZone() {//qq空间
-                            shareOnlyUrlOnQQorZone(true, API.share_url + voiceGroupObj.voicefile_index);
+                            shareOnlyUrlOnQQorZone(true, API.share_url + voiceGroupObj.voicefile_index,MyStringUtils.decodeUnicode(voiceGroupObj.voicefile_index), API.shareTitle,voiceGroupObj.sys_headurl);
 
                         }
                     });
@@ -452,19 +458,23 @@ public class MyGFRecordsActivity extends BaseActivity implements IWeiboHandler.R
 
 
     //qq 分享
-    public void shareOnlyUrlOnQQorZone(boolean qqzone, String url) {
+    public void shareOnlyUrlOnQQorZone(boolean qqzone, String url,String content,String title,String headUrl) {
         final Bundle params = new Bundle();
         params.putString(QQShare.SHARE_TO_QQ_TARGET_URL, url);
-        params.putString(QQShare.SHARE_TO_QQ_APP_NAME, "茶密录音机");
-        params.putString(QQShare.SHARE_TO_QQ_TITLE, "茶密");
-        params.putString(QQShare.SHARE_TO_QQ_SUMMARY, "茶密分享最动听的茶道秘书");
+        params.putString(QQShare.SHARE_TO_QQ_APP_NAME, "茶密");
+        params.putString(QQShare.SHARE_TO_QQ_TITLE, content);
+        params.putString(QQShare.SHARE_TO_QQ_SUMMARY, title);
         params.putInt(QQShare.SHARE_TO_QQ_KEY_TYPE, QQShare.SHARE_TO_QQ_TYPE_DEFAULT);
-        String iconlocalurl = FileUtilQq.existQQshareIcon();
-        if (!TextUtils.isEmpty(iconlocalurl)) {
-            params.putString(QQShare.SHARE_TO_QQ_IMAGE_LOCAL_URL,
-                    iconlocalurl);
 
-        }
+        params.putString(QQShare.SHARE_TO_QQ_IMAGE_URL,
+                    headUrl);
+
+//        String iconlocalurl = FileUtilQq.existQQshareIcon();
+//        if (!TextUtils.isEmpty(iconlocalurl)) {
+//            params.putString(QQShare.SHARE_TO_QQ_IMAGE_LOCAL_URL,
+//                    iconlocalurl);
+//
+//        }
 
         if (qqzone) {
             params.putInt(QQShare.SHARE_TO_QQ_EXT_INT, QQShare.SHARE_TO_QQ_FLAG_QZONE_AUTO_OPEN); //打开这句话，可以实现分享纯图到QQ空间
