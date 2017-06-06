@@ -275,7 +275,6 @@ class QuinticDeviceTeaImpl implements QuinticDeviceTea {
                             } catch (BleException ex) {
                                 callback.onError(new QuinticException(ex));
                             }
-//                            callback.onComplete(trueReturnCode);//返回 EB0C00OB
 
                         }
 
@@ -283,10 +282,20 @@ class QuinticDeviceTeaImpl implements QuinticDeviceTea {
                     }
                     if(QuinticCommon.matchData(data, QuinticCommon.stringToBytes("EB0C0001"))) {
                         Log.e("MP3","MP3设置当前语音组成功");
+                        try {
+                            Log.e("MP3","MP3开始复位设备");
 
-                        callback.onComplete("EB0C0001");
+                            connection.writeData(new BleWriteData(QuinticCommon.stringToBytes("EB17")));
+                        } catch (BleException ex) {
+                            callback.onError(new QuinticException(ex));
+                        }
                     }
 
+                    if(QuinticCommon.matchData(data, QuinticCommon.stringToBytes("EB1701"))) {
+                        Log.e("MP3","MP3复位设备成功");
+                        callback.onComplete("EB1701");
+
+                    }
 //                    if (!QuinticCommon.matchData(data, QuinticCommon.stringToBytes("ec"))) {
 //                        String notifydata=QuinticCommon.unsignedBytesToHexString(data, " ");
 //
@@ -307,151 +316,239 @@ class QuinticDeviceTeaImpl implements QuinticDeviceTea {
     }
 
 
-    public void convertCodeMap3(final List<byte[]> code, final QuinticCallbackTea<String> callback) {
-        try {
-            //逻辑list 中一共9个mp3的byte[]
-            /**
-             * 每个长包分，多个短包发送
-             */
-//            Intent intent = new Intent("com.pushtest.broadcast");
-//            intent.putExtra("CurrentLoading", "MP3 第" + position + "个Broadcast  发送进度:" + 11 * (position + 1));
+//    public void convertCodeMap3(final List<byte[]> code, final QuinticCallbackTea<String> callback) {
+//        try {
+//            //逻辑list 中一共9个mp3的byte[]
+//            /**
+//             * 每个长包分，多个短包发送
+//             */
+////            Intent intent = new Intent("com.pushtest.broadcast");
+////            intent.putExtra("CurrentLoading", "MP3 第" + position + "个Broadcast  发送进度:" + 11 * (position + 1));
+////
+////            context.sendBroadcast(intent);
+//            byte[] mapcode0 = code.get(position);
+//            //先发送 EB 0C 00 00   00     A4     34     03
 //
-//            context.sendBroadcast(intent);
-            byte[] mapcode0 = code.get(position);
-            //先发送 EB 0C 00 00   00     A4     34     03
-
-            Log.e("mapcode0",QuinticCommon.unsignedBytesToHexString(mapcode0,0,1000));
-
-            Log.e("mapcode0",QuinticCommon.unsignedBytesToHexString(mapcode0,1000,mapcode0.length-1000));
-
-            int packageCount = mapcode0.length / 64;
-
-            if(packageCount%64!=0){
-                packageCount=packageCount+1;
-            }
-
-            int lenth=0;
-            if(packageCount%4!=0){
-                packageCount=packageCount-packageCount%4+4;
-                lenth=packageCount*64;
-            }else{
-                lenth=mapcode0.length;
-                Log.e("lenth",lenth+"");
-                if(mapcode0.length % 64!=0){
-                    lenth=mapcode0.length-mapcode0.length % 64+64;
-                    Log.e("lenth2",lenth+"");
-
-                }
-
-            }
-
-
-
-//            byte[]  mapcode=new byte[lenth];
-//            for(int m=0;m<mapcode.length;m++){
-//                mapcode[m]=0;
+//            Log.e("mapcode0",QuinticCommon.unsignedBytesToHexString(mapcode0,0,1000));
+//
+//            Log.e("mapcode0",QuinticCommon.unsignedBytesToHexString(mapcode0,1000,mapcode0.length-1000));
+//
+//            int packageCount = mapcode0.length / 64;
+//
+//            if(packageCount%64!=0){
+//                packageCount=packageCount+1;
 //            }
 //
-//            for(int m=0;m<mapcode0.length;m++){
-//                mapcode[m]=mapcode0[m];
-//            }
-//            System.arraycopy(mapcode0, 0, mapcode, 0, mapcode0.length);
-//           byte  aa= mapcode[mapcode0.length];
+//            int lenth=0;
+//            if(packageCount%4!=0){
+//                packageCount=packageCount-packageCount%4+4;
+//                lenth=packageCount*64;
+//            }else{
+//                lenth=mapcode0.length;
+//                Log.e("lenth",lenth+"");
+//                if(mapcode0.length % 64!=0){
+//                    lenth=mapcode0.length-mapcode0.length % 64+64;
+//                    Log.e("lenth2",lenth+"");
 //
-//            mapcode[mapcode0.length]=0;
-//            byte  bb= mapcode[mapcode0.length];
+//                }
+//
+//            }
+//
+//
+//
+////            byte[]  mapcode=new byte[lenth];
+////            for(int m=0;m<mapcode.length;m++){
+////                mapcode[m]=0;
+////            }
+////
+////            for(int m=0;m<mapcode0.length;m++){
+////                mapcode[m]=mapcode0[m];
+////            }
+////            System.arraycopy(mapcode0, 0, mapcode, 0, mapcode0.length);
+////           byte  aa= mapcode[mapcode0.length];
+////
+////            mapcode[mapcode0.length]=0;
+////            byte  bb= mapcode[mapcode0.length];
+//
+////            Log.e("mapcode",QuinticCommon.unsignedBytesToHexString(mapcode,0,mapcode.length));
+//
+//
+//
+//            String packageCountH = QuinticCommon.unsignedIntToHexString(packageCount / 256);
+//            String packageCountL = QuinticCommon.unsignedIntToHexString(packageCount % 256);
+//
+//            int otherNum = 64;
+//            String otherNumHex = QuinticCommon.unsignedIntToHexString(otherNum);
+//
+//            String firstCode = "EB0C0000" + packageCountH + packageCountL + otherNumHex + QuinticCommon.unsignedIntToHexString(position + 3);
+//            connection.writeData(new BleWriteData(QuinticCommon.stringToBytes(firstCode)));
+//
+//
+//            for (int i = 0; i < packageCount; i++) {
+//
+//                callback.onProgress(11 * (position + 1)+i*10/packageCount);
+//
+//
+//                String iHexH = QuinticCommon.unsignedIntToHexString((i + 1) / 256);
+//                String iHexL = QuinticCommon.unsignedIntToHexString((i + 1) % 256);
+//                StringBuffer everyCode =new StringBuffer();
+//
+////                everyCode.append("EB0C" + iHexH + iHexL + "40");
+////                everyCode.append(QuinticCommon.unsignedBytesToHexString(mapcode, 64 * i, 64));
+//                int length=mapcode0.length;
+//                int codeImportNum=length/64;
+//                if(codeImportNum%64==0){
+//                    if(i<=codeImportNum-1){
+//                        everyCode.append("EB0C" + iHexH + iHexL + "40");
+//                        everyCode.append(QuinticCommon.unsignedBytesToHexString(mapcode0, 64 * i, 64));
+//
+//                    }else{
+//                        everyCode.append("EB0C" + iHexH + iHexL + "40");
+//                        for(int j=0;j<64;j++){
+//                            everyCode.append("00");
+//                        }
+//                    }
+//
+//
+//                }else{
+//                    if(i<=codeImportNum-1){
+//                        everyCode.append("EB0C" + iHexH + iHexL + "40");
+//                        everyCode.append(QuinticCommon.unsignedBytesToHexString(mapcode0, 64 * i, 64));
+//
+//                    }
+//                    else if(i==codeImportNum){
+//                        everyCode.append("EB0C" + iHexH + iHexL + "40");
+//                        everyCode.append(QuinticCommon.unsignedBytesToHexString(mapcode0, 64 * i, codeImportNum%64));
+//
+//
+//                        for(int j=0;j<64-codeImportNum%64;j++){
+//                            everyCode.append("00");
+//                        }
+//
+//                    }
+//
+//                    else{
+//                        everyCode.append("EB0C" + iHexH + iHexL + "40");
+//                        for(int j=0;j<64;j++){
+//                            everyCode.append("00");
+//                        }
+//                    }
+//
+//
+//                }
+//
+//
+//
+//
+//
+//                Log.e("bytes:",everyCode.toString());
+//                connection.writeData(new BleWriteData(QuinticCommon.stringToBytes(everyCode.toString())));
+//
+////                Log.i("MP3 "+position+"Broadcast  Send", everyCode);
+////                intent.putExtra("CurrentLoading", "MP3 第" + position + "个Broadcast  发送 短包进度:第" + i + "个");
+////
+////                context.sendBroadcast(intent);
+//
+//            }
+//
+//            String finalCode = "EB0CFFFF" + QuinticCommon.unsignedIntToHexString(position + 3);
+//
+//
+//            connection.writeData(new BleWriteData(QuinticCommon.stringToBytes(finalCode)));
+//
+//
+//           // callback.onProgress(11 * (position + 1));
+//        } catch (BleException ex) {
+//            connection.hold();
+//            callback.onError(new QuinticException(ex));
+//        }
+//    }
+//}
+public void convertCodeMap3(final List<byte[]> code, final QuinticCallbackTea<String> callback) {
+    try {
+        //逻辑list 中一共9个mp3的byte[]
+        /**
+         * 每个长包分，多个短包发送
+         */
+//        Intent intent = new Intent("com.pushtest.broadcast");
+//        intent.putExtra("CurrentLoading", "MP3 第" + position + "个Broadcast  发送进度:" + 11 * (position + 1));
+//
+//        context.sendBroadcast(intent);
+        byte[] mapcode0 = code.get(position);
+        //先发送 EB 0C 00 00   00     A4     34     03
 
-//            Log.e("mapcode",QuinticCommon.unsignedBytesToHexString(mapcode,0,mapcode.length));
+
+        Log.e("mapcode0",QuinticCommon.unsignedBytesToHexString(mapcode0,0,1000));
+        Log.e("mapcode0",QuinticCommon.unsignedBytesToHexString(mapcode0,1000,mapcode0.length-1000));
+
+        int packageCount = mapcode0.length / 64;
+
+        if(packageCount%64!=0){
+            packageCount=packageCount+1;
+        }
+
+        int lenth=0;
+        if(packageCount%4!=0){
+            packageCount=packageCount-packageCount%4+4;
+            lenth=packageCount*64;
+        }else{
+            lenth=mapcode0.length;
+            Log.e("lenth",lenth+"");
+            if(mapcode0.length % 64!=0){
+                lenth=mapcode0.length-mapcode0.length % 64+64;
+                Log.e("lenth2",lenth+"");
+
+            }
+
+        }
 
 
 
-            String packageCountH = QuinticCommon.unsignedIntToHexString(packageCount / 256);
-            String packageCountL = QuinticCommon.unsignedIntToHexString(packageCount % 256);
-
-            int otherNum = 64;
-            String otherNumHex = QuinticCommon.unsignedIntToHexString(otherNum);
-
-            String firstCode = "EB0C0000" + packageCountH + packageCountL + otherNumHex + QuinticCommon.unsignedIntToHexString(position + 3);
-            connection.writeData(new BleWriteData(QuinticCommon.stringToBytes(firstCode)));
-
-
-            for (int i = 0; i < packageCount; i++) {
-
-                callback.onProgress(11 * (position + 1)+i*10/packageCount);
-
-
-                String iHexH = QuinticCommon.unsignedIntToHexString((i + 1) / 256);
-                String iHexL = QuinticCommon.unsignedIntToHexString((i + 1) % 256);
-                StringBuffer everyCode =new StringBuffer();
-
-//                everyCode.append("EB0C" + iHexH + iHexL + "40");
-//                everyCode.append(QuinticCommon.unsignedBytesToHexString(mapcode, 64 * i, 64));
-                int length=mapcode0.length;
-                int codeImportNum=length/64;
-                if(codeImportNum%64==0){
-                    if(i<=codeImportNum-1){
-                        everyCode.append("EB0C" + iHexH + iHexL + "40");
-                        everyCode.append(QuinticCommon.unsignedBytesToHexString(mapcode0, 64 * i, 64));
-
-                    }else{
-                        everyCode.append("EB0C" + iHexH + iHexL + "40");
-                        for(int j=0;j<64;j++){
-                            everyCode.append("00");
-                        }
-                    }
-
-
-                }else{
-                    if(i<=codeImportNum-1){
-                        everyCode.append("EB0C" + iHexH + iHexL + "40");
-                        everyCode.append(QuinticCommon.unsignedBytesToHexString(mapcode0, 64 * i, 64));
-
-                    }
-                    else if(i==codeImportNum){
-                        everyCode.append("EB0C" + iHexH + iHexL + "40");
-                        everyCode.append(QuinticCommon.unsignedBytesToHexString(mapcode0, 64 * i, codeImportNum%64));
-
-
-                        for(int j=0;j<64-codeImportNum%64;j++){
-                            everyCode.append("00");
-                        }
-
-                    }
-
-                    else{
-                        everyCode.append("EB0C" + iHexH + iHexL + "40");
-                        for(int j=0;j<64;j++){
-                            everyCode.append("00");
-                        }
-                    }
-
-
-                }
+        byte[]  mapcode=new byte[lenth];
+        for(int m=0;m<mapcode0.length;m++){
+            mapcode[m]=mapcode0[m];
+        }
+        Log.e("mapcode",QuinticCommon.unsignedBytesToHexString(mapcode,0,mapcode.length));
 
 
 
+        String packageCountH = QuinticCommon.unsignedIntToHexString(packageCount / 256);
+        String packageCountL = QuinticCommon.unsignedIntToHexString(packageCount % 256);
+
+        int otherNum = 64;
+        String otherNumHex = QuinticCommon.unsignedIntToHexString(otherNum);
+
+        String firstCode = "EB0C0000" + packageCountH + packageCountL + otherNumHex + QuinticCommon.unsignedIntToHexString(position + 3);
+        connection.writeData(new BleWriteData(QuinticCommon.stringToBytes(firstCode)));
 
 
-                Log.e("bytes:",everyCode.toString());
-                connection.writeData(new BleWriteData(QuinticCommon.stringToBytes(everyCode.toString())));
+        for (int i = 0; i < packageCount; i++) {
+            String iHexH = QuinticCommon.unsignedIntToHexString((i + 1) / 256);
+            String iHexL = QuinticCommon.unsignedIntToHexString((i + 1) % 256);
+
+
+            String everyCode =null;
+            everyCode = "EB0C" + iHexH + iHexL + "40" + QuinticCommon.unsignedBytesToHexString(mapcode, 64 * i, 64);
+
+            connection.writeData(new BleWriteData(QuinticCommon.stringToBytes(everyCode)));
 
 //                Log.i("MP3 "+position+"Broadcast  Send", everyCode);
-//                intent.putExtra("CurrentLoading", "MP3 第" + position + "个Broadcast  发送 短包进度:第" + i + "个");
+//            intent.putExtra("CurrentLoading", "MP3 第" + position + "个Broadcast  发送 短包进度:第" + i + "个");
 //
-//                context.sendBroadcast(intent);
+//            context.sendBroadcast(intent);
 
-            }
-
-            String finalCode = "EB0CFFFF" + QuinticCommon.unsignedIntToHexString(position + 3);
-
-
-            connection.writeData(new BleWriteData(QuinticCommon.stringToBytes(finalCode)));
-
-
-           // callback.onProgress(11 * (position + 1));
-        } catch (BleException ex) {
-            connection.hold();
-            callback.onError(new QuinticException(ex));
         }
+
+        String finalCode = "EB0CFFFF" + QuinticCommon.unsignedIntToHexString(position + 3);
+
+
+        connection.writeData(new BleWriteData(QuinticCommon.stringToBytes(finalCode)));
+
+
+        callback.onProgress(11 * (position + 1));
+    } catch (BleException ex) {
+        connection.hold();
+        callback.onError(new QuinticException(ex));
     }
+}
 }

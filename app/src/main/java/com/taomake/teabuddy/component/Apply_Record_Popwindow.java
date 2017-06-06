@@ -116,9 +116,14 @@ public class Apply_Record_Popwindow {
                 apply_connecting_line.setVisibility(View.VISIBLE);
                 break;
             case 3:
+
+
                 apply_download_line.setVisibility(View.VISIBLE);
                 break;
             case 2:
+                //这个时候需要去连接蓝牙  发送eb19
+
+//               setVoiceInit();
                 apply_ready_line.setVisibility(View.VISIBLE);
                 break;
             default:
@@ -388,7 +393,7 @@ public class Apply_Record_Popwindow {
                         .post(new Runnable() {
                             @Override
                             public void run() {
-                                apply_download_comment.setText("已完成 " + progress+"%");
+                                apply_download_comment.setText("已完成 " + progress + "%");
 
                             }
                         });
@@ -410,13 +415,13 @@ public class Apply_Record_Popwindow {
                             public void run() {
 //BACK 0A 04 01 53result
                                 String trimResult = result.replace(" ", "");
-                                if (trimResult.contains("eb0c0001")) {
+                                if (trimResult.contains("EB1701")) {
 //
-                                    Util.Toast(context,"应用成功");
+                                    Util.Toast(context, "应用成功");
 
                                     closePopupWindow(context);
                                 } else {
-                                    connectSendCodeFailUi("电量查询失败");
+                                    connectSendCodeFailUi("下载录音失败");
                                 }
 
                             }
@@ -425,6 +430,52 @@ public class Apply_Record_Popwindow {
         });
     }
 
+
+
+    public void setVoiceInit() {
+        if (resultDeviceAll == null) return;
+        String code = "EB19";
+
+        resultDeviceAll.sendCommonCode(code, new QuinticCallbackTea<String>() {
+            @Override
+            public void onError(QuinticException ex) {
+                super.onError(ex);
+                new Handler(context.getMainLooper())
+                        .post(new Runnable() {
+                            @Override
+                            public void run() {
+                                connectSendCodeFailUi("电量查询失败");
+                            }
+                        });
+            }
+
+            @Override
+            public void onComplete(final String result) {
+                super.onComplete(result);
+                if (result == null) {
+                    connectSendCodeFailUi("电量查询失败");
+
+                    return;
+                }
+                new Handler(context.getMainLooper())
+                        .post(new Runnable() {
+                            @Override
+                            public void run() {
+//BACK 0A 04 01 53result
+                                String trimResult = result.replace(" ", "");
+                                if (trimResult.contains("eb19")) {
+                                    Log.d("当前电量", "录音初始化eb19成功");
+                                } else {
+                                    connectSendCodeFailUi("电量查询失败");
+                                }
+
+                            }
+                        });
+
+            }
+        });
+
+    }
 
     //***********************************************
 

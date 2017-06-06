@@ -1,11 +1,14 @@
 package com.taomake.teabuddy.activity;
 
+import android.Manifest;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.widget.EditText;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -365,8 +368,7 @@ boolean boolman=sexType;
                 if (MANGER != null && MANGER.equals("1")) {
                     finish();
                 } else {
-                    Util.startActivity(LoginByphoneActivity.this, MainActivity_.class);
-                    finish();
+                    permissionAll();
                 }
 
 
@@ -375,7 +377,52 @@ boolean boolman=sexType;
         }
     }
 
+    public void postStart(){
+        Util.startActivity(LoginByphoneActivity.this, MainActivity_.class);
+        finish();
 
+    }
+
+    int  MY_PERMISSIONS_REQUEST_ACCESS_ALL=5005;
+    public void permissionAll() {
+
+        List<String> plist=new ArrayList<String>();
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            plist.add(Manifest.permission.ACCESS_COARSE_LOCATION);
+        }
+
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+            plist.add(Manifest.permission.RECORD_AUDIO);
+        }
+
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+            plist.add(Manifest.permission.READ_PHONE_STATE);
+        }
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            plist.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        }
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+            plist.add(Manifest.permission.READ_CONTACTS);
+        }
+        if(plist.size()>0) {
+            String[] toBeStored = plist.toArray(new String[plist.size()]);
+
+//请求权限
+            ActivityCompat.requestPermissions(this, toBeStored,
+                    MY_PERMISSIONS_REQUEST_ACCESS_ALL);
+//判断是否需要 向用户解释，为什么要申请该权限
+        }else{
+            postStart();
+
+        }
+
+
+    }
 
     public List<String> setTestData() {
         List<String> jobJsons = new ArrayList<String>();

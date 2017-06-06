@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -40,6 +41,8 @@ import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.sharedpreferences.Pref;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 
@@ -150,12 +153,12 @@ public class WelcomeActivity extends BaseActivity {
 
             welcome_rel_id.setVisibility(View.VISIBLE);
             login_rel_id.setVisibility(View.GONE);
-            permissionBle();
-//            if (Build.VERSION.SDK_INT >= 23){
-//                permissionBle();
-//            }else {
-//                postStart();
-//            }
+//            permissionBle();
+            if (Build.VERSION.SDK_INT >= 23){
+                permissionAll();
+            }else {
+                postStart();
+            }
         }
     }
 
@@ -174,9 +177,7 @@ public class WelcomeActivity extends BaseActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[]
             grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == MY_PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION) {
-            permissionRecord();
-        } else if (requestCode == RECORD_AUDIO_ID) {
+        if (requestCode == MY_PERMISSIONS_REQUEST_ACCESS_ALL) {
             postStart();
         }
 
@@ -184,41 +185,80 @@ public class WelcomeActivity extends BaseActivity {
     }
 
 
-    int RECORD_AUDIO_ID = 3004;
-
-    public void permissionRecord() {
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
-//请求权限
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO},
-                    RECORD_AUDIO_ID);
-//判断是否需要 向用户解释，为什么要申请该权限
-//            if(ActivityCompat.shouldShowRequestPermissionRationale(this,
+//    int RECORD_AUDIO_ID = 3004;
+//
+//    public void permissionRecord() {
+//        if (ContextCompat.checkSelfPermission(this,
+//                Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+////请求权限
+//            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO},
+//                    RECORD_AUDIO_ID);
+////判断是否需要 向用户解释，为什么要申请该权限
+//
+//        } else {
+//            postStart();
+//        }
+//
+//    }
+//
+//    int MY_PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION = 3003;
+//
+//    public void permissionBle() {
+//        if (ContextCompat.checkSelfPermission(this,
+//                Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+////请求权限
+//            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+//                    MY_PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION);
+////判断是否需要 向用户解释，为什么要申请该权限
+//            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
 //                    Manifest.permission.READ_CONTACTS)) {
 //                Toast.makeText(this, "shouldShowRequestPermissionRationale", Toast.LENGTH_SHORT).show();
 //            }
-        } else {
-            postStart();
-        }
+//        } else {
+//            permissionRecord();
+//        }
+//
+//    }
 
-    }
 
-    int MY_PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION = 3003;
+    int  MY_PERMISSIONS_REQUEST_ACCESS_ALL=5005;
+    public void permissionAll() {
 
-    public void permissionBle() {
+        List<String> plist=new ArrayList<String>();
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-//请求权限
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
-                    MY_PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION);
-//判断是否需要 向用户解释，为什么要申请该权限
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                    Manifest.permission.READ_CONTACTS)) {
-                Toast.makeText(this, "shouldShowRequestPermissionRationale", Toast.LENGTH_SHORT).show();
-            }
-        } else {
-            permissionRecord();
+            plist.add(Manifest.permission.ACCESS_COARSE_LOCATION);
         }
+
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+            plist.add(Manifest.permission.RECORD_AUDIO);
+        }
+
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+            plist.add(Manifest.permission.READ_PHONE_STATE);
+        }
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            plist.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        }
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+            plist.add(Manifest.permission.READ_CONTACTS);
+        }
+        if(plist.size()>0) {
+            String[] toBeStored = plist.toArray(new String[plist.size()]);
+
+//请求权限
+            ActivityCompat.requestPermissions(this, toBeStored,
+                    MY_PERMISSIONS_REQUEST_ACCESS_ALL);
+//判断是否需要 向用户解释，为什么要申请该权限
+        }else{
+            postStart();
+
+        }
+
 
     }
 
@@ -480,16 +520,7 @@ public class WelcomeActivity extends BaseActivity {
     }
 
     public void setRegisterIdHandler(String resp) {
-//        foxProgressbarInterface.stopProgressBar();
-//        if (resp != null && !resp.equals("")) {
-//            DeviceCubImgJson dbRecordsJson = new Gson().fromJson(resp, DeviceCubImgJson.class);
-//            if ((dbRecordsJson.rcode + "").equals(Constant.RES_SUCCESS)) {
-//                final String url = dbRecordsJson.obj;
-//                configPref.payUrl().put(url);
-//                getMessageBindDeviceForMsg(configPref.userUnion().get());
-//
-//            }
-//        }
+
 
     }
 

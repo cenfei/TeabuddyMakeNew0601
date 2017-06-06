@@ -1,18 +1,15 @@
 package com.taomake.teabuddy.activity;
 
-import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.CompoundButton;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import com.taomake.teabuddy.R;
@@ -420,8 +417,6 @@ Integer chooseNumButton=0;
         arrayWheel2.setCurrentItem(minuteSetting-1);
         setTextviewSize(minuteSetting + "", monthAdapter2);
         setTextviewSize(hourSetting + "", monthAdapter3);
-
-
         arrayWheel.invalidateWheel(true);
         arrayWheel2.invalidateWheel(true);
         arrayWheel3.invalidateWheel(true);
@@ -524,10 +519,9 @@ Integer chooseNumButton=0;
                                     minuteSetting = QuinticCommon.unsignedByteToInt(data[3]);
 
                                     hourSetting = QuinticCommon.unsignedByteToInt(data[4]);
-
                                     weekInt = QuinticCommon.unsignedByteToInt(data[5]);
-
                                     String eventArray = Integer.toBinaryString(weekInt);
+                                    Log.e("read setting","chooseNumButton:"+chooseNumButton+ ",minuteSetting:"+minuteSetting+",hourSetting:"+hourSetting+",eventArray:"+eventArray);
                                     weekIntCharArray = eventArray.toCharArray();
                                     connectSettingInfoSuccess();
 //                                    Log.d("当前电量", batteryLevelValue + "");

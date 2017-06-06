@@ -13,19 +13,22 @@
         android:background="@null">
 
 
-
+<LinearLayout
+    android:id="@+id/back_line"
+    android:layout_width="50dp"
+    android:layout_height="match_parent">
         <ImageView
             android:id="@+id/left_btn"
             android:layout_width="10dp"
             android:layout_height="14dp"
             android:layout_marginLeft="20dp"
+            android:layout_gravity="center_vertical"
             android:scaleType="fitXY"
             android:src="@drawable/topbar_btn_bank"
-            android:layout_centerVertical="true"
 
             />
 
-
+</LinearLayout>
         <TextView
             android:id="@+id/close"
             android:layout_width="wrap_content"

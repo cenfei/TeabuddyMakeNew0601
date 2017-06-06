@@ -21,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -120,6 +121,7 @@ public class HotFragment extends Fragment {
             Intent intent = new Intent(getActivity(), DeviceUpdateTwoActivity_.class);
 
             intent.putExtra("sysdownloadsize", sysdownloadsize);
+            intent.putExtra("upversion", sysUpdateVersion);
 
             startActivity(intent);
 
@@ -391,8 +393,11 @@ public class HotFragment extends Fragment {
         if (teaingCountValue < 10) {
             tea_sum_cub_text_id.setText(teaingCountValue + "");
             if (MyStringUtils.checkAndroidSex(getActivity())) {
+                Log.d("checkAndroidSiz","true");
                 tea_sum_cub_text_id.setTextSize(getResources().getDimension(R.dimen.font_140));
             } else {
+                Log.d("checkAndroidSiz","false");
+
                 tea_sum_cub_text_id.setTextSize(getResources().getDimension(R.dimen.font_200));
 
             }
@@ -1207,15 +1212,19 @@ public class HotFragment extends Fragment {
                     Intent intent = new Intent(getActivity(), DeviceActivityTea.class);
                     intent.putExtra("MAC_DEVICE", blindDeviceId);
                     String version = configPref.userDeviceVersion().get();
-                    intent.putExtra("upversion", version);
+                    intent.putExtra("upversion", sysUpdateVersion);
                     intent.putExtra("deviceVersionObj", configPref.deviceUpdateInfo().get());
                     intent.putExtra("sysdownloadsize", sysdownloadsize);
 
 
                     startActivity(intent);
                 } else {
-                    Util.startActivity(getActivity(), DeviceUpdateTwoActivity_.class);
+                    Intent intent = new Intent(getActivity(), DeviceUpdateTwoActivity_.class);
 
+                    intent.putExtra("sysdownloadsize", sysdownloadsize);
+                    intent.putExtra("upversion", sysUpdateVersion);
+
+                    startActivity(intent);
                 }
 
 
@@ -1264,6 +1273,9 @@ public class HotFragment extends Fragment {
                             break;
                         case BluetoothAdapter.STATE_TURNING_OFF://蓝牙关掉---切换到没有连接页面
                             Log.e("HOT", "onReceive---------STATE_TURNING_OFF");
+                            if (mainApp.boolupdateSuccess == 2||mainApp.boolupdateSuccess == 1) {
+                                openBle();
+                            }
 
                             unconnectUi();
 //                            BleUtil.toReset(mContext);
@@ -1283,4 +1295,20 @@ public class HotFragment extends Fragment {
         }
     };
 
+
+    public   void openBle() {
+
+        BluetoothAdapter mBluetoothAdapter = BluetoothAdapter
+                .getDefaultAdapter();
+        if (mBluetoothAdapter == null) {
+            Toast.makeText(getActivity(), "本机没有找到蓝牙硬件或驱动！", Toast.LENGTH_SHORT).show();
+        }
+        // 如果本地蓝牙没有开启，则开启
+        if (!mBluetoothAdapter.isEnabled()) {
+                  // 用enable()方法来开启，无需询问用户(实惠无声息的开启蓝牙设备),这时就需要用到android.permission.BLUETOOTH_ADMIN权限。
+            mBluetoothAdapter.enable();
+        }
+
+
+    }
 }

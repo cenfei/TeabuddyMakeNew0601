@@ -51,7 +51,7 @@
             android:layout_marginTop="13dp"
             android:gravity="center_horizontal"
             android:textAlignment="center"
-            android:textColor="#88ffffff"
+            android:textColor="#ffffff"
             android:textSize="15sp" />
 
         <RelativeLayout
@@ -72,6 +72,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
+
+
+               android:progressBackgroundTint="#ffffff"
+
                 android:layout_centerHorizontal="true"
 
                 />
@@ -86,7 +90,7 @@
 
                 android:layout_below="@+id/progressBar"
                 android:layout_marginTop="6dp"
-                android:textColor="#88ffffff"
+                android:textColor="#ffffff"
                 android:textSize="15sp" />
 
             <LinearLayout
@@ -104,9 +108,9 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:gravity="center"
-                    android:text="注意"
+                    android:text="注意!"
                     android:textColor="#ffffff"
-                    android:textSize="20sp" />
+                    android:textSize="17sp" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -114,7 +118,7 @@
                     android:layout_marginTop="20dp"
                     android:gravity="center"
                     android:text="请确保手机屏幕停留在本页面,\n并保持手机和茶杯在3米以内\n否则可能导致升级失败"
-                    android:textColor="#aaffffff"
+                    android:textColor="#ffffff"
                     android:textSize="13sp" />
             </LinearLayout>
         </RelativeLayout>

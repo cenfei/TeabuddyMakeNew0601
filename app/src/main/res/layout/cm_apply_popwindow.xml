@@ -2,7 +2,7 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="248dp"
-    android:layout_height="154dp"
+    android:layout_height="164dp"
     android:background="#99000000"
     android:fitsSystemWindows="true"
     android:orientation="vertical">
@@ -11,7 +11,7 @@
     <LinearLayout
         android:id="@+id/record_line_id"
         android:layout_width="248dp"
-        android:layout_height="154dp"
+        android:layout_height="164dp"
         android:layout_centerInParent="true"
         android:background="@drawable/rounded_process"
         android:gravity="center"
@@ -72,7 +72,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
-                android:layout_marginLeft="37dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
                 android:layout_marginTop="16dp"
 
                 android:text="- 下载期间请放正茶杯并避免插电复位"
@@ -83,8 +84,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
-                android:layout_marginLeft="37dp"
-
+                android:layout_marginLeft="20dp"
+android:layout_marginRight="20dp"
                 android:text="- 请确保茶密与手机距离5米内"
                 android:textColor="@color/white_alpha80"
                 android:textSize="12sp" />
@@ -92,8 +93,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
-                android:layout_marginLeft="37dp"
-
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
                 android:text="- 保持手机页面停留在下载页面"
                 android:textColor="@color/white_alpha80"
                 android:textSize="12sp" />
@@ -148,7 +149,7 @@
                 android:gravity="center"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
-                android:text="l蓝牙发送需要3-10分钟，请保持屏幕停留在本页面"
+                android:text="蓝牙发送需要3-10分钟，请保持屏幕停留在本页面"
                 android:textColor="@color/white_alpha80"
                 android:textSize="12sp" />
 

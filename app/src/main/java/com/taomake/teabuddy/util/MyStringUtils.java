@@ -77,6 +77,8 @@ public class MyStringUtils {
         int width = d.getWidth();
 
         int height = d.getHeight();
+        Log.d("checkAndroidSiz","width:"+width+"height:"+height);
+
         if (height >= 2560 && width >= 1440) {
             return true;
         }

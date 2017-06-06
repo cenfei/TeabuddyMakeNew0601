@@ -73,6 +73,12 @@ public class WebViewActivity extends BaseActivity {
     @ViewById(R.id.progressbar_updown)
     ProgressBar progressBar;
 
+
+    @Click(R.id.back_line)
+    void onback_line() {
+finish();
+    }
+
 //    @Pref
 //    UserPref_ userPref;
 
@@ -317,10 +323,10 @@ public class WebViewActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    @Click(R.id.left_btn)
-    void onLeftBtnClick() {
-        finish();
-    }
+//    @Click(R.id.left_btn)
+//    void onLeftBtnClick() {
+//        finish();
+//    }
     @Click(R.id.close)
     void onFinish(){
         finish();

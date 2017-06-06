@@ -1,5 +1,6 @@
 package com.taomake.teabuddy.activity;
 
+import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.taomake.teabuddy.R;
 import com.taomake.teabuddy.base.MainApp;
@@ -113,8 +115,9 @@ connectFindDevice();
 
 
         String  sysdownloadsize=getIntent().getStringExtra("sysdownloadsize");
+        String  version=getIntent().getStringExtra("upversion");
 
-        String version=configPref.userDeviceVersion().get();
+//        String version=configPref.userDeviceVersion().get();
 
         if(!TextUtils.isEmpty(version)) {
             tea_os_version.setText("Cha OS " +version);
@@ -342,7 +345,21 @@ connectFindDevice();
 
 
     int batteryLevelValue = 0;
+    public   void closeBle() {
 
+        BluetoothAdapter mBluetoothAdapter = BluetoothAdapter
+                .getDefaultAdapter();
+        if (mBluetoothAdapter == null) {
+            Toast.makeText(DeviceUpdateTwoActivity.this, "本机没有找到蓝牙硬件或驱动！", Toast.LENGTH_SHORT).show();
+        }
+        // 如果本地蓝牙没有开启，则开启
+        if (mBluetoothAdapter.isEnabled()) {
+            // 用enable()方法来开启，无需询问用户(实惠无声息的开启蓝牙设备),这时就需要用到android.permission.BLUETOOTH_ADMIN权限。
+            mBluetoothAdapter.disable();
+        }
+
+
+    }
     public void getbatteryLevel() {
         if (resultDeviceAll == null) return;
         String code = "EB16";
@@ -374,19 +391,19 @@ connectFindDevice();
 
                                     mainApp.boolupdateSuccess=1;
 
-                                    QuinticBleAPISdkBase.getInstanceFactory(DeviceUpdateTwoActivity.this).conn.disconnect();
-
-                                    try {
-                                        Thread.sleep(3000);
-                                    } catch (InterruptedException e) {
-                                        e.printStackTrace();
-                                    }
-
+//                                    QuinticBleAPISdkBase.getInstanceFactory(DeviceUpdateTwoActivity.this).conn.disconnect();
+//
+//                                    try {
+//                                        Thread.sleep(3000);
+//                                    } catch (InterruptedException e) {
+//                                        e.printStackTrace();
+//                                    }
+                                    closeBle();
 //                                    Util.startActivity(DeviceUpdateTwoActivity.this, DeviceActivityTea.class);
                                     Intent intent = new Intent(DeviceUpdateTwoActivity.this, DeviceActivityTea.class);
                                     intent.putExtra("deviceVersionObj", configPref.deviceUpdateInfo().get());
 
-                                    String version=configPref.userDeviceVersion().get();
+                                    String  version=getIntent().getStringExtra("upversion");
                                     intent.putExtra("upversion",version);
 
                                     intent.putExtra("MAC_DEVICE",blindDeviceId);

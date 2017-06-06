@@ -142,7 +142,7 @@ public class BleConnection {
 
                     final BluetoothGattService serviceoad = gatt.getService(UUID.fromString(QuinticUuid.OAD_UPDATE_UUID));
 
-                    if(serviceoad!=null) {
+                    if (serviceoad != null) {
 //                        bluetoothDevice = gatt.getDevice();
                         if (connectTimeout.isStarted()) {
                             connectTimeout.cancel();
@@ -283,8 +283,7 @@ public class BleConnection {
                     Log.i("----- ble write -----", QuinticCommon.unsignedBytesToHexString(characteristic.getValue(), " "));
 
 
-
-                        connectTimeout.restart(15000);
+                    connectTimeout.restart(15000);
 
 
                     for (BleDataObserver bleDataObserver : Observers.getBleDataObservers()) {
@@ -296,11 +295,16 @@ public class BleConnection {
 
 
                     String trimResult = writedata.replace(" ", "");
-if(trimResult.equals("eb0501")){
-    bleStateChangeCallback.onNotify(characteristic.getValue());
+                    if (trimResult.equals("eb0501")) {
+                        bleStateChangeCallback.onNotify(characteristic.getValue());
 
 
-}
+                    }
+                    if (trimResult.equals("eb19")) {
+                        bleStateChangeCallback.onNotify(characteristic.getValue());
+
+
+                    }
 
 
                 } else {
@@ -404,7 +408,7 @@ if(trimResult.equals("eb0501")){
                         callback.onError(new BleException(BleException.BLUETOOTH_NOT_OPENED, "蓝牙未打开"));
                     } else {
                         try {
-                            if (Build.VERSION.SDK_INT <= 18 ||true) {
+                            if (Build.VERSION.SDK_INT <= 18 || true) {
                                 QuinticScanCallback cb = new QuinticScanCallback() {
                                     @Override
                                     public void onScan(QuinticScanResult scanResult) {
