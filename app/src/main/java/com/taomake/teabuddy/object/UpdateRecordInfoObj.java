@@ -16,6 +16,7 @@ public class UpdateRecordInfoObj implements Serializable {
     public String media_id;
     public String spx_path;
     public String voicefile_mute;
+    public String voicefile_property;
 
 //    {"voicefile_id":"21","unionid":"sys","voicefile_index":"3","voicefile_no":"5","voicefile_path":"\/var\/www\/html\/voice\/sys\/3\/005.mp3",
 // "voicefile_url":"http:\/\/testserver.teabuddy.cn\/voice\/sys\/3\/005.mp3",

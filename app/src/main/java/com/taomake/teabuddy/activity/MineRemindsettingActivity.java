@@ -155,6 +155,7 @@ Integer chooseNumButton=0;
                 sb.append("0");
             }
         }
+        Log.e("write setting","chooseNumButton:"+chooseNumButton+ ",minuteSetting:"+minuteSetting+",hourSetting:"+hourSetting+",eventArray:"+sb.toString());
 
         Integer weekDayValue = Integer.valueOf(sb.toString(), 2);//周期 位开关
 
@@ -229,9 +230,7 @@ Integer chooseNumButton=0;
 //            }
 //        });
 
-        initdataWheel();
-        initdataWheel2();
-        initdataWheel3();
+
 
 
         gridview = (GridView) findViewById(R.id.gridview);
@@ -400,31 +399,29 @@ Integer chooseNumButton=0;
     int afterNoon = 0;
 
     public void connectSettingInfoSuccess() {
-        int afternoonbool = 0;
+        int afternoonbool = 1;
         if (hourSetting > 12) {
-            afternoonbool = 1;
-            arrayWheel3.setCurrentItem(hourSetting - 12-1);
-            setTextviewSize("下午", monthAdapter);
+            afternoonbool = 2;
 
+            initdataWheel3(hourSetting - 12);
         } else {
-            arrayWheel3.setCurrentItem(hourSetting-1);
-            setTextviewSize("上午", monthAdapter);
+
+                initdataWheel3(hourSetting);
+
 
         }
 
 
-        arrayWheel.setCurrentItem(afternoonbool);
-        arrayWheel2.setCurrentItem(minuteSetting-1);
-        setTextviewSize(minuteSetting + "", monthAdapter2);
-        setTextviewSize(hourSetting + "", monthAdapter3);
-        arrayWheel.invalidateWheel(true);
-        arrayWheel2.invalidateWheel(true);
-        arrayWheel3.invalidateWheel(true);
+
+
+
+        initdataWheel(afternoonbool);
+        initdataWheel2(minuteSetting);
 
         //星期初始化
         for(int i=weekIntCharArray.length;i>=1;i--){
           if(weekIntCharArray[i-1]=='1'){
-              myGridDbRecordAdapter.clickTempHash.add(7-i);
+              myGridDbRecordAdapter.clickTempHash.add(weekIntCharArray.length-i);
           }
 
 
@@ -543,7 +540,7 @@ Integer chooseNumButton=0;
     private WheelView arrayWheel;
     ArrayWheelAdapter monthAdapter;
     String[] PLANETS= {"上午", "下午"};
-    void initdataWheel() {
+    void initdataWheel(int temp) {
 
         //测试数据
 
@@ -576,7 +573,7 @@ Integer chooseNumButton=0;
             }
         };
 
-        int temp = PLANETS.length / 2;
+//        int temp = PLANETS.length / 2;
 
         monthAdapter = new ArrayWheelAdapter<String>(MineRemindsettingActivity.this, PLANETS, R.id.wheel_text, temp, 1);
 
@@ -602,7 +599,7 @@ Integer chooseNumButton=0;
     private WheelView arrayWheel2;
     ArrayWheelAdapter monthAdapter2;
 
-    void initdataWheel2() {
+    void initdataWheel2(int temp) {
 
         //测试数据
         String[] PLANETS2 = setdatawheel(60);
@@ -636,7 +633,7 @@ Integer chooseNumButton=0;
             }
         };
 
-        int temp = PLANETS2.length / 2;
+//        int temp = PLANETS2.length / 2;
 
         monthAdapter2 = new ArrayWheelAdapter<String>(MineRemindsettingActivity.this, PLANETS2, R.id.wheel_text, temp, 1);
 
@@ -652,7 +649,7 @@ Integer chooseNumButton=0;
 
     private WheelView arrayWheel3;
     ArrayWheelAdapter monthAdapter3;
-    void initdataWheel3() {
+    void initdataWheel3(int temp) {
 
         //测试数据
         String[]   PLANETS3 = setdatawheel(12);
@@ -686,7 +683,7 @@ Integer chooseNumButton=0;
             }
         };
 
-        int temp = PLANETS3.length / 2;
+//        int temp = PLANETS3.length / 2;
 
         monthAdapter3 = new ArrayWheelAdapter<String>(MineRemindsettingActivity.this, PLANETS3, R.id.wheel_text, temp, 1);
 

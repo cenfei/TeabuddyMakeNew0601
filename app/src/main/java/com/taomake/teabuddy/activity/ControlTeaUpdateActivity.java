@@ -95,7 +95,7 @@ public class ControlTeaUpdateActivity extends BaseActivity {
             return;
         }
 
-        TeaDetailTimeObj teaDetailTimeObj=null;
+        TeaDetailTimeObj teaDetailTimeObj = null;
         if (designRoomInfos.size() > 0) {//postionUpdate 不等于0表示更新
             teaDetailTimeObj = designRoomInfos.get(postionUpdate);
 //            if (teaDetailTimeObj == null) {
@@ -113,7 +113,6 @@ public class ControlTeaUpdateActivity extends BaseActivity {
 //
 //            designRoomInfos.add(teaDetailTimeObj);
 //        }
-
 
 
         if (teaDetailTimeObj != null) {
@@ -134,38 +133,38 @@ public class ControlTeaUpdateActivity extends BaseActivity {
             Util.Toast(ControlTeaUpdateActivity.this, "请设置茶名");
             return;
         }
-       if(designRoomInfos.size()>0){
-           designRoomInfos.remove((designRoomInfos.size() - 1));
-       }
+        if (designRoomInfos.size() > 0) {
+            designRoomInfos.remove((designRoomInfos.size() - 1));
+        }
 
-        if(designRoomInfos.size()<1){
+        if (designRoomInfos.size() < 1) {
             Util.Toast(ControlTeaUpdateActivity.this, "主人，最少需要1泡");
             return;
         }
-        if(designRoomInfos.size()>10){
+        if (designRoomInfos.size() > 10) {
             Util.Toast(ControlTeaUpdateActivity.this, "主人，最多10泡哦");
             return;
         }
 
-        if(teaDetailJsonGloabl==null){
-            teaDetailJsonGloabl=new TeaDetailJson();
+        if (teaDetailJsonGloabl == null) {
+            teaDetailJsonGloabl = new TeaDetailJson();
         }
 
-        TeaInfoObj teaInfoObj= teaDetailJsonGloabl.obj;
-        if(teaInfoObj==null){
-            teaInfoObj=new TeaInfoObj();
-            teaInfoObj.cz_type="0";
-            teaInfoObj.countnums="2";
-            teaInfoObj.wd="90";
-            teaInfoObj.cz_id="";
-            teaInfoObj.tj="0";
-            teaDetailJsonGloabl.obj=teaInfoObj;
+        TeaInfoObj teaInfoObj = teaDetailJsonGloabl.obj;
+        if (teaInfoObj == null) {
+            teaInfoObj = new TeaInfoObj();
+            teaInfoObj.cz_type = "0";
+            teaInfoObj.countnums = "2";
+            teaInfoObj.wd = "90";
+            teaInfoObj.cz_id = "";
+            teaInfoObj.tj = "0";
+            teaDetailJsonGloabl.obj = teaInfoObj;
         }
 
-        teaDetailJsonGloabl.obj.xc=switch1.isChecked()?"1":"0";
+        teaDetailJsonGloabl.obj.xc = switch1.isChecked() ? "1" : "0";
 //        teaDetailJsonGloabl.obj.cz = MyStringUtils.convertToUnicode(teaName);
         try {
-            teaDetailJsonGloabl.obj.cz = URLEncoder.encode(teaName,"UTF-8");
+            teaDetailJsonGloabl.obj.cz = URLEncoder.encode(teaName, "UTF-8");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
@@ -273,7 +272,7 @@ public class ControlTeaUpdateActivity extends BaseActivity {
     Integer fenS = 0;
     Integer postionUpdate = 0;
 
-    public void updateWheel(int postion){
+    public void updateWheel(int postion) {
         postionUpdate = postion;
         //更新girdview
         TeaDetailTimeObj teaDetailTimeObj = designRoomInfos.get(postion);
@@ -298,10 +297,10 @@ public class ControlTeaUpdateActivity extends BaseActivity {
 
         if (czIdIntent == null) {//新建
 
-            TeaDetailTimeObj teaDetailTimeObj1=    new TeaDetailTimeObj();
-            teaDetailTimeObj1.p_second="60";
-            TeaDetailTimeObj teaDetailTimeObj2=    new TeaDetailTimeObj();
-            teaDetailTimeObj2.p_second="60";
+            TeaDetailTimeObj teaDetailTimeObj1 = new TeaDetailTimeObj();
+            teaDetailTimeObj1.p_second = "60";
+            TeaDetailTimeObj teaDetailTimeObj2 = new TeaDetailTimeObj();
+            teaDetailTimeObj2.p_second = "60";
             designRoomInfos.add(teaDetailTimeObj1);
             designRoomInfos.add(teaDetailTimeObj2);
             designRoomInfos.add(new TeaDetailTimeObj());
@@ -312,22 +311,22 @@ public class ControlTeaUpdateActivity extends BaseActivity {
             @Override
             public void addCallFunc(int postion) {
 
-                if(designRoomInfos.size()==11) {
-                    Util.Toast(ControlTeaUpdateActivity.this,"主人最多10泡茶");
+                if (designRoomInfos.size() == 11) {
+                    Util.Toast(ControlTeaUpdateActivity.this, "主人最多10泡茶");
                     return;
                 }
 
                 //定位到第一个，然后新增的靠前
                 Integer second = fenP * 60 + fenS;
 
-                TeaDetailTimeObj teaDetailTimeObj=new TeaDetailTimeObj();
+                TeaDetailTimeObj teaDetailTimeObj = new TeaDetailTimeObj();
                 teaDetailTimeObj.p_second = second + "";
 
-               List<TeaDetailTimeObj> teaDetailTimeObjs=new ArrayList<TeaDetailTimeObj>();
+                List<TeaDetailTimeObj> teaDetailTimeObjs = new ArrayList<TeaDetailTimeObj>();
                 teaDetailTimeObjs.add(teaDetailTimeObj);
-               for(int i=0;i<designRoomInfos.size();i++){
-                   teaDetailTimeObjs.add(designRoomInfos.get(i));
-               }
+                for (int i = 0; i < designRoomInfos.size(); i++) {
+                    teaDetailTimeObjs.add(designRoomInfos.get(i));
+                }
                 designRoomInfos.clear();
                 designRoomInfos.addAll(teaDetailTimeObjs);
                 postionUpdate = 0;
@@ -337,10 +336,7 @@ public class ControlTeaUpdateActivity extends BaseActivity {
                 pullToRefreshListView.getRefreshableView().setSelection(y);
 
 
-
                 updateWheel(0);
-
-
 
 
             }
@@ -355,8 +351,8 @@ public class ControlTeaUpdateActivity extends BaseActivity {
             @Override
             public void deleteCallFunc(int postion) {
                 //删除girdview
-                if(designRoomInfos.size()==3) {
-                    Util.Toast(ControlTeaUpdateActivity.this,"主人最少2泡茶");
+                if (designRoomInfos.size() == 3) {
+                    Util.Toast(ControlTeaUpdateActivity.this, "主人最少2泡茶");
                     return;
                 }
 
@@ -428,8 +424,8 @@ public class ControlTeaUpdateActivity extends BaseActivity {
 //                intent.putExtra(Constant.CASE_HOME_NAME,adapterHomeDesignListView.getItem(position-1).name);
 //
 //                startActivity(intent);
-                adapterHomeDesignListView.setClickpostion(position-1);
-                updateWheel(position-1);
+                adapterHomeDesignListView.setClickpostion(position - 1);
+                updateWheel(position - 1);
 
                 adapterHomeDesignListView.notifyDataSetChanged();
                 pullToRefreshListView.onRefreshComplete();
@@ -495,13 +491,13 @@ public class ControlTeaUpdateActivity extends BaseActivity {
 
                 //设置当前的switch1
 
-           Integer  xc=Integer.valueOf(  teaDetailJsonGloabl.obj.xc);
-                switch1.setChecked(xc==1?true:false);
+                Integer xc = Integer.valueOf(teaDetailJsonGloabl.obj.xc);
+                switch1.setChecked(xc == 1 ? true : false);
 
                 tea_detail_name_editText.setText(MyStringUtils.decodeUnicode(teaDetailJsonGloabl.obj.cz));//默认的茶种名字
-if(teaDetailJsonGloabl.obj.cz_type.equals("9")){
-    tea_detail_name_editText.setClickable(false);
-}
+                if (teaDetailJsonGloabl.obj.cz_type.equals("9")) {
+                    tea_detail_name_editText.setClickable(false);
+                }
 
                 if (teaDetailJsonGloabl.obj2 != null && teaDetailJsonGloabl.obj2.size() > 0) {//列表
 
@@ -524,6 +520,10 @@ if(teaDetailJsonGloabl.obj.cz_type.equals("9")){
                     pullToRefreshListView.setVisibility(View.GONE);
 //                    no_data_id.setVisibility(View.VISIBLE);
                 } else {
+
+                    adapterHomeDesignListView.setClickpostion(0);
+                    updateWheel(0);
+
                     pullToRefreshListView.setVisibility(View.VISIBLE);
 //                    no_data_id.setVisibility(View.GONE);
 
@@ -643,7 +643,7 @@ if(teaDetailJsonGloabl.obj.cz_type.equals("9")){
         int temp = PLANETS.length / 2;
 
         monthAdapter = new ArrayWheelAdapter<String>(ControlTeaUpdateActivity.this, PLANETS, R.id.wheel_text, temp, false);
-        fenP=temp;
+        fenP = temp;
         arrayWheel.setViewAdapter(monthAdapter);
         arrayWheel.setCurrentItem(temp);
 
@@ -694,7 +694,7 @@ if(teaDetailJsonGloabl.obj.cz_type.equals("9")){
         };
 
         int temp = PLANETS.length / 2;
-        fenS=temp;
+        fenS = temp;
         monthAdapter2 = new ArrayWheelAdapter<String>(ControlTeaUpdateActivity.this, PLANETS, R.id.wheel_text, temp, false);
 
         arrayWheel2.setViewAdapter(monthAdapter2);

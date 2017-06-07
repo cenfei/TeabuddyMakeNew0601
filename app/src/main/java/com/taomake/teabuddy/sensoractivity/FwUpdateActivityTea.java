@@ -216,6 +216,8 @@ public class FwUpdateActivityTea extends Activity {
         Log.d(TAG, "onCreate");
 
         super.onCreate(savedInstanceState);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
         setContentView(R.layout.sensor_device_update_three);
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
 
@@ -612,7 +614,12 @@ public class FwUpdateActivityTea extends Activity {
         if (othertime > 40) {
             txt = "马上开始升级";
         } else {
-            txt = "还需约" + othertime + "分钟";
+            if(othertime==0){
+                int othertimes = (int) ((timeEstimate - sec) %60);
+                txt = "还需约" + othertimes + "秒";
+            }else {
+                txt = "还需约" + othertime + "分钟";
+            }
         }
         mProgressInfo.setText(txt);
 

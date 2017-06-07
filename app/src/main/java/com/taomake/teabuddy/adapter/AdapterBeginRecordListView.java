@@ -31,7 +31,9 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -96,6 +98,9 @@ String unionid=null;
         return position;
     }
 
+
+   public  Map<String,String> voiceMap=new HashMap<String,String>();
+
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         RecordInfoObj personalRanking = mPersonal.get(position);
@@ -128,7 +133,7 @@ String unionid=null;
         //下载每个mp3文件
         String mp3DbUrl = personalRanking.voicefile_url;
         final String recordName = luyinArrays[position] + ".mp3";
-
+        voiceMap.put("voice"+(position+3),"1");
 
 //       if(position==8){
 //           downloadMp3(mp3DbUrl, recordName);
@@ -146,7 +151,7 @@ String unionid=null;
                 Log.d("download", "download");
                 viewholder.img_record_id.setImageDrawable(context.getResources().getDrawable(R.drawable.cm_bg_record));
                 viewholder.img_download_id.setImageDrawable(context.getResources().getDrawable(R.drawable.cm_bg_db_c));
-
+                voiceMap.put("voice"+(position+3),"1");
                 new Record_Download_Popwindow().showPopwindow(context, img,unionid,(position+3)+"", new Record_Download_Popwindow.CallBackPayWindow() {
                     @Override
                     public void handleCallBackDbSelect(String recorddir) {
@@ -165,7 +170,7 @@ String unionid=null;
             @Override
             public void onClick(View view) {
                 Log.d("record", "record");
-
+                voiceMap.put("voice"+(position+3),"2");
                     viewholder.img_record_id.setImageDrawable(context.getResources().getDrawable(R.drawable.cm_bg_record_c));
                     viewholder.img_download_id.setImageDrawable(context.getResources().getDrawable(R.drawable.cm_bg_db));
                     final URecorder recorder = new URecorder(pathR);

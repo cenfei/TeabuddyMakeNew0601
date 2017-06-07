@@ -617,7 +617,7 @@ public class ProtocolUtil {
     public static void updateBcRecordList(Context context,
                                              AsyncHttpResponseHandler callBack,
                                              String unionid, String voicefileindex, String voicefile_title, byte[] headurl
-,List<File> voiceListByte
+,List<File> voiceListByte,String voiceJson
     ) {
 
 
@@ -627,6 +627,7 @@ public class ProtocolUtil {
             parmaMap.put("headurl", new ByteArrayInputStream(headurl), "image/jpeg");
 
         parmaMap.put("type", "editsave");
+        parmaMap.put("voicefile_property", voiceJson);
 
 //        parmaMap.put("step", "list");
         parmaMap.put("unionid", unionid);
@@ -655,7 +656,7 @@ int i=3;
     public static void addBcRecordList(Context context,
                                           AsyncHttpResponseHandler callBack,
                                           String unionid, String voicefile_title, byte[] headurl
-            ,List<File> voiceListByte
+            ,List<File> voiceListByte,String voiceJson
     ) {
 
 
@@ -668,6 +669,7 @@ int i=3;
 
 //        parmaMap.put("step", "list");
         parmaMap.put("unionid", unionid);
+        parmaMap.put("voicefile_property", voiceJson);
 //        parmaMap.put("voicefileindex", voicefileindex);
 
         parmaMap.put("voicefile_title", voicefile_title);

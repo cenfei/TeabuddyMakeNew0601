@@ -522,9 +522,10 @@ String unionid=null;
 
         }
 
+        String voiceTypeJson=new Gson().toJson(adapterHomeDesignListView.voiceMap);
 
         ProtocolUtil.addBcRecordList(this, new UpdateBcNineRecordsHandler(), unionid
-                , cbr_nickname_idValue, avarByte, fileList);//devno 空表示所有
+                , cbr_nickname_idValue, avarByte, fileList,voiceTypeJson);//devno 空表示所有
 
 
     }

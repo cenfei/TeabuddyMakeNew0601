@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.media.MediaPlayer;
 import android.os.Environment;
+import android.os.Handler;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +17,7 @@ import android.widget.TextView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taomake.teabuddy.R;
+import com.taomake.teabuddy.component.FoxProgressbarInterface;
 import com.taomake.teabuddy.component.Record_Download_Popwindow;
 import com.taomake.teabuddy.component.Record_Popwindow;
 import com.taomake.teabuddy.object.UpdateRecordInfoObj;
@@ -30,7 +33,9 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -69,6 +74,7 @@ String unionid=null;
         }
 
     }
+    public Map<String,String> voiceMap=new HashMap<String,String>();
 
 
     @Override
@@ -119,40 +125,51 @@ String unionid=null;
 
         viewholder.record_item_name_id.setText(luyinArrays[position]);
 
+
         //下载每个mp3文件
         String mp3DbUrl = personalRanking.voicefile_url;
         final String recordName = luyinArrays[position] + ".mp3";
-        downloadMp3(mp3DbUrl, recordName);
+//        downloadMp3(mp3DbUrl, recordName);
 
 
+        if(!TextUtils.isEmpty(personalRanking.voicefile_property)&&"1".equals(personalRanking.voicefile_property)){
+            viewholder.img_record_id.setImageDrawable(context.getResources().getDrawable(R.drawable.cm_bg_record));
+            viewholder.img_download_id.setImageDrawable(context.getResources().getDrawable(R.drawable.cm_bg_db_c));
+            voiceMap.put("voice"+(position+3),"1");
+        }else{
+            viewholder.img_record_id.setImageDrawable(context.getResources().getDrawable(R.drawable.cm_bg_record_c));
+            viewholder.img_download_id.setImageDrawable(context.getResources().getDrawable(R.drawable.cm_bg_db));
+            voiceMap.put("voice"+(position+3),"2");
+        }
 
 
+        final String pathR = Environment.getExternalStorageDirectory() + "/" + path + "/" + recordName;
 
 
         viewholder.img_download_id.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Log.d("download", "download");
+                voiceMap.put("voice"+(position+3),"1");
                 viewholder.img_record_id.setImageDrawable(context.getResources().getDrawable(R.drawable.cm_bg_record));
                 viewholder.img_download_id.setImageDrawable(context.getResources().getDrawable(R.drawable.cm_bg_db_c));
 
                 new Record_Download_Popwindow().showPopwindow(context, img,unionid,(position+3)+"", new Record_Download_Popwindow.CallBackPayWindow() {
                     @Override
                     public void handleCallBackDbSelect(String recorddir) {
-                        downloadMp3(recorddir, recordName);
-
+                        downloadMp3(recorddir, recordName,pathR,position);
+                        Util.Toast(context, "更换成功");
 
                     }
                 });
             }
         });
-        final String pathR = Environment.getExternalStorageDirectory() + "/" + path + "/" + recordName;
 
         viewholder.img_record_id.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Log.d("record", "record");
-
+                voiceMap.put("voice"+(position+3),"2");
                 viewholder.img_record_id.setImageDrawable(context.getResources().getDrawable(R.drawable.cm_bg_record_c));
                 viewholder.img_download_id.setImageDrawable(context.getResources().getDrawable(R.drawable.cm_bg_db));
                 final URecorder recorder = new URecorder(pathR);
@@ -180,25 +197,45 @@ String unionid=null;
         viewholder.img_play_id.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d("play", "play");
-                File file = new File(pathR);
-                if (file.exists()) {
-//                    final UPlayer uPlayer = new UPlayer(pathR);
-//                    uPlayer.start();
 
-                    mediaPlayer=new MediaPlayer();
-                    songplay(pathR);
-                }
-                else{
-                    Util.Toast(context, "文件正在下载，请稍等");
-                }
-
+                playVoice(pathR,position);
             }
         });
 
         return convertView;
     }
 
+
+    public void playVoice(String  pathvoice,int position){
+        Log.d("play", "play");
+        File file = new File(pathvoice);
+        if (file.exists()) {
+//                    final UPlayer uPlayer = new UPlayer(pathR);
+//                    uPlayer.start();
+            foxProgressbarInterface = new FoxProgressbarInterface();
+            foxProgressbarInterface.startProgressBar(context, luyinArrays[position]+"...");
+
+            mediaPlayer=new MediaPlayer();
+            mediaPlayer.setOnCompletionListener(new CompletionListener());
+
+            songplay(pathvoice);
+        }
+        else{
+            Util.Toast(context, "文件正在下载，请稍等");
+        }
+    }
+
+    FoxProgressbarInterface foxProgressbarInterface;
+    private final class CompletionListener implements MediaPlayer.OnCompletionListener {
+
+        @Override
+        public void onCompletion(MediaPlayer mp) {
+
+            if(foxProgressbarInterface!=null)
+                foxProgressbarInterface.stopProgressBar();
+        }
+
+    }
     private static class ViewHolder {
         ImageView img_play_id;
         ImageView img_record_id;
@@ -232,7 +269,10 @@ String unionid=null;
     public static   String  path = "teabuddy_record_file";
     public static   String  Voice_Path = Environment.getExternalStorageDirectory() + "/" + path + "/" ;
 
-    public  void downloadMp3(final String urlStr, final String fileName) {
+
+
+
+    public  void downloadMp3(final String urlStr, final String fileName,final String pathVoice,final int postion) {
 
         fixedThreadPool.execute(new Runnable() {
             @Override
@@ -285,6 +325,12 @@ String unionid=null;
 
                     }
                     System.out.println("success");
+//                    context.runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            playVoice(pathVoice,postion);
+//                        }
+//                    });
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
                 } catch (IOException e) {

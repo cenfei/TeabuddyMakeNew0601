@@ -56,8 +56,17 @@ import org.androidannotations.annotations.ViewById;
 import org.androidannotations.annotations.sharedpreferences.Pref;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -412,6 +421,10 @@ public class UpdateRecordActivity extends BaseActivity {
 
                 }
 
+
+            if (designRoomInfos != null && designRoomInfos.size() > 0) {//列表
+                downloadMp3List();
+            }
 //            }
 
         }
@@ -435,10 +448,10 @@ public class UpdateRecordActivity extends BaseActivity {
             }
 
         }
-
+        String voiceTypeJson=new Gson().toJson(adapterHomeDesignListView.voiceMap);
 
         ProtocolUtil.updateBcRecordList(this, new UpdateBcNineRecordsHandler(), configPref.userUnion().get(), voicefileindex
-                , cbr_nickname_idValue, avarByte, fileList);//devno 空表示所有
+                , cbr_nickname_idValue, avarByte, fileList,voiceTypeJson);//devno 空表示所有
 
 
     }
@@ -485,6 +498,116 @@ public class UpdateRecordActivity extends BaseActivity {
 
         }
     }
+
+
+
+    public  void downloadMp3List() {
+
+        for(int position=0;position<designRoomInfos.size();position++)
+        {
+            UpdateRecordInfoObj personalRanking = designRoomInfos.get(position);
+            String mp3DbUrl = personalRanking.voicefile_url;
+            final String recordName = AdapterBeginRecordListView.luyinArrays[position] + ".mp3";
+            downloadMp3(mp3DbUrl,recordName);
+
+        }
+
+//        try {
+//            fixedThreadPool.awaitTermination(10, TimeUnit.SECONDS);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+//        foxProgressbarInterface.stopProgressBar();
+
+
+    }
+
+    ExecutorService fixedThreadPool = Executors.newFixedThreadPool(3);
+    public static   String  path = "teabuddy_record_file";
+    public static   String  Voice_Path = Environment.getExternalStorageDirectory() + "/" + path + "/" ;
+
+
+    public  void downloadMp3(final String urlStr, final String fileName) {
+
+        fixedThreadPool.execute(new Runnable() {
+            @Override
+            public void run() {
+//                String fileName = "2.mp3";
+                OutputStream output = null;
+                try {
+                /*
+                 * 通过URL取得HttpURLConnection
+                 * 要网络连接成功，需在AndroidMainfest.xml中进行权限配置
+                 * <uses-permission android:name="android.permission.INTERNET" />
+                 */
+                    URL url = new URL(urlStr);
+                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                    //取得inputStream，并将流中的信息写入SDCard
+
+                /*
+                 * 写前准备
+                 * 1.在AndroidMainfest.xml中进行权限配置
+                 * <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+                 * 取得写入SDCard的权限
+                 * 2.取得SDCard的路径： Environment.getExternalStorageDirectory()
+                 * 3.检查要保存的文件上是否已经存在
+                 * 4.不存在，新建文件夹，新建文件
+                 * 5.将input流中的信息写入SDCard
+                 * 6.关闭流
+                 */
+                    String SDCard = Environment.getExternalStorageDirectory() + "";
+                    String pathName = SDCard + "/" + path + "/" + fileName;//文件存储路径
+
+                    File file = new File(pathName);
+                    InputStream input = conn.getInputStream();
+                    if (file.exists()) {
+                        Log.d("exits","exits");
+//                        file.delete();
+//                        return;
+                    } else {
+                        String dir = SDCard + "/" + path;
+                        new File(dir).mkdir();//新建文件夹
+                        file.createNewFile();//新建文件
+
+                    }
+                    output = new FileOutputStream(file);
+                    //读取大文件
+                    byte[] voice_bytes = new byte[1024];
+                    int len1 = -1;
+                    while ((len1 = input.read(voice_bytes)) != -1) {
+                        output.write(voice_bytes, 0, len1);
+                        output.flush();
+
+                    }
+                    System.out.println("success");
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } finally {
+                    try {
+                        if(output!=null)
+                            output.close();
+                        System.out.println("success");
+                    } catch (IOException e) {
+                        System.out.println("fail");
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+        });
+        // String urlStr="http://172.17.54.91:8080/download/1.mp3";
+
+
+    }
+
+
+
+
+
+
+
 
 
     public List<String> setTestData() {

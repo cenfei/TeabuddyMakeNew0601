@@ -61,11 +61,8 @@ public class DeviceUpdateTwoActivity extends BaseActivity {
     @Click(R.id.one_text_line)
     void onone_text_line() {
 
-//        Util.startActivity(DeviceUpdateTwoActivity.this, DeviceActivityTea.class);
-//
-//        finish();
-//        getLeservice();
-connectFindDevice();
+            connectFindDevice();
+
     }
 
 
@@ -360,6 +357,44 @@ connectFindDevice();
 
 
     }
+
+    final Handler writehandler = new Handler();
+
+
+    int process = 1;
+    protected Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            // TODO Auto-generated method stub
+            //要做的事情
+            if (process <= 20) {
+
+
+
+                writehandler.postDelayed(this, 1000);
+                process = process + 1;
+            } else {
+                process = 0;
+                foxProgressbarInterface.stopProgressBar();
+                writehandler.removeCallbacks(runnable);
+
+                Intent intent = new Intent(DeviceUpdateTwoActivity.this, DeviceActivityTea.class);
+                intent.putExtra("deviceVersionObj", configPref.deviceUpdateInfo().get());
+
+                String version = getIntent().getStringExtra("upversion");
+                intent.putExtra("upversion", version);
+
+                intent.putExtra("MAC_DEVICE", blindDeviceId);
+                startActivity(intent);
+                finish();
+
+
+            }
+        }
+    };
+
+
+
     public void getbatteryLevel() {
         if (resultDeviceAll == null) return;
         String code = "EB16";
@@ -390,25 +425,70 @@ connectFindDevice();
                                     MainApp mainApp=(MainApp)getApplicationContext();
 
                                     mainApp.boolupdateSuccess=1;
-
+                                    if (QuinticBleAPISdkBase.getInstanceFactory(DeviceUpdateTwoActivity.this).conn != null) {
+                                        QuinticBleAPISdkBase.getInstanceFactory(DeviceUpdateTwoActivity.this).conn.disconnect();
+                                    }
 //                                    QuinticBleAPISdkBase.getInstanceFactory(DeviceUpdateTwoActivity.this).conn.disconnect();
 //
 //                                    try {
-//                                        Thread.sleep(3000);
+//                                        Thread.sleep(8000);
 //                                    } catch (InterruptedException e) {
 //                                        e.printStackTrace();
 //                                    }
-                                    closeBle();
+//                                                Intent intent = new Intent(DeviceUpdateTwoActivity.this, DeviceActivityTea.class);
+//                                                intent.putExtra("deviceVersionObj", configPref.deviceUpdateInfo().get());
+//
+//                                                String version = getIntent().getStringExtra("upversion");
+//                                                intent.putExtra("upversion", version);
+//
+//                                                intent.putExtra("MAC_DEVICE", blindDeviceId);
+//                                                startActivity(intent);
+//                                                finish();
+                                    foxProgressbarInterface = new FoxProgressbarInterface();
+
+                                    foxProgressbarInterface.startProgressBar(DeviceUpdateTwoActivity.this, "OAD数据读取中...");
+                                    writehandler.post(runnable);
+//                                    BluetoothAdapter mBluetoothAdapter = BluetoothAdapter
+//                                            .getDefaultAdapter();
+//                                    if (mBluetoothAdapter == null) {
+//                                        Toast.makeText(DeviceUpdateTwoActivity.this, "本机没有找到蓝牙硬件或驱动！", Toast.LENGTH_SHORT).show();
+//                                    }
+//                                    // 如果本地蓝牙没有开启，则开启
+//                                    if (mBluetoothAdapter.isEnabled()) {
+//                                        // 用enable()方法来开启，无需询问用户(实惠无声息的开启蓝牙设备),这时就需要用到android.permission.BLUETOOTH_ADMIN权限。
+//                                     boolean boolclose=   mBluetoothAdapter.disable();
+//                                        try {
+//                                            Thread.sleep(3000);
+//                                        } catch (InterruptedException e) {
+//                                            e.printStackTrace();
+//                                        }
+//                                        if(!mBluetoothAdapter.isEnabled()){
+//                                            boolean   boolopen =  mBluetoothAdapter.enable();
+//
+//                                            try {
+//                                                Thread.sleep(3000);
+//                                            } catch (InterruptedException e) {
+//                                                e.printStackTrace();
+//                                            }
+//
+//                                            if(mBluetoothAdapter.isEnabled()){
+//                                                Intent intent = new Intent(DeviceUpdateTwoActivity.this, DeviceActivityTea.class);
+//                                                intent.putExtra("deviceVersionObj", configPref.deviceUpdateInfo().get());
+//
+//                                                String version = getIntent().getStringExtra("upversion");
+//                                                intent.putExtra("upversion", version);
+//
+//                                                intent.putExtra("MAC_DEVICE", blindDeviceId);
+//                                                startActivity(intent);
+//                                                finish();
+//                                            }else{
+//                                                mBluetoothAdapter.enable();
+//                                            }
+//                                        }
+//                                    }
+
 //                                    Util.startActivity(DeviceUpdateTwoActivity.this, DeviceActivityTea.class);
-                                    Intent intent = new Intent(DeviceUpdateTwoActivity.this, DeviceActivityTea.class);
-                                    intent.putExtra("deviceVersionObj", configPref.deviceUpdateInfo().get());
 
-                                    String  version=getIntent().getStringExtra("upversion");
-                                    intent.putExtra("upversion",version);
-
-                                    intent.putExtra("MAC_DEVICE",blindDeviceId);
-                                    startActivity(intent);
-                                    finish();
 
 //                                    byte[] data = QuinticCommon.stringToBytes(trimResult);
 //                                    batteryLevelValue = QuinticCommon.unsignedByteToInt(data[3]);

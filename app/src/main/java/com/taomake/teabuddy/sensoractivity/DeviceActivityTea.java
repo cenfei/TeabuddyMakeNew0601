@@ -117,6 +117,7 @@ import com.example.ti.util.CustomToast;
 import com.example.ti.util.PreferenceWR;
 import com.google.gson.Gson;
 import com.taomake.teabuddy.R;
+import com.taomake.teabuddy.activity.DeviceUpdateTwoActivity;
 import com.taomake.teabuddy.object.DeviceVersionObj;
 import com.taomake.teabuddy.util.Constant;
 
@@ -535,9 +536,24 @@ String upversion;
 
         }
 
-        getLeservice();
-        // BLE
-
+        BluetoothAdapter mBluetoothAdapter = BluetoothAdapter
+                .getDefaultAdapter();
+        if (mBluetoothAdapter == null) {
+            Toast.makeText(DeviceActivityTea.this, "本机没有找到蓝牙硬件或驱动！", Toast.LENGTH_SHORT).show();
+        }
+        // 如果本地蓝牙没有开启，则开启
+        if (!mBluetoothAdapter.isEnabled()) {
+            mBluetoothAdapter.enable();
+            try {
+                Thread.sleep(3000);
+                getLeservice();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }else {
+            getLeservice();
+            // BLE
+        }
 
     }
 

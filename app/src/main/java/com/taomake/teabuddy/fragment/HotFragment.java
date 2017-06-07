@@ -1266,6 +1266,8 @@ public class HotFragment extends Fragment {
                                 unconnectUi();
                             }
 
+
+
                             break;
                         case BluetoothAdapter.STATE_ON:
                             Log.e("HOT", "onReceive---------STATE_ON");
@@ -1273,7 +1275,7 @@ public class HotFragment extends Fragment {
                             break;
                         case BluetoothAdapter.STATE_TURNING_OFF://蓝牙关掉---切换到没有连接页面
                             Log.e("HOT", "onReceive---------STATE_TURNING_OFF");
-                            if (mainApp.boolupdateSuccess == 2||mainApp.boolupdateSuccess == 1) {
+                            if (mainApp.boolupdateSuccess == 2) {
                                 openBle();
                             }
 
