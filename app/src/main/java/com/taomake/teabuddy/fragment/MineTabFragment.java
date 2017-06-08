@@ -49,7 +49,6 @@ import org.androidannotations.annotations.sharedpreferences.Pref;
 import quinticble.QuinticBleAPISdkBase;
 import quinticble.QuinticCallbackTea;
 import quinticble.QuinticCommon;
-import quinticble.QuinticDeviceFactoryTea;
 import quinticble.QuinticDeviceTea;
 import quinticble.QuinticException;
 
@@ -167,6 +166,9 @@ public class MineTabFragment extends Fragment implements SwipeRefreshLayout.OnRe
         if(msgnum!=0){
             mine_msg_line.setVisibility(View.VISIBLE);
             mine_msg_num_id.setText(msgnum+"");
+        }else{
+            mine_msg_line.setVisibility(View.GONE);
+//            mine_msg_num_id.setText(msgnum+"");
         }
         blindDeviceId = configPref.userDeviceMac().get();
         blindDeviceId = MyStringUtils.macStringToUpper(blindDeviceId);
@@ -391,8 +393,11 @@ public class MineTabFragment extends Fragment implements SwipeRefreshLayout.OnRe
     private Integer countError = 0;
 
     public void connectFindDevice() {
-        if(!MyStringUtils.isopenBluetooth(getActivity())) return;
+        if(!MyStringUtils.isopenBluetooth(getActivity())) {
 
+            getMinePersonInfoFunc();
+            return;
+        }
 
         if (MyStringUtils.isNotNullAndEmpty(QuinticBleAPISdkBase.resultDevice)) {
             foxProgressbarInterface = new FoxProgressbarInterface();
@@ -477,7 +482,12 @@ public void connectSendCodeFailUi(String failMsg){
             @Override
             public void onError(QuinticException ex) {
                 super.onError(ex);
-                connectSendCodeFailUi(failMsg);
+                new Handler(getActivity().getMainLooper())
+                        .post(new Runnable() {
+                            @Override
+                            public void run() {
+                                connectSendCodeFailUi(failMsg);
+                            }});
 
             }
 

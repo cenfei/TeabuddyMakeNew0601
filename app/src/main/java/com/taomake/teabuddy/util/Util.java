@@ -36,6 +36,7 @@ import android.webkit.WebView;
 import android.widget.Toast;
 
 import com.taomake.teabuddy.R;
+import com.taomake.teabuddy.component.FoxToastInterface;
 import com.taomake.teabuddy.prefs.ConfigPref;
 import com.taomake.teabuddy.prefs.ConfigPref_;
 
@@ -360,12 +361,17 @@ int  month=calendar.get(Calendar.MONTH);
     }
 
     public static void Toast(Context context, String str) {
-        if (context != null && !TextUtils.isEmpty(str)) {
-            ActivityManager mActivityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-            String topActivityName = mActivityManager.getRunningTasks(1).get(0).topActivity.getPackageName();
-//            if (topActivityName.contains("ishuashua"))
-            Toast.makeText(context, str, Toast.LENGTH_SHORT).show();
-        }
+//        if (context != null && !TextUtils.isEmpty(str)) {
+//            ActivityManager mActivityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+//            String topActivityName = mActivityManager.getRunningTasks(1).get(0).topActivity.getPackageName();
+////            if (topActivityName.contains("ishuashua"))
+//            Toast.makeText(context, str, Toast.LENGTH_SHORT).show();
+//        }
+
+
+        new FoxToastInterface().startProgressBar(context,str);
+
+
     }
 
     public static boolean isAppForeground(Context context) {

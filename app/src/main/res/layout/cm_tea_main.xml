@@ -438,7 +438,7 @@
             android:text="还没连接上?"
             android:layout_alignParentBottom="true"
           android:layout_centerHorizontal="true"
-            android:textColor="@color/font_titie2"
+            android:textColor="@color/white"
             android:layout_marginBottom="24dp"
             android:textSize="15sp" />
 
@@ -537,7 +537,7 @@ android:layout_marginLeft="107dp"
         android:text="重新连接"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:textColor="@color/font_titie2"
+        android:textColor="@color/white"
         android:layout_marginBottom="24dp"
         android:textSize="15sp" />
 
@@ -600,7 +600,7 @@ android:gravity="center_horizontal"
             android:text="请打开蓝牙"
             android:layout_marginTop="30dp"
             android:textSize="17sp"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             />
         </LinearLayout>
 

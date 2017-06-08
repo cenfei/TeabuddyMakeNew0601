@@ -81,23 +81,8 @@ public class DeviceManagerActivity extends BaseActivity {
 
     @Click(R.id.update_line_id)
     void onupdate_line_id() {
-        MainApp mainApp = (MainApp) getApplicationContext();
 
-        DeviceVersionObj deviceVersionObj=mainApp.deviceVersionObj;
-        if(deviceVersionObj==null){
-            Util.startActivity(this, DeviceUpdateActivity_.class);
-
-            return;
-        }
-
-
-        String sysUpdateVersion=deviceVersionObj.ver;
-String sysdownloadsize=deviceVersionObj.downloadsize;
-        Double sysUpdateVersionD = Double.valueOf(sysUpdateVersion);
-        String deviceVersion = configPref.userDeviceVersion().get();
-        Double deviceVersionD = Double.valueOf(deviceVersion);
-
-            if (sysUpdateVersionD > deviceVersionD) {
+       if (needupdate) {
 
                 Intent intent = new Intent(this, DeviceUpdateTwoActivity_.class);
 
@@ -189,12 +174,48 @@ String sysdownloadsize=deviceVersionObj.downloadsize;
 if(configPref.userName().get()!=null)
         mg_title_id.setText(configPref.userName().get()+"的喝茶小伙伴");
 
+
+        ImageView dv_update_img_id = (ImageView) findViewById(R.id.dv_update_img_id);
+
+
+        MainApp mainApp = (MainApp) getApplicationContext();
+
+        DeviceVersionObj deviceVersionObj=mainApp.deviceVersionObj;
+        if(deviceVersionObj==null){
+            Util.startActivity(this, DeviceUpdateActivity_.class);
+
+            return;
+        }
+
+
+         sysUpdateVersion=deviceVersionObj.ver;
+         sysdownloadsize=deviceVersionObj.downloadsize;
+        Double sysUpdateVersionD = Double.valueOf(sysUpdateVersion);
+        String deviceVersion = configPref.userDeviceVersion().get();
+        Double deviceVersionD = Double.valueOf(deviceVersion);
+
+        if (sysUpdateVersionD > deviceVersionD) {
+            needupdate=true;
+            dv_update_img_id.setBackgroundResource(R.drawable.cm_update_device_c);
+
+        }else{
+            dv_update_img_id.setBackgroundResource(R.drawable.cm_update_device);
+
+            needupdate=false;
+        }
+
+
+
         imageLoader = ImageLoader.getInstance();
         options = ImageLoaderUtil.getAvatarOptionsInstance();
         getDeviceCubImg();
+
+
 //        initdata();
     }
-
+    String sysUpdateVersion=null;
+    String sysdownloadsize=null;
+    boolean needupdate=true;
 
     @AfterViews
     void init() {

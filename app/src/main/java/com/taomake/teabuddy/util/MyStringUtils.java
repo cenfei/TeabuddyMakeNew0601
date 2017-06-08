@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
@@ -71,8 +70,8 @@ public class MyStringUtils {
         if (!mBluetoothAdapter.isEnabled()) {
             // 我们通过startActivityForResult()方法发起的Intent将会在onActivityResult()回调方法中获取用户的选择，比如用户单击了Yes开启，
             // 那么将会收到RESULT_OK的结果，
-            Toast.makeText(context, "蓝牙关闭，请打开", Toast.LENGTH_SHORT).show();
-
+            //Toast.makeText(context, "蓝牙关闭，请打开", Toast.LENGTH_SHORT).show();
+Util.Toast(context, "蓝牙关闭，请打开");
             // 如果RESULT_CANCELED则代表用户不愿意开启蓝牙
 //            Intent mIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
 //            context.startActivityForResult(mIntent, 1);

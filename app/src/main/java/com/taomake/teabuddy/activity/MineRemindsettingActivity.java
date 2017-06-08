@@ -1,6 +1,5 @@
 package com.taomake.teabuddy.activity;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -36,7 +35,6 @@ import java.util.Set;
 import quinticble.QuinticBleAPISdkBase;
 import quinticble.QuinticCallbackTea;
 import quinticble.QuinticCommon;
-import quinticble.QuinticDeviceFactoryTea;
 import quinticble.QuinticDeviceTea;
 import quinticble.QuinticException;
 
@@ -360,57 +358,7 @@ Integer chooseNumButton=0;
             getSettingInfo();
 
         } else {
-        final Context context = MineRemindsettingActivity.this;
-        QuinticDeviceFactoryTea quinticDeviceFactory = QuinticBleAPISdkBase
-                .getInstanceFactory(context);
-
-        quinticDeviceFactory.findDevice(blindDeviceId,
-                new QuinticCallbackTea<QuinticDeviceTea>() {
-
-                    @Override
-                    public void onComplete(final QuinticDeviceTea resultDevice) {
-                        super.onComplete(resultDevice);
-                        new Handler(context.getMainLooper())
-                                .post(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        resultDeviceAll = resultDevice;
-                                        QuinticBleAPISdkBase.resultDevice = resultDeviceAll;
-                                        // ************处理动作
-//                                        getbatteryLevel();
-                                        getSettingInfo();
-
-                                    }
-                                });
-                    }
-
-                    @Override
-                    public void onError(final QuinticException ex) {
-                        new Handler(context.getMainLooper())
-                                .post(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        if (countError < 1) {
-                                            Log.d("connectFindDevice ex",
-                                                    ex.getCode()
-                                                            + ""
-                                                            + ex.getMessage());
-
-                                            connecterror();
-
-
-//                                            connectFindDevice();
-//                                            countError++;
-//                                        } else {
-//                                            unconnectUi();
-                                            // *****************连接失败
-//                                                Util.Toast(context,
-//                                                        "");
-                                        }
-                                    }
-                                });
-                    }
-                });
+            connecterror();
         }
     }
 
@@ -428,13 +376,10 @@ Integer chooseNumButton=0;
             initdataWheel3(hourSetting - 12);
         } else {
 
-                initdataWheel3(hourSetting);
+            initdataWheel3(hourSetting);
 
 
         }
-
-
-
 
 
         initdataWheel(afternoonbool);
@@ -459,13 +404,23 @@ Integer chooseNumButton=0;
     public void setSettingInfo(String code) {
         if (resultDeviceAll == null) return;
 //        String code = "EA14";
+        foxProgressbarInterface = new FoxProgressbarInterface();
+
+        foxProgressbarInterface.startProgressBar(MineRemindsettingActivity.this, "设置中...");
 
         resultDeviceAll.sendCommonCode(code, new QuinticCallbackTea<String>() {
             @Override
             public void onError(QuinticException ex) {
                 super.onError(ex);
-//                connectSendCodeFailUi("电量查询失败");
-
+                new Handler(MineRemindsettingActivity.this.getMainLooper())
+                        .post(new Runnable() {
+                            @Override
+                            public void run() {
+                                if(foxProgressbarInterface!=null)
+                                foxProgressbarInterface.stopProgressBar();
+                               Util.Toast(MineRemindsettingActivity.this,"设置提醒失败");
+                            }
+                        });
             }
 
             @Override
@@ -481,6 +436,8 @@ Integer chooseNumButton=0;
                             @Override
                             public void run() {
 //BACK 0A 04 01 53result
+                              if(foxProgressbarInterface!=null)
+                                foxProgressbarInterface.stopProgressBar();
                                 String trimResult = result.replace(" ", "");
                                 if (trimResult.contains("eb14")) {
                                     byte[] data = QuinticCommon.stringToBytes(trimResult);
@@ -503,8 +460,7 @@ Integer chooseNumButton=0;
 
 
     public void getSettingInfo() {
-        if(foxProgressbarInterface!=null)
-        foxProgressbarInterface.stopProgressBar();
+
         if (resultDeviceAll == null) return;
         String code = "EA14";
 
@@ -512,7 +468,13 @@ Integer chooseNumButton=0;
             @Override
             public void onError(QuinticException ex) {
                 super.onError(ex);
-//                connectSendCodeFailUi("电量查询失败");
+                new Handler(MineRemindsettingActivity.this.getMainLooper())
+                        .post(new Runnable() {
+                            @Override
+                            public void run() {
+connecterror();
+                            }
+                        });
 
             }
 

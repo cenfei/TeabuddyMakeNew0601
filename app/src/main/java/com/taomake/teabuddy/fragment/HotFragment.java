@@ -35,7 +35,7 @@ import com.taomake.teabuddy.activity.WebViewActivity_;
 import com.taomake.teabuddy.base.MainApp;
 import com.taomake.teabuddy.component.DynamicWave;
 import com.taomake.teabuddy.component.FoxProgressbarInterface;
-import com.taomake.teabuddy.component.Permission_Popwindow;
+import com.taomake.teabuddy.component.One_Permission_Popwindow;
 import com.taomake.teabuddy.network.ProtocolUtil;
 import com.taomake.teabuddy.network.RowMessageHandler;
 import com.taomake.teabuddy.object.BaseJson;
@@ -213,7 +213,8 @@ public class HotFragment extends Fragment {
 
         getActivity().registerReceiver(mReceiver, makeFilter());
 
-
+        changeui();
+        firstchange++;
 //        updateUiResume();
 
         return chatView;
@@ -244,8 +245,8 @@ public class HotFragment extends Fragment {
 
         } else {
 //
-            changeui();
-            firstchange++;
+//            changeui();
+//            firstchange++;
 
         }
     }
@@ -311,6 +312,17 @@ public class HotFragment extends Fragment {
         tea_cub_gif.setVisibility(View.GONE);
 
         cicrle_line_id = (LinearLayout) view.findViewById(R.id.cicrle_line_id);
+
+        LinearLayout  right_title = (LinearLayout) view.findViewById(R.id.right_title_line);
+        right_title.setVisibility(View.GONE);
+        LinearLayout  left_title_line = (LinearLayout) view.findViewById(R.id.left_title_line);
+
+        left_title_line.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                unconnectUi();
+            }
+        });
 
         tea_unconnect_comment.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -456,9 +468,11 @@ public class HotFragment extends Fragment {
         if (foxProgressbarInterface != null) {
             foxProgressbarInterface.stopProgressBar();
         }
-        connect_status_commnet_id.setText(msg);
+        if(connect_status_commnet_id!=null) {
+            connect_status_commnet_id.setText(msg);
 
-        unconnectUi();
+            unconnectUi();
+        }
     }
 
 
@@ -719,7 +733,15 @@ mainApp.deviceVersionObj=deviceVersionObj;
     public void connectFindDevice() {
 
         if (!MyStringUtils.isopenBluetooth(getActivity())) {
-            connectSendCodeFailUi("");
+
+
+if(showcontnect) {
+    connectSendCodeFailUi("");
+}else{
+    connectUi();
+    bluetooth_rel.setVisibility(View.VISIBLE);
+
+}
             return;
         }
 
@@ -1222,7 +1244,7 @@ mainApp.deviceVersionObj=deviceVersionObj;
 
 
     public void perssion_func(View tab_paocha, String comment, String text1, String text2) {
-        new Permission_Popwindow().showPopwindow(getActivity(), tab_paocha, comment, text1, text2, new Permission_Popwindow.CallBackPayWindow() {
+        new One_Permission_Popwindow().showPopwindow(getActivity(), tab_paocha, comment, text1, text2, new One_Permission_Popwindow.CallBackPayWindow() {
             @Override
             public void handleCallBackChangeUser() {
 //                Util.outLogin(getActivity(), configPref);

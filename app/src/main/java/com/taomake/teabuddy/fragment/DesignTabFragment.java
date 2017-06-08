@@ -159,9 +159,13 @@ public class DesignTabFragment extends Fragment{
         @Override
         public void onPageScrollStateChanged(int arg0) {
 
+            if(arg0==0){
+                positionSelect=mPager.getCurrentItem();
+            }
+
             MainApp mainApp=(MainApp)getActivity().getApplicationContext();
-            mainApp.boolchoosePaocha=mPager.getCurrentItem()==0?true:false;
-                if(mPager.getCurrentItem()==0&&!HotFragment.canChangePager){
+            mainApp.boolchoosePaocha=positionSelect==0?true:false;
+                if(mainApp.boolchoosePaocha&&!HotFragment.canChangePager){
                     mPager.setIsCanScroll(false);
                     ll_container.setVisibility(View.GONE);
                 }else {
@@ -172,6 +176,9 @@ public class DesignTabFragment extends Fragment{
 
         }
     }
+
+
+    int  positionSelect=0;
 
 //    @Override
 //    public boolean onTouchEvent(MotionEvent ev) {

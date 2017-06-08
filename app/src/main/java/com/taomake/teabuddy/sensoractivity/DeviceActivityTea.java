@@ -98,7 +98,6 @@ import com.example.ti.ble.common.GattInfo;
 import com.example.ti.ble.common.GenericBluetoothProfile;
 import com.example.ti.ble.common.IBMIoTCloudProfile;
 import com.example.ti.ble.sensortag.DeviceView;
-import com.example.ti.ble.sensortag.FwUpdateActivity;
 import com.example.ti.ble.sensortag.FwUpdateActivity_CC26xx;
 import com.example.ti.ble.sensortag.PreferencesActivity;
 import com.example.ti.ble.sensortag.PreferencesFragment;
@@ -119,7 +118,6 @@ import com.example.ti.util.CustomToast;
 import com.example.ti.util.PreferenceWR;
 import com.google.gson.Gson;
 import com.taomake.teabuddy.R;
-import com.taomake.teabuddy.activity.DeviceUpdateTwoActivity;
 import com.taomake.teabuddy.base.MainApp;
 import com.taomake.teabuddy.component.One_Permission_Popwindow;
 import com.taomake.teabuddy.object.DeviceVersionObj;
@@ -348,9 +346,7 @@ import quinticble.QuinticBleAPISdkBase;
     TextView one_text_line;
 
     public void finishRequest() {
-        MainApp mainApp = (MainApp) getApplicationContext();
 
-        if (mainApp.boolupdateSuccess == 1) {
             new One_Permission_Popwindow().showPopwindow(DeviceActivityTea.this, one_text_line, "确认退出吗？固件已经进入升级模式，请勿离开", "确认", "取消", new One_Permission_Popwindow.CallBackPayWindow() {
                 @Override
                 public void handleCallBackChangeUser() {//确定
@@ -365,9 +361,7 @@ import quinticble.QuinticBleAPISdkBase;
 
                 }
             });
-        } else {
-            finish();
-        }
+
     }
 
 //下载bin

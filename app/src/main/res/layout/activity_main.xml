@@ -147,7 +147,6 @@
                     android:layout_marginTop="3dp"
                     android:background="@drawable/rounded_unreadmsg"
 android:gravity="center"
-                    android:visibility="gone"
                     android:layout_height="18dp"
                     android:layout_toRightOf="@+id/mine_line_id"
                     android:layout_toEndOf="@+id/mine_line_id"
