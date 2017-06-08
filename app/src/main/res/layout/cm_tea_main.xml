@@ -71,8 +71,8 @@
 
             <LinearLayout
                 android:id="@+id/tea_name_line"
-                android:layout_width="136dp"
-                android:layout_height="60dp"
+                android:layout_width="140dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
                 android:layout_marginTop="7dp"
                 android:gravity="bottom"

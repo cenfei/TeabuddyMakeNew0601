@@ -87,6 +87,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -97,6 +98,7 @@ import com.example.ti.ble.common.GattInfo;
 import com.example.ti.ble.common.GenericBluetoothProfile;
 import com.example.ti.ble.common.IBMIoTCloudProfile;
 import com.example.ti.ble.sensortag.DeviceView;
+import com.example.ti.ble.sensortag.FwUpdateActivity;
 import com.example.ti.ble.sensortag.FwUpdateActivity_CC26xx;
 import com.example.ti.ble.sensortag.PreferencesActivity;
 import com.example.ti.ble.sensortag.PreferencesFragment;
@@ -118,8 +120,11 @@ import com.example.ti.util.PreferenceWR;
 import com.google.gson.Gson;
 import com.taomake.teabuddy.R;
 import com.taomake.teabuddy.activity.DeviceUpdateTwoActivity;
+import com.taomake.teabuddy.base.MainApp;
+import com.taomake.teabuddy.component.One_Permission_Popwindow;
 import com.taomake.teabuddy.object.DeviceVersionObj;
 import com.taomake.teabuddy.util.Constant;
+import com.taomake.teabuddy.util.MyStringUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -308,9 +313,9 @@ import quinticble.QuinticBleAPISdkBase;
         }
         this.mBtLeService.abortTimedDisconnect();
 
+        one_text_line=(TextView)   findViewById(com.example.ti.ble.sensortag.R.id.one_text_line);
 
-
-        findViewById(com.example.ti.ble.sensortag.R.id.one_text_line).setOnClickListener(new View.OnClickListener() {
+        one_text_line.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -321,10 +326,49 @@ import quinticble.QuinticBleAPISdkBase;
 
             }
         });
+        LinearLayout  left_title_line=(LinearLayout)   findViewById(com.example.ti.ble.sensortag.R.id.left_title_line);
+
+        left_title_line.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+               finishRequest();
+
+            }
+        });
 
 
     }
 
+    @Override
+    public void onBackPressed() {
+        finishRequest();
+    }
+
+    TextView one_text_line;
+
+    public void finishRequest() {
+        MainApp mainApp = (MainApp) getApplicationContext();
+
+        if (mainApp.boolupdateSuccess == 1) {
+            new One_Permission_Popwindow().showPopwindow(DeviceActivityTea.this, one_text_line, "确认退出吗？固件已经进入升级模式，请勿离开", "确认", "取消", new One_Permission_Popwindow.CallBackPayWindow() {
+                @Override
+                public void handleCallBackChangeUser() {//确定
+
+                    MyStringUtils.closeBle();
+                    finish();
+
+                }
+
+                @Override
+                public void handleCallBackBindDevice() {
+
+                }
+            });
+        } else {
+            finish();
+        }
+    }
 
 //下载bin
 

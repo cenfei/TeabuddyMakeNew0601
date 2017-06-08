@@ -56,6 +56,8 @@ public class AllFragment extends Fragment {
     LinearLayout shutdown_line;
     @Click(R.id.shutdown_line)
     void onshutdown_line() {
+        if (!MyStringUtils.isopenBluetooth(getActivity())) return;
+
         new One_Permission_Popwindow().showPopwindow(getActivity(), shutdown_line, "确认关闭茶密电源？插电即可重新开机", "确认", "取消", new One_Permission_Popwindow.CallBackPayWindow() {
             @Override
             public void handleCallBackChangeUser() {//确定
@@ -137,6 +139,7 @@ public class AllFragment extends Fragment {
                                 int postion,// The position of the view in the adapter
                                 long arg3// The row id of the item that was clicked
         ) {
+            if (!MyStringUtils.isopenBluetooth(getActivity())) return;
 
             // 显示所选Item的ItemText
             blindDeviceId = configPref.userDeviceMac().get();

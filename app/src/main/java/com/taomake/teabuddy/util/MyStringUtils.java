@@ -43,7 +43,22 @@ import static android.content.Context.WINDOW_SERVICE;
 @SuppressLint("SimpleDateFormat")
 public class MyStringUtils {
 
+    public static void closeBle() {
 
+        BluetoothAdapter mBluetoothAdapter = BluetoothAdapter
+                .getDefaultAdapter();
+        if (mBluetoothAdapter == null) {
+//            Toast.makeText(context, "本机没有找到蓝牙硬件或驱动！", Toast.LENGTH_SHORT).show();
+//            context.finish();
+        }
+        // 如果本地蓝牙没有开启，则开启
+        if (mBluetoothAdapter.isEnabled()) {
+
+            mBluetoothAdapter.disable();//关闭蓝牙
+        }
+
+
+    }
     public static boolean isopenBluetooth(Activity context) {
         BluetoothAdapter mBluetoothAdapter = BluetoothAdapter
                 .getDefaultAdapter();
@@ -56,9 +71,11 @@ public class MyStringUtils {
         if (!mBluetoothAdapter.isEnabled()) {
             // 我们通过startActivityForResult()方法发起的Intent将会在onActivityResult()回调方法中获取用户的选择，比如用户单击了Yes开启，
             // 那么将会收到RESULT_OK的结果，
+            Toast.makeText(context, "蓝牙关闭，请打开", Toast.LENGTH_SHORT).show();
+
             // 如果RESULT_CANCELED则代表用户不愿意开启蓝牙
-            Intent mIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            context.startActivityForResult(mIntent, 1);
+//            Intent mIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+//            context.startActivityForResult(mIntent, 1);
             // 用enable()方法来开启，无需询问用户(实惠无声息的开启蓝牙设备),这时就需要用到android.permission.BLUETOOTH_ADMIN权限。
             // mBluetoothAdapter.enable();
             // mBluetoothAdapter.disable();//关闭蓝牙

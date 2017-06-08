@@ -345,6 +345,8 @@ public class MyGFRecordsActivity extends BaseActivity implements IWeiboHandler.R
                 collectBool = false;
             }
 
+         final   String titleShare=configPref.userName().get()+"刚刚分享了叫“"+MyStringUtils.decodeUnicode(voiceGroupObj.voicefile_title)+"”的录音";
+
             new SZ_PayPopwindow_RecordBottom().showPopwindow(MyGFRecordsActivity.this, imageView, collectBool, new SZ_PayPopwindow_RecordBottom.CallBackPayWindow() {
                 @Override
                 public void handleCallBackPlay() {
@@ -387,7 +389,7 @@ public class MyGFRecordsActivity extends BaseActivity implements IWeiboHandler.R
 //                                    API.share_url + voiceGroupObj.voicefile_index, R.drawable.app_logo);
 //                            mShareManager.shareByWebchat(webpage, WechatShareManager.WECHAT_SHARE_TYPE_TALK);
                             WechatShareManager.ShareContentWebpage webpage = (WechatShareManager.ShareContentWebpage) mShareManager.getShareContentWebpag(
-                                    MyStringUtils.decodeUnicode(voiceGroupObj.voicefile_index), API.shareTitle,
+                                    titleShare, API.shareTitle,
                                     API.share_url + voiceGroupObj.voicefile_index, R.drawable.app_logo);
                             mShareManager.shareByWebchat(webpage, WechatShareManager.WECHAT_SHARE_TYPE_TALK, voiceGroupObj.sys_headurl);
                         }
@@ -400,7 +402,7 @@ public class MyGFRecordsActivity extends BaseActivity implements IWeiboHandler.R
                             }
 
                             WechatShareManager.ShareContentWebpage webpage = (WechatShareManager.ShareContentWebpage) mShareManager.getShareContentWebpag(
-                                    MyStringUtils.decodeUnicode(voiceGroupObj.voicefile_index), API.shareTitle,
+                                    titleShare, API.shareTitle,
                                     API.share_url + voiceGroupObj.voicefile_index, R.drawable.app_logo);
                             mShareManager.shareByWebchat(webpage, WechatShareManager.WECHAT_SHARE_TYPE_FRENDS, voiceGroupObj.sys_headurl);
 
@@ -409,18 +411,18 @@ public class MyGFRecordsActivity extends BaseActivity implements IWeiboHandler.R
                         @Override
                         public void handleCallBackShare() {//新浪微博
                             testShareWebUrl(API.share_url + voiceGroupObj.voicefile_index,
-                                    MyStringUtils.decodeUnicode(voiceGroupObj.voicefile_index), API.shareTitle
+                                    titleShare, API.shareTitle
                                     );
                         }
 
                         @Override
                         public void handleCallBackApply() {//qq好友
-                            shareOnlyUrlOnQQorZone(false, API.share_url + voiceGroupObj.voicefile_index,MyStringUtils.decodeUnicode(voiceGroupObj.voicefile_index), API.shareTitle,voiceGroupObj.sys_headurl);
+                            shareOnlyUrlOnQQorZone(false, API.share_url + voiceGroupObj.voicefile_index,titleShare, API.shareTitle,voiceGroupObj.sys_headurl);
                         }
 
                         @Override
                         public void handleCallBackQqZone() {//qq空间
-                            shareOnlyUrlOnQQorZone(true, API.share_url + voiceGroupObj.voicefile_index,MyStringUtils.decodeUnicode(voiceGroupObj.voicefile_index), API.shareTitle,voiceGroupObj.sys_headurl);
+                            shareOnlyUrlOnQQorZone(true, API.share_url + voiceGroupObj.voicefile_index,titleShare, API.shareTitle,voiceGroupObj.sys_headurl);
 
                         }
                     });

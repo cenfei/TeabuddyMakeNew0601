@@ -131,7 +131,11 @@ public class MainActivity extends BaseFragmentActivity {
         if (!TextUtils.isEmpty(unionid)) {
             configPref.userUnion().put(unionid);
         }
-
+        SharedPreferences preferences=getSharedPreferences("dataUNIION", MODE_PRIVATE);
+        String nickname=preferences.getString("nickname", "");
+        if (!TextUtils.isEmpty(nickname)) {
+            configPref.userName().put(nickname);
+        }
 
 
 

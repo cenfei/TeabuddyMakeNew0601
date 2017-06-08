@@ -20,6 +20,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.taomake.teabuddy.R;
 import com.taomake.teabuddy.adapter.AdapterMsgSortListView;
 import com.taomake.teabuddy.component.FoxProgressbarInterface;
+import com.taomake.teabuddy.fragment.MineTabFragment;
 import com.taomake.teabuddy.network.ProtocolUtil;
 import com.taomake.teabuddy.network.RowMessageHandler;
 import com.taomake.teabuddy.object.BaseJson;
@@ -135,6 +136,16 @@ public class MineMessageListActivity extends BaseActivity {
         initUi();
     }
 
+    @Override
+    public void finish() {
+        super.finish();
+        //geng
+        Intent intent = new Intent(MineTabFragment.MYACTION_UPDATE_Mine);
+        Log.i("Broadcast Change MINE", "change MINE fragment");
+
+        sendBroadcast(intent);
+
+    }
 
     @Override
     protected void initActivityName() {

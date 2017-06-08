@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.taomake.teabuddy.R;
 import com.taomake.teabuddy.adapter.MyGridWeekDayAdapter;
+import com.taomake.teabuddy.component.FoxProgressbarInterface;
 import com.taomake.teabuddy.prefs.ConfigPref_;
 import com.taomake.teabuddy.util.MyStringUtils;
 import com.taomake.teabuddy.util.Util;
@@ -333,10 +334,25 @@ Integer chooseNumButton=0;
     private QuinticDeviceTea resultDeviceAll;
     private Integer countError = 0;
 
+    public void connecterror(){
+        if(foxProgressbarInterface!=null)
+            foxProgressbarInterface.stopProgressBar();
+        initdataWheel(1);
+        initdataWheel2(1);
+        initdataWheel3(1);
+    }
+    FoxProgressbarInterface foxProgressbarInterface;
+
     public void connectFindDevice() {
-//                foxProgressbarInterface = new FoxProgressbarInterface();
-//
-//        foxProgressbarInterface.startProgressBar(getActivity(), "蓝牙读取中...");
+
+        if (!MyStringUtils.isopenBluetooth(MineRemindsettingActivity.this)) {
+            connecterror();
+
+            return;
+        }
+                foxProgressbarInterface = new FoxProgressbarInterface();
+
+        foxProgressbarInterface.startProgressBar(MineRemindsettingActivity.this, "数据读取中...");
 
         if (MyStringUtils.isNotNullAndEmpty(QuinticBleAPISdkBase.resultDevice)) {
             resultDeviceAll = QuinticBleAPISdkBase.resultDevice;
@@ -379,9 +395,13 @@ Integer chooseNumButton=0;
                                                     ex.getCode()
                                                             + ""
                                                             + ex.getMessage());
-                                            connectFindDevice();
-                                            countError++;
-                                        } else {
+
+                                            connecterror();
+
+
+//                                            connectFindDevice();
+//                                            countError++;
+//                                        } else {
 //                                            unconnectUi();
                                             // *****************连接失败
 //                                                Util.Toast(context,
@@ -399,6 +419,8 @@ Integer chooseNumButton=0;
     int afterNoon = 0;
 
     public void connectSettingInfoSuccess() {
+        if(foxProgressbarInterface!=null)
+            foxProgressbarInterface.stopProgressBar();
         int afternoonbool = 1;
         if (hourSetting > 12) {
             afternoonbool = 2;
@@ -481,6 +503,8 @@ Integer chooseNumButton=0;
 
 
     public void getSettingInfo() {
+        if(foxProgressbarInterface!=null)
+        foxProgressbarInterface.stopProgressBar();
         if (resultDeviceAll == null) return;
         String code = "EA14";
 

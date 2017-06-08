@@ -280,6 +280,7 @@ public class WXEntryActivity extends AppCompatActivity implements IWXAPIEventHan
 						intent.putExtra("deviceid", baseJson.obj.deviceid);
 						intent.putExtra("mac", baseJson.obj.mac);
 						intent.putExtra("unionid", unionid);
+						intent.putExtra("nickname", nickname);
 
 						startActivity(intent);
 						finish();

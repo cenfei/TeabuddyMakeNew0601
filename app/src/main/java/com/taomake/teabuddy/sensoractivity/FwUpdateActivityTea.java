@@ -761,13 +761,13 @@ public class FwUpdateActivityTea extends Activity {
         }
     }
 
-    public void closeBle() {
+    public static void closeBle() {
 
         BluetoothAdapter mBluetoothAdapter = BluetoothAdapter
                 .getDefaultAdapter();
         if (mBluetoothAdapter == null) {
-            Toast.makeText(this, "本机没有找到蓝牙硬件或驱动！", Toast.LENGTH_SHORT).show();
-            finish();
+//            Toast.makeText(context, "本机没有找到蓝牙硬件或驱动！", Toast.LENGTH_SHORT).show();
+//            context.finish();
         }
         // 如果本地蓝牙没有开启，则开启
         if (mBluetoothAdapter.isEnabled()) {

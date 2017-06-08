@@ -392,15 +392,16 @@ public class HotFragment extends Fragment {
 
         if (teaingCountValue < 10) {
             tea_sum_cub_text_id.setText(teaingCountValue + "");
-            if (MyStringUtils.checkAndroidSex(getActivity())) {
-                Log.d("checkAndroidSiz","true");
-                tea_sum_cub_text_id.setTextSize(getResources().getDimension(R.dimen.font_140));
-            } else {
-                Log.d("checkAndroidSiz","false");
-
-                tea_sum_cub_text_id.setTextSize(getResources().getDimension(R.dimen.font_200));
-
-            }
+//            if (MyStringUtils.checkAndroidSex(getActivity())) {
+//                Log.d("checkAndroidSiz","true");
+//                tea_sum_cub_text_id.setTextSize(getResources().getDimension(R.dimen.font_140));
+//            } else {
+//                Log.d("checkAndroidSiz","false");
+//
+//                tea_sum_cub_text_id.setTextSize(getResources().getDimension(R.dimen.font_200));
+//
+//            }
+            tea_sum_cub_text_id.setTextSize(getResources().getDimension(R.dimen.font_140));
 
 //            tea_sum_cub_text_id.setTextSize(getResources().getDimension(R.dimen.font_140));
 
@@ -641,26 +642,42 @@ public class HotFragment extends Fragment {
                 if (deviceVersionObjList != null) {
                     deviceVersionObj = deviceVersionObjList.get(0);
                 }
+                MainApp mainApp = (MainApp) getActivity().getApplicationContext();
+
                 if (deviceVersionObj != null && deviceVersionObj.url != null && !deviceVersionObj.url.equals("")) {
 
 
                     //将固件升级信息保存起来
 
 //                    configPref.
-                    MainApp mainApp = (MainApp) getActivity().getApplicationContext();
 
                     mainApp.boolupdateSuccess = 0;
                     needupdate = true;
                     sysUpdateVersion = deviceVersionObj.ver;
-                    sysdownloadsize = deviceVersionObj.downloadsize;
-                    configPref.deviceUpdateInfo().put(new Gson().toJson(deviceVersionObj));
-                    update_device_id.setBackgroundResource(R.drawable.cm_update_device_c);
-                    perssion_func(update_device_id, "您的茶密有固件了", "立即更新", "取消");
+                    //当前版本和固件版本比较
+                    Double sysUpdateVersionD = Double.valueOf(sysUpdateVersion);
+                    String deviceVersion = configPref.userDeviceVersion().get();
+                    Double deviceVersionD = Double.valueOf(deviceVersion);
+                    if (sysUpdateVersionD > deviceVersionD) {
+
+                        sysdownloadsize = deviceVersionObj.downloadsize;
+                        configPref.deviceUpdateInfo().put(new Gson().toJson(deviceVersionObj));
+                        update_device_id.setBackgroundResource(R.drawable.cm_update_device_c);
+                        perssion_func(update_device_id, "您的茶密有固件了", "立即更新", "取消");
+                    } else {
+                        configPref.userDeviceVersion().put(deviceVersion);
+
+
+                        mainApp.boolupdateSuccess = 2;
+                        needupdate = false;
+
+                        update_device_id.setBackgroundResource(R.drawable.cm_update_device);
+
+                    }
 
                 } else {
                     configPref.userDeviceVersion().put(deviceVersion);
 
-                    MainApp mainApp = (MainApp) getActivity().getApplicationContext();
 
                     mainApp.boolupdateSuccess = 2;
                     needupdate = false;
@@ -701,8 +718,10 @@ public class HotFragment extends Fragment {
 
     public void connectFindDevice() {
 
-        if (!MyStringUtils.isopenBluetooth(getActivity())) return;
-
+        if (!MyStringUtils.isopenBluetooth(getActivity())) {
+            connectSendCodeFailUi("");
+            return;
+        }
 
         blindDeviceId = configPref.userDeviceMac().get();
         blindDeviceId = MyStringUtils.macStringToUpper(blindDeviceId);
@@ -1081,6 +1100,9 @@ public class HotFragment extends Fragment {
 
                                     deviceVersion = versionD + "";
 //                                    deviceVersion="2.45";//fox测试
+                                    if(deviceVersion.length()==3){
+                                        deviceVersion=deviceVersion+"0";
+                                    }
                                     configPref.userDeviceVersion().put(deviceVersion);
                                     checkDeviceUpdateToServer();
                                     getLogHistory();//同时获取log日志  2.并且向网络判断当前版本更新ui
@@ -1267,7 +1289,6 @@ public class HotFragment extends Fragment {
                             }
 
 
-
                             break;
                         case BluetoothAdapter.STATE_ON:
                             Log.e("HOT", "onReceive---------STATE_ON");
@@ -1275,7 +1296,7 @@ public class HotFragment extends Fragment {
                             break;
                         case BluetoothAdapter.STATE_TURNING_OFF://蓝牙关掉---切换到没有连接页面
                             Log.e("HOT", "onReceive---------STATE_TURNING_OFF");
-                            if (mainApp.boolupdateSuccess == 2) {
+                            if (mainApp.boolupdateSuccess == 2||mainApp.boolupdateSuccess == 1) {
                                 openBle();
                             }
 
@@ -1298,7 +1319,7 @@ public class HotFragment extends Fragment {
     };
 
 
-    public   void openBle() {
+    public void openBle() {
 
         BluetoothAdapter mBluetoothAdapter = BluetoothAdapter
                 .getDefaultAdapter();
@@ -1307,7 +1328,7 @@ public class HotFragment extends Fragment {
         }
         // 如果本地蓝牙没有开启，则开启
         if (!mBluetoothAdapter.isEnabled()) {
-                  // 用enable()方法来开启，无需询问用户(实惠无声息的开启蓝牙设备),这时就需要用到android.permission.BLUETOOTH_ADMIN权限。
+            // 用enable()方法来开启，无需询问用户(实惠无声息的开启蓝牙设备),这时就需要用到android.permission.BLUETOOTH_ADMIN权限。
             mBluetoothAdapter.enable();
         }
 

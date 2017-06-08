@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.taomake.teabuddy.R;
 import com.taomake.teabuddy.base.MainApp;
 import com.taomake.teabuddy.component.FoxProgressbarInterface;
+import com.taomake.teabuddy.component.One_Permission_Popwindow;
 import com.taomake.teabuddy.network.RowMessageHandler;
 import com.taomake.teabuddy.prefs.ConfigPref_;
 import com.taomake.teabuddy.sensoractivity.DeviceActivityTea;
@@ -24,6 +25,7 @@ import com.taomake.teabuddy.util.MyStringUtils;
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.ViewById;
 import org.androidannotations.annotations.sharedpreferences.Pref;
 
 import java.util.ArrayList;
@@ -43,25 +45,63 @@ public class DeviceUpdateTwoActivity extends BaseActivity {
 
     @Pref
     ConfigPref_ configPref;
-//    @ViewById(R.id.no_data_id)
-//    RelativeLayout no_data_id;
-
+    @ViewById(R.id.one_text_line)
+    TextView one_text_line;
 
 
     int y = 0;
     int limit = 10;
 
+    @Override
+    public void onBackPressed() {
+       finishRequest();
+    }
+
+    public void finishRequest() {
+        MainApp mainApp = (MainApp) getApplicationContext();
+
+        if (mainApp.boolupdateSuccess == 1) {
+            new One_Permission_Popwindow().showPopwindow(DeviceUpdateTwoActivity.this, one_text_line, "确认退出吗？固件已经进入升级模式，请勿离开", "确认", "取消", new One_Permission_Popwindow.CallBackPayWindow() {
+                @Override
+                public void handleCallBackChangeUser() {//确定
+                    MyStringUtils.closeBle();
+                    finish();
+
+                }
+
+                @Override
+                public void handleCallBackBindDevice() {
+
+                }
+            });
+        } else {
+            finish();
+        }
+    }
+
 
     @Click(R.id.left_title_line)
     void onLeftTitleLine() {
-
-        finish();
+        finishRequest();
 
     }
     @Click(R.id.one_text_line)
     void onone_text_line() {
+        new One_Permission_Popwindow().showPopwindow(DeviceUpdateTwoActivity.this, one_text_line, "确认升级吗？友情提示本操作不可逆", "确认", "取消", new One_Permission_Popwindow.CallBackPayWindow() {
+            @Override
+            public void handleCallBackChangeUser() {//确定
 
-            connectFindDevice();
+                connectFindDevice();
+
+            }
+
+            @Override
+            public void handleCallBackBindDevice() {
+
+            }
+        });
+
+
 
     }
 
@@ -280,6 +320,7 @@ public class DeviceUpdateTwoActivity extends BaseActivity {
     private String blindDeviceId;
     private QuinticDeviceTea resultDeviceAll;
     private Integer countError = 0;
+
 
     public void connectFindDevice() {
 //                foxProgressbarInterface = new FoxProgressbarInterface();
