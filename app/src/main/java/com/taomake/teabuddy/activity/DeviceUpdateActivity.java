@@ -8,8 +8,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.taomake.teabuddy.R;
+import com.taomake.teabuddy.base.MainApp;
 import com.taomake.teabuddy.component.FoxProgressbarInterface;
 import com.taomake.teabuddy.network.RowMessageHandler;
+import com.taomake.teabuddy.object.DeviceVersionObj;
 import com.taomake.teabuddy.prefs.ConfigPref_;
 import com.taomake.teabuddy.util.Util;
 
@@ -86,12 +88,23 @@ finish();
 
         String version=configPref.userDeviceVersion().get();
 
-        if(!TextUtils.isEmpty(version)) {
-            tea_os_version.setText("Cha OS " +version);
+        MainApp mainApp = (MainApp) getApplicationContext();
+
+        DeviceVersionObj deviceVersionObj=mainApp.deviceVersionObj;
+        if(deviceVersionObj!=null&&!TextUtils.isEmpty(deviceVersionObj.ver)){
+            tea_os_version.setText("Cha OS " +deviceVersionObj.ver);
         }else{
-            tea_os_version.setText("Cha OS 1.0");
+            if(!TextUtils.isEmpty(version)) {
+                tea_os_version.setText("Cha OS " +version);
+            }else{
+                tea_os_version.setText("Cha OS 1.0");
+
+            }
 
         }
+
+
+
 
 
 //        initdata();

@@ -8,6 +8,7 @@ import android.webkit.WebView;
 
 import com.sina.weibo.sdk.api.share.IWeiboShareAPI;
 import com.sina.weibo.sdk.api.share.WeiboShareSDK;
+import com.taomake.teabuddy.object.DeviceVersionObj;
 import com.taomake.teabuddy.util.ImageLoaderUtil;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
@@ -44,6 +45,9 @@ public static WebView webView;
     public  boolean boolchoosePaocha=true;
 
     public static int boolupdateSuccess=0;
+
+    public DeviceVersionObj deviceVersionObj;
+
     @Override
     public void onCreate() {
         super.onCreate();

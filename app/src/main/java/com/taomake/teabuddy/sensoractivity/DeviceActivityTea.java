@@ -567,16 +567,22 @@ String upversion;
         TextView tea_os_version = (TextView) findViewById(R.id.tea_os_version);
         TextView text_db_size = (TextView) findViewById(R.id.text_db_size);
 
+        TextView comment_content_id = (TextView) findViewById(R.id.comment_content_id);
 
-         upversion=getIntent().getStringExtra("upversion");
-      String  sysdownloadsize=getIntent().getStringExtra("sysdownloadsize");
+        MainApp mainApp = (MainApp) getApplicationContext();
 
-        if(!TextUtils.isEmpty(upversion)) {
-            tea_os_version.setText("Cha OS " +upversion);
+        DeviceVersionObj deviceVersionObj=mainApp.deviceVersionObj;
+        String  sysdownloadsize=deviceVersionObj.downloadsize;
+        String  version =deviceVersionObj.ver;
+        String  updatetext=MyStringUtils.decodeUnicode(deviceVersionObj.content);
+        if(!TextUtils.isEmpty(version)) {
+            tea_os_version.setText("Cha OS " +version);
             text_db_size.setText(sysdownloadsize);
+            comment_content_id.setText(updatetext);
         }else{
             tea_os_version.setText("Cha OS 1.0");
             text_db_size.setText("0kb");
+            comment_content_id.setText("传统修复");
 
         }
 

@@ -18,6 +18,7 @@ import com.taomake.teabuddy.base.MainApp;
 import com.taomake.teabuddy.component.FoxProgressbarInterface;
 import com.taomake.teabuddy.component.One_Permission_Popwindow;
 import com.taomake.teabuddy.network.RowMessageHandler;
+import com.taomake.teabuddy.object.DeviceVersionObj;
 import com.taomake.teabuddy.prefs.ConfigPref_;
 import com.taomake.teabuddy.sensoractivity.DeviceActivityTea;
 import com.taomake.teabuddy.util.MyStringUtils;
@@ -149,19 +150,28 @@ public class DeviceUpdateTwoActivity extends BaseActivity {
 
         TextView tea_os_version = (TextView) findViewById(R.id.tea_os_version);
         TextView text_db_size = (TextView) findViewById(R.id.text_db_size);
+        TextView comment_content_id = (TextView) findViewById(R.id.comment_content_id);
 
 
-        String  sysdownloadsize=getIntent().getStringExtra("sysdownloadsize");
-        String  version=getIntent().getStringExtra("upversion");
+//        String  sysdownloadsize=getIntent().getStringExtra("sysdownloadsize");
+//        String  version=getIntent().getStringExtra("upversion");
 
 //        String version=configPref.userDeviceVersion().get();
 
+        MainApp mainApp = (MainApp) getApplicationContext();
+
+        DeviceVersionObj deviceVersionObj=mainApp.deviceVersionObj;
+        String  sysdownloadsize=deviceVersionObj.downloadsize;
+        String  version =deviceVersionObj.ver;
+String  updatetext=MyStringUtils.decodeUnicode(deviceVersionObj.content);
         if(!TextUtils.isEmpty(version)) {
             tea_os_version.setText("Cha OS " +version);
             text_db_size.setText(sysdownloadsize);
+            comment_content_id.setText(updatetext);
         }else{
             tea_os_version.setText("Cha OS 1.0");
             text_db_size.setText("0kb");
+            comment_content_id.setText("传统修复");
 
         }
 

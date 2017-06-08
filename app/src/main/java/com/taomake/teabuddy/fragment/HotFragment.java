@@ -645,7 +645,7 @@ public class HotFragment extends Fragment {
                 MainApp mainApp = (MainApp) getActivity().getApplicationContext();
 
                 if (deviceVersionObj != null && deviceVersionObj.url != null && !deviceVersionObj.url.equals("")) {
-
+mainApp.deviceVersionObj=deviceVersionObj;
 
                     //将固件升级信息保存起来
 

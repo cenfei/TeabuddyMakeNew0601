@@ -194,7 +194,7 @@ boolean boolman=sexType;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
+        permissionAll();
     }
 
     String ticket = null;
@@ -368,7 +368,8 @@ boolean boolman=sexType;
                 if (MANGER != null && MANGER.equals("1")) {
                     finish();
                 } else {
-                    permissionAll();
+                    Util.startActivity(LoginByphoneActivity.this, MainActivity_.class);
+                    finish();
                 }
 
 
@@ -378,8 +379,8 @@ boolean boolman=sexType;
     }
 
     public void postStart(){
-        Util.startActivity(LoginByphoneActivity.this, MainActivity_.class);
-        finish();
+//        Util.startActivity(LoginByphoneActivity.this, MainActivity_.class);
+//        finish();
 
     }
 

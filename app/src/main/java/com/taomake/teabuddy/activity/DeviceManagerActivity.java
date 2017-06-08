@@ -12,10 +12,12 @@ import com.google.gson.Gson;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taomake.teabuddy.R;
+import com.taomake.teabuddy.base.MainApp;
 import com.taomake.teabuddy.component.FoxProgressbarInterface;
 import com.taomake.teabuddy.network.ProtocolUtil;
 import com.taomake.teabuddy.network.RowMessageHandler;
 import com.taomake.teabuddy.object.DeviceCubImgJson;
+import com.taomake.teabuddy.object.DeviceVersionObj;
 import com.taomake.teabuddy.prefs.ConfigPref_;
 import com.taomake.teabuddy.util.Constant;
 import com.taomake.teabuddy.util.ImageLoaderUtil;
@@ -79,8 +81,35 @@ public class DeviceManagerActivity extends BaseActivity {
 
     @Click(R.id.update_line_id)
     void onupdate_line_id() {
+        MainApp mainApp = (MainApp) getApplicationContext();
 
-        Util.startActivity(DeviceManagerActivity.this, DeviceUpdateActivity_.class);
+        DeviceVersionObj deviceVersionObj=mainApp.deviceVersionObj;
+        if(deviceVersionObj==null){
+            Util.startActivity(this, DeviceUpdateActivity_.class);
+
+            return;
+        }
+
+
+        String sysUpdateVersion=deviceVersionObj.ver;
+String sysdownloadsize=deviceVersionObj.downloadsize;
+        Double sysUpdateVersionD = Double.valueOf(sysUpdateVersion);
+        String deviceVersion = configPref.userDeviceVersion().get();
+        Double deviceVersionD = Double.valueOf(deviceVersion);
+
+            if (sysUpdateVersionD > deviceVersionD) {
+
+                Intent intent = new Intent(this, DeviceUpdateTwoActivity_.class);
+
+                intent.putExtra("sysdownloadsize", sysdownloadsize);
+                intent.putExtra("upversion", sysUpdateVersion);
+
+                startActivity(intent);
+
+            } else {
+                Util.startActivity(this, DeviceUpdateActivity_.class);
+
+            }
 //        finish();
 
     }
