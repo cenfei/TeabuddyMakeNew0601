@@ -66,42 +66,37 @@ public class WelcomeActivity extends BaseActivity {
 //    UserPref_ userPref;
 
     RelativeLayout welcome_rel_id, login_rel_id;
-
+ boolean uselogin=true;
     @AfterViews
     void init() {
 
         welcome_rel_id = (RelativeLayout) findViewById(R.id.welcome_rel_id);
         login_rel_id = (RelativeLayout) findViewById(R.id.login_rel_id);
+        if (configPref.showWelcome4().get() ||
+                (configPref.userDeviceMac().get() == null || configPref.userDeviceMac().get().equals("")) ||
+                (configPref.userUnion().get() == null || configPref.userUnion().get().equals(""))) {
 
-//       if (Build.VERSION.SDK_INT >= 14)
-//             {
-//    Util.startActivity(WelcomeActivity.this, PermissionActivity.class);
-//}
-//        if (configPref.showWelcome4().get()) {
-//            welcome_rel_id.setVisibility(View.GONE);
-//            login_rel_id.setVisibility(View.VISIBLE);
-//            configPref.showWelcome4().put(false);
-//            initVideo();
-//
-//        } else {
-//            welcome_rel_id.setVisibility(View.VISIBLE);
-//            login_rel_id.setVisibility(View.GONE);
-//            new FoxHandler(this).postDelayed(new Runnable() {
-//
-//                @Override
-//                public void run() {
-//                    startActivity();
-//                }
-//            }, 2000);
-//        }
+            welcome_rel_id.setVisibility(View.GONE);
+            login_rel_id.setVisibility(View.VISIBLE);
+            configPref.showWelcome4().put(false);
+            initVideo();
 
-//        String channel = "";
-//        try {
-//            channel = this.getPackageManager().getApplicationInfo(getPackageName(), PackageManager.GET_META_DATA).metaData.getString("UMENG_CHANNEL");
-//        } catch (PackageManager.NameNotFoundException e) {
-//            e.printStackTrace();
-//        }
-//        Log.w("welcomeactivity", "channel=" + channel);
+            if (Build.VERSION.SDK_INT >= 23) {
+                uselogin=true;
+                permissionAll();
+            }
+        } else {
+
+            uselogin=false;
+            welcome_rel_id.setVisibility(View.VISIBLE);
+            login_rel_id.setVisibility(View.GONE);
+//            permissionBle();
+            if (Build.VERSION.SDK_INT >= 23){
+                permissionAll();
+            }else {
+                postStart();
+            }
+        }
     }
 
 //    private void getLocation() {
@@ -139,38 +134,19 @@ public class WelcomeActivity extends BaseActivity {
         if (foxProgressbarInterface != null) {
             foxProgressbarInterface.stopProgressBar();
         }
-        if (configPref.showWelcome4().get() ||
-                (configPref.userDeviceMac().get() == null || configPref.userDeviceMac().get().equals("")) ||
-                (configPref.userUnion().get() == null || configPref.userUnion().get().equals(""))) {
 
-            welcome_rel_id.setVisibility(View.GONE);
-            login_rel_id.setVisibility(View.VISIBLE);
-            configPref.showWelcome4().put(false);
-            initVideo();
-
-        } else {
-
-
-            welcome_rel_id.setVisibility(View.VISIBLE);
-            login_rel_id.setVisibility(View.GONE);
-//            permissionBle();
-            if (Build.VERSION.SDK_INT >= 23){
-                permissionAll();
-            }else {
-                postStart();
-            }
-        }
     }
 
     public void postStart() {
-        new FoxHandler(this).postDelayed(new Runnable() {
+        if(!uselogin) {
+            new FoxHandler(this).postDelayed(new Runnable() {
 
-            @Override
-            public void run() {
-                startActivity();
-            }
-        }, 2000);
-
+                @Override
+                public void run() {
+                    startActivity();
+                }
+            }, 2000);
+        }
     }
 
     @Override

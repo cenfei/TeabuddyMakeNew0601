@@ -44,13 +44,13 @@ public class DeviceManagerActivity extends BaseActivity {
     ImageView mg_cubimg_id;
 
 
-
     @ViewById(R.id.mg_unbind_id)
     TextView mg_unbind_id;
 
 
     int y = 0;
     int limit = 10;
+
     @Click(R.id.mg_unbind_id)
     void onmg_unbind_id() {
 
@@ -67,7 +67,8 @@ public class DeviceManagerActivity extends BaseActivity {
         finish();
 
     }
-    final int SCANNIN_GREQUEST_CODE=1001;
+
+    final int SCANNIN_GREQUEST_CODE = 1001;
 
     @Click(R.id.right_title_line)
     void onright_title_line() {
@@ -82,19 +83,19 @@ public class DeviceManagerActivity extends BaseActivity {
     @Click(R.id.update_line_id)
     void onupdate_line_id() {
 
-       if (needupdate) {
+        if (needupdate) {
 
-                Intent intent = new Intent(this, DeviceUpdateTwoActivity_.class);
+            Intent intent = new Intent(this, DeviceUpdateTwoActivity_.class);
 
-                intent.putExtra("sysdownloadsize", sysdownloadsize);
-                intent.putExtra("upversion", sysUpdateVersion);
+            intent.putExtra("sysdownloadsize", sysdownloadsize);
+            intent.putExtra("upversion", sysUpdateVersion);
 
-                startActivity(intent);
+            startActivity(intent);
 
-            } else {
-                Util.startActivity(this, DeviceUpdateActivity_.class);
+        } else {
+            Util.startActivity(this, DeviceUpdateActivity_.class);
 
-            }
+        }
 //        finish();
 
     }
@@ -106,6 +107,7 @@ public class DeviceManagerActivity extends BaseActivity {
 //        finish();
 
     }
+
     @Click(R.id.findcode_line_id)
     void onfindcode_line_id() {//设备二维码
         Util.startActivity(DeviceManagerActivity.this, DeviceSecondCodeActivity_.class);
@@ -113,14 +115,15 @@ public class DeviceManagerActivity extends BaseActivity {
 
 
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
             case SCANNIN_GREQUEST_CODE:
-                if(resultCode == RESULT_OK){
+                if (resultCode == RESULT_OK) {
                     Bundle bundle = data.getExtras();
-                    String ticket=bundle.getString("result");
+                    String ticket = bundle.getString("result");
                     Log.e("Recv QRcode result", ticket);
 
 
@@ -129,7 +132,7 @@ public class DeviceManagerActivity extends BaseActivity {
 
                     intent.putExtra("ticket", ticket);
                     intent.putExtra("unionid", configPref.userUnion().get());
-                    intent.putExtra("MANGER","1");
+                    intent.putExtra("MANGER", "1");
 
                     startActivity(intent);
                 }
@@ -148,6 +151,7 @@ public class DeviceManagerActivity extends BaseActivity {
 
 
     }
+
     private ImageLoader imageLoader;
     private DisplayImageOptions options;
 
@@ -171,8 +175,8 @@ public class DeviceManagerActivity extends BaseActivity {
         title_line_id.setVisibility(View.GONE);
 
         TextView mg_title_id = (TextView) findViewById(R.id.mg_title_id);
-if(configPref.userName().get()!=null)
-        mg_title_id.setText(configPref.userName().get()+"的喝茶小伙伴");
+        if (configPref.userName().get() != null)
+            mg_title_id.setText(configPref.userName().get() + "的喝茶小伙伴");
 
 
         ImageView dv_update_img_id = (ImageView) findViewById(R.id.dv_update_img_id);
@@ -180,32 +184,30 @@ if(configPref.userName().get()!=null)
 
         MainApp mainApp = (MainApp) getApplicationContext();
 
-        DeviceVersionObj deviceVersionObj=mainApp.deviceVersionObj;
-        if(deviceVersionObj==null){
-            Util.startActivity(this, DeviceUpdateActivity_.class);
-
-            return;
-        }
-
-
-         sysUpdateVersion=deviceVersionObj.ver;
-         sysdownloadsize=deviceVersionObj.downloadsize;
-        Double sysUpdateVersionD = Double.valueOf(sysUpdateVersion);
-        String deviceVersion = configPref.userDeviceVersion().get();
-        Double deviceVersionD = Double.valueOf(deviceVersion);
-
-        if (sysUpdateVersionD > deviceVersionD) {
-            needupdate=true;
-            dv_update_img_id.setBackgroundResource(R.drawable.cm_update_device_c);
-
-        }else{
+        DeviceVersionObj deviceVersionObj = mainApp.deviceVersionObj;
+        if (deviceVersionObj == null) {
             dv_update_img_id.setBackgroundResource(R.drawable.cm_update_device);
 
-            needupdate=false;
+            needupdate = false;
+        } else {
+            sysUpdateVersion = deviceVersionObj.ver;
+            sysdownloadsize = deviceVersionObj.downloadsize;
+            Double sysUpdateVersionD = Double.valueOf(sysUpdateVersion);
+            String deviceVersion = configPref.userDeviceVersion().get();
+            Double deviceVersionD = Double.valueOf(deviceVersion);
+
+            if (sysUpdateVersionD > deviceVersionD) {
+                needupdate = true;
+                dv_update_img_id.setBackgroundResource(R.drawable.cm_update_device_c);
+
+            } else {
+                dv_update_img_id.setBackgroundResource(R.drawable.cm_update_device);
+
+                needupdate = false;
+            }
+
+
         }
-
-
-
         imageLoader = ImageLoader.getInstance();
         options = ImageLoaderUtil.getAvatarOptionsInstance();
         getDeviceCubImg();
@@ -213,9 +215,10 @@ if(configPref.userName().get()!=null)
 
 //        initdata();
     }
-    String sysUpdateVersion=null;
-    String sysdownloadsize=null;
-    boolean needupdate=true;
+
+    String sysUpdateVersion = null;
+    String sysdownloadsize = null;
+    boolean needupdate = true;
 
     @AfterViews
     void init() {
@@ -306,10 +309,10 @@ if(configPref.userName().get()!=null)
         if (resp != null && !resp.equals("")) {
             DeviceCubImgJson dbRecordsJson = new Gson().fromJson(resp, DeviceCubImgJson.class);
             if ((dbRecordsJson.rcode + "").equals(Constant.RES_SUCCESS)) {
-                String imgUrl=dbRecordsJson.obj;
-                if(imgUrl!=null&&!imgUrl.equals("")){
+                String imgUrl = dbRecordsJson.obj;
+                if (imgUrl != null && !imgUrl.equals("")) {
 
-                    imageLoader.displayImage(imgUrl,mg_cubimg_id,options);
+                    imageLoader.displayImage(imgUrl, mg_cubimg_id, options);
 
                 }
 
@@ -321,13 +324,9 @@ if(configPref.userName().get()!=null)
     }
 
 
-
-
-    public List<String > setTestData() {
+    public List<String> setTestData() {
         List<String> jobJsons = new ArrayList<String>();
         for (int i = 1; i < 10; i++) {
-
-
 
 
             jobJsons.add("打招呼");
@@ -336,7 +335,6 @@ if(configPref.userName().get()!=null)
 
         return jobJsons;
     }
-
 
 
 }

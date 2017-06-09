@@ -145,6 +145,14 @@ Integer chooseNumButton=0;
 
         Set<Integer> choosePHash = myGridDbRecordAdapter.clickTempHash;
 
+        if(choosePHash.size()==0){
+
+            Util.Toast(MineRemindsettingActivity.this,"选择日期");
+            return;
+        }
+
+
+
         StringBuffer sb = new StringBuffer();
         for (int i = 7; i >=0; i--) {
             if (choosePHash.contains(i)) {
@@ -335,9 +343,10 @@ Integer chooseNumButton=0;
     public void connecterror(){
         if(foxProgressbarInterface!=null)
             foxProgressbarInterface.stopProgressBar();
-        initdataWheel(1);
-        initdataWheel2(1);
-        initdataWheel3(1);
+        initdataWheel(0);
+        initdataWheel2(0);
+        initdataWheel3(0);
+        changeButtonGroup(chooseNumButton);
     }
     FoxProgressbarInterface foxProgressbarInterface;
 
@@ -362,7 +371,7 @@ Integer chooseNumButton=0;
         }
     }
 
-    int  minuteSetting, hourSetting, weekInt;
+    int  minuteSetting=0, hourSetting=0, weekInt=0;
     char[] weekIntCharArray;
     int afterNoon = 0;
 

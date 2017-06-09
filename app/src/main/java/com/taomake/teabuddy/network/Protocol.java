@@ -108,7 +108,9 @@ return;
                     if (return_code==1) {
                         call.getMessage(result, url);
                     } else if (return_code==0) {
-                        Util.Toast(context, returnMsg);
+                        if(!returnMsg.contains("fail")) {
+                            Util.Toast(context, returnMsg);
+                        }
                         call.getMessage(result, url);
                     } else if (return_code==2) {
 //                        Util.Toast(context, returnMsg);
