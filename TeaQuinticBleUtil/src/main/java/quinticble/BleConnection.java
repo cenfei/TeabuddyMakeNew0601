@@ -408,7 +408,7 @@ public class BleConnection {
                         callback.onError(new BleException(BleException.BLUETOOTH_NOT_OPENED, "蓝牙未打开"));
                     } else {
                         try {
-                            if (Build.VERSION.SDK_INT <= 18 || true) {
+                            if (Build.VERSION.SDK_INT <= 18||true) {
                                 QuinticScanCallback cb = new QuinticScanCallback() {
                                     @Override
                                     public void onScan(QuinticScanResult scanResult) {

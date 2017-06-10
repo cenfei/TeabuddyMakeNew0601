@@ -3,6 +3,7 @@ package com.taomake.teabuddy.component;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Handler;
+import android.text.TextUtils;
 import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
@@ -26,7 +27,7 @@ public class FoxToastInterface {
         public void run() {
             // TODO Auto-generated method stub
             //要做的事情
-            if (process <= 2) {
+            if (process <= 1) {
 
 
 
@@ -38,15 +39,23 @@ public class FoxToastInterface {
                 stopProgressBar();
 
                 writehandler.removeCallbacks(runnable);
-
+                if(foxToastCallback!=null)
+                foxToastCallback.toastCloseCallbak();
             }
         }
     };
 
 
-    public void startProgressBar(Context context,String comment) {
-        dialog = new Dialog(context, R.style.myprocessstyle);
+    public interface   FoxToastCallback{
 
+        public void toastCloseCallbak();
+
+    }
+    FoxToastCallback  foxToastCallback ;
+
+    public void startProgressBar(Context context,String comment,FoxToastCallback foxToastCallback) {
+        dialog = new Dialog(context, R.style.myprocessstyle);
+this.foxToastCallback=foxToastCallback;
         writehandler.post(runnable);
 
 // 加载popuwindow 菊花
@@ -62,10 +71,14 @@ public class FoxToastInterface {
 
         // wallet_bind_line = (LinearLayout) dialog
         // .findViewById(R.id.wallet_bind_line);
-
         wallet_bind_image = (ImageView) dialog
                 .findViewById(R.id.wallet_bind_image);
+if(!TextUtils.isEmpty(comment)&&(comment.contains("成功")||comment.contains("完成"))){
+    wallet_bind_image.setImageDrawable(context.getResources().getDrawable(R.drawable.rc_apply));
+}else {
+    wallet_bind_image.setImageDrawable(context.getResources().getDrawable(R.drawable.pc_delete));
 
+}
         TextView wallet_sycn_comment = (TextView) dialog
                 .findViewById(R.id.wallet_sycn_comment);
         wallet_sycn_comment.setText(comment);
@@ -75,7 +88,7 @@ public class FoxToastInterface {
     }
 
     public void stopProgressBar() {
-        stopWaiting();
+//        stopWaiting();
         if(dialog!=null&&dialog.isShowing()) {
             dialog.dismiss();
         }

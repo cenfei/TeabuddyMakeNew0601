@@ -66,6 +66,11 @@ String unionid=null;
         imageLoader = ImageLoader.getInstance();
         options = ImageLoaderUtil.getAvatarOptionsInstance();
 
+        for(int i=0;i<9;i++){
+            voiceDbchooseMap.put(i, 0);
+
+        }
+
     }
 
     public void addList(List<RecordInfoObj> addList) {
@@ -100,6 +105,7 @@ String unionid=null;
 
 
    public  Map<String,String> voiceMap=new HashMap<String,String>();
+    public  Map<Integer,Integer> voiceDbchooseMap=new HashMap<Integer,Integer>();
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
@@ -144,20 +150,23 @@ String unionid=null;
 
 
 
-
         viewholder.img_download_id.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Log.d("download", "download");
                 viewholder.img_record_id.setImageDrawable(context.getResources().getDrawable(R.drawable.cm_bg_record));
                 viewholder.img_download_id.setImageDrawable(context.getResources().getDrawable(R.drawable.cm_bg_db_c));
-                voiceMap.put("voice"+(position+3),"1");
-                new Record_Download_Popwindow().showPopwindow(context, img,unionid,(position+3)+"", new Record_Download_Popwindow.CallBackPayWindow() {
+                voiceMap.put("voice" + (position + 3), "1");
+                Log.d("choose p",voiceDbchooseMap.get(position)+"");
+                new Record_Download_Popwindow().showPopwindow(context, img,voiceDbchooseMap.get(position),unionid,(position+3)+"", new Record_Download_Popwindow.CallBackPayWindow() {
                     @Override
-                    public void handleCallBackDbSelect(String recorddir) {
+                    public void handleCallBackDbSelect(String recorddir,int choosepostion) {
+                        Log.d("choose choosepostion",choosepostion+"");
+
+                        voiceDbchooseMap.put(position,choosepostion);
 
                         downloadMp3(recorddir, recordName);
-                        Util.Toast(context, "更换成功");
+                        Util.Toast(context, "更换成功",null);
 
 
                     }
@@ -211,7 +220,7 @@ String unionid=null;
                     songplay(pathR);
                 }
                 else{
-                    Util.Toast(context, "文件正在下载，请稍等");
+                    Util.Toast(context, "文件正在下载，请稍等",null);
                 }
 
             }

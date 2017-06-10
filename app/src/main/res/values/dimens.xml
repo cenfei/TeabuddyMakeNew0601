@@ -62,7 +62,7 @@
 
     <dimen name="font_100">50sp</dimen>
     <dimen name="font_200">55sp</dimen>
-    <dimen name="font_140">50sp</dimen>
+    <dimen name="font_140">45sp</dimen>
 
     <dimen name="font_48">24sp</dimen>
     <dimen name="dim_font_title">16sp</dimen>

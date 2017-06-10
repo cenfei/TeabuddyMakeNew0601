@@ -137,14 +137,14 @@ public class MainActivity extends BaseFragmentActivity {
             configPref.userName().put(nickname);
         }
 
-
+        mainappAll=(MainApp)getApplicationContext();
 
 
 //        mine_msg_id= (TextView)   findViewById(R.id.mine_msg_id);
 //        mine_msg_line= (LinearLayout)   findViewById(R.id.mine_msg_line);
 //        mine_msg_line.setVisibility(View.GONE);
     }
-
+MainApp  mainappAll=null;
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -222,7 +222,7 @@ boolean firstSelect=false;
 
     private void selectRun() {
 
-
+long endtime=System.currentTimeMillis();
 
         current=0;
         resetImg();
@@ -233,12 +233,13 @@ boolean firstSelect=false;
         tab_luyin_img.setVisibility(View.GONE);
         tab_luyin_img_c.setVisibility(View.VISIBLE);
         tab_luyin_text.setTextColor(getResources().getColor(R.color.white));
+long starttime=mainappAll.starttime;
+        if(endtime-starttime>6000) {
+            Intent intent = new Intent(HomeTabFragment.MYACTION_UPDATE_HOME);
+            Log.i("Broadcast Change home", "change home fragment");
 
-        Intent intent = new Intent(HomeTabFragment.MYACTION_UPDATE_HOME);
-        Log.i("Broadcast Change home", "change home fragment");
-
-        sendBroadcast(intent);
-
+            sendBroadcast(intent);
+        }
 
     }
 
@@ -260,12 +261,16 @@ boolean firstSelect=false;
 
             MainApp mainApp=(MainApp)getApplicationContext();
          if(mainApp.boolchoosePaocha) {
+long endtime=System.currentTimeMillis();
 
-             Intent intent = new Intent(HotFragment.MYACTION_UPDATE);
-             Log.i("Broadcast Change Hot", "change hot fragment");
+             long starttime=mainappAll.starttime;
+             if(endtime-starttime>6000) {
 
-             sendBroadcast(intent);
+                 Intent intent = new Intent(HotFragment.MYACTION_UPDATE);
+                 Log.i("Broadcast Change Hot", "change hot fragment");
 
+                 sendBroadcast(intent);
+             }
          }
         } else {//弹出选择对话框
 
@@ -275,7 +280,7 @@ boolean firstSelect=false;
     }
 
     public void perssion_func() {
-        new One_Permission_Popwindow().showPopwindow(MainActivity.this, tab_paocha,null,null,null, new One_Permission_Popwindow.CallBackPayWindow() {
+        new One_Permission_Popwindow().showPopwindow(MainActivity.this, tab_paocha, null, null, null, new One_Permission_Popwindow.CallBackPayWindow() {
             @Override
             public void handleCallBackChangeUser() {
                 Util.outLogin(MainActivity.this, configPref);
@@ -309,11 +314,15 @@ boolean firstSelect=false;
             tab_mine_img_c.setVisibility(View.VISIBLE);
             tab_mine_text.setTextColor(getResources().getColor(R.color.white));
 
+            long endtime=System.currentTimeMillis();
 
-            Intent intent = new Intent(MineTabFragment.MYACTION_UPDATE_Mine);
-            Log.i("Broadcast Change MINE", "change MINE fragment");
+            long starttime=mainappAll.starttime;
+            if(endtime-starttime>6000) {
+                Intent intent = new Intent(MineTabFragment.MYACTION_UPDATE_Mine);
+                Log.i("Broadcast Change MINE", "change MINE fragment");
 
-            sendBroadcast(intent);
+                sendBroadcast(intent);
+            }
         } else {//当没有登录的时候不能被点击
             perssion_func();
 
@@ -353,6 +362,7 @@ boolean firstSelect=false;
 //        Util.eventUnregister(this);
 //        unregisterReceiver(timeTickReceiver);
     }
+//    long starttime=0;
     @Override
     protected void onResume() {
         super.onResume();
@@ -364,10 +374,15 @@ boolean firstSelect=false;
         }
 
         if(current==1){
-            Intent intent = new Intent(HotFragment.MYACTION_UPDATE);
-            Log.i("Broadcast Change Hot", "change hot fragment");
-intent.putExtra("updateteaid","1");
-            sendBroadcast(intent);
+            long endtime=System.currentTimeMillis();
+
+            long starttime=mainappAll.starttime;
+            if(endtime-starttime>6000) {
+                Intent intent = new Intent(HotFragment.MYACTION_UPDATE);
+                Log.i("Broadcast Change Hot", "change hot fragment");
+                intent.putExtra("updateteaid", "1");
+                sendBroadcast(intent);
+            }
         }
 
     }

@@ -8,7 +8,11 @@ import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.PaintFlagsDrawFilter;
 import android.util.AttributeSet;
+import android.view.Display;
 import android.view.View;
+import android.view.WindowManager;
+
+import static android.content.Context.WINDOW_SERVICE;
 
 public class DynamicWave extends View {
 
@@ -18,9 +22,9 @@ public class DynamicWave extends View {
     private static final float STRETCH_FACTOR_A = 20;
     private static final int OFFSET_Y = 0;
     // ��һ��ˮ���ƶ��ٶ�
-    private static final int TRANSLATE_X_SPEED_ONE = 7;
+    private static final int TRANSLATE_X_SPEED_ONE = 4;
     // �ڶ���ˮ���ƶ��ٶ�
-    private static final int TRANSLATE_X_SPEED_TWO = 5;
+    private static final int TRANSLATE_X_SPEED_TWO = 4;
     private float mCycleFactorW;
 
     private int mTotalWidth, mTotalHeight;
@@ -34,13 +38,14 @@ public class DynamicWave extends View {
 
     private Paint mWavePaint;
     private DrawFilter mDrawFilter;
-
+private Context context;
     public DynamicWave(Context context, AttributeSet attrs) {
         super(context, attrs);
         // ��dpת��Ϊpx�����ڿ��Ʋ�ͬ�ֱ������ƶ��ٶȻ�һ��
+        this.context=context;
+
         mXOffsetSpeedOne = UiUtils.dipToPx(context, TRANSLATE_X_SPEED_ONE);
         mXOffsetSpeedTwo = UiUtils.dipToPx(context, TRANSLATE_X_SPEED_TWO);
-
         // ��ʼ���Ʋ��ƵĻ���
         mWavePaint = new Paint();
         // ȥ��ʾ��
@@ -50,8 +55,15 @@ public class DynamicWave extends View {
         // ���û�����ɫ
         mWavePaint.setColor(WAVE_PAINT_COLOR);
         mDrawFilter = new PaintFlagsDrawFilter(0, Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG);
-    }
+        WindowManager wm = (WindowManager) context.getSystemService(WINDOW_SERVICE);
 
+        Display d = wm.getDefaultDisplay();
+
+          width = d.getWidth();
+
+        int height = d.getHeight();
+    }
+int width=0;
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
@@ -62,12 +74,17 @@ public class DynamicWave extends View {
 
             // ��400ֻ��Ϊ�˿��Ʋ��ƻ��Ƶ�y������Ļ��λ�ã���ҿ��Ըĳ�һ��������Ȼ��̬�ı�����������Ӷ��γɲ��������½�Ч��
             // ���Ƶ�һ��ˮ����
-            canvas.drawLine(i, mTotalHeight - mResetOneYPositions[i] - 350, i,
+
+
+
+          int numsize=  width*170/320;
+//            Log.e("numsize","numsize"+numsize);
+            canvas.drawLine(i, mTotalHeight - mResetOneYPositions[i] - numsize, i,
                     mTotalHeight,
                     mWavePaint);
 
             // ���Ƶڶ���ˮ����
-            canvas.drawLine(i, mTotalHeight - mResetTwoYPositions[i] - 350, i,
+            canvas.drawLine(i, mTotalHeight - mResetTwoYPositions[i] - numsize, i,
                     mTotalHeight,
                     mWavePaint);
         }

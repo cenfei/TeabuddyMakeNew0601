@@ -48,7 +48,7 @@ public class SetBackIdeaActivity extends BaseActivity {
         String content=backidea_content_id.getText().toString();
        if(content==null||content.equals("")){
 
-           Util.Toast(SetBackIdeaActivity.this,"请您留下宝贵反馈意见，谢谢");
+           Util.Toast(SetBackIdeaActivity.this,"请您留下宝贵反馈意见，谢谢",null);
 
            return;
        }
@@ -208,7 +208,7 @@ public class SetBackIdeaActivity extends BaseActivity {
             if ((baseJson.rcode + "").equals(Constant.RES_SUCCESS)) {
 
 
-                Util.Toast(SetBackIdeaActivity.this,"反馈意见发送成功");
+                Util.Toast(SetBackIdeaActivity.this,"反馈意见发送成功",null);
             }
 
         }

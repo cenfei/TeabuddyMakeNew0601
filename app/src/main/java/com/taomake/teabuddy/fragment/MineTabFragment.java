@@ -29,6 +29,7 @@ import com.taomake.teabuddy.activity.MineMessageListActivity_;
 import com.taomake.teabuddy.activity.MineRemindsettingActivity_;
 import com.taomake.teabuddy.activity.MineSortListActivity_;
 import com.taomake.teabuddy.activity.WelcomeActivity_;
+import com.taomake.teabuddy.base.MainApp;
 import com.taomake.teabuddy.component.FoxProgressbarInterface;
 import com.taomake.teabuddy.network.ProtocolUtil;
 import com.taomake.teabuddy.network.RowMessageHandler;
@@ -107,7 +108,7 @@ public class MineTabFragment extends Fragment implements SwipeRefreshLayout.OnRe
     void onmine_remind_id() {
 
         if(resultDeviceAll==null){
-            Util.Toast(getActivity(),"主人请先链接茶密");
+            Util.Toast(getActivity(),"主人请先链接茶密",null);
         }else {
             Util.startActivity(getActivity(), MineRemindsettingActivity_.class);
         }
@@ -467,6 +468,10 @@ public class MineTabFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
 public void connectSendCodeFailUi(String failMsg){
     Log.e("getLogHistory",failMsg);
+    MainApp mainappAll=(MainApp)getActivity().getApplicationContext();
+
+    mainappAll.starttime=System.currentTimeMillis();
+
     getMinePersonInfoFunc();
 }
     public void getLogHistory() {
@@ -504,6 +509,10 @@ public void connectSendCodeFailUi(String failMsg){
                             @Override
                             public void run() {
 //BACK 0A 10 01
+                                MainApp   mainappAll=(MainApp)getActivity().getApplicationContext();
+
+                                mainappAll.starttime=System.currentTimeMillis();
+
                                 String trimResult = result.replace(" ", "");
 
                                 if (trimResult.contains("ea07")) {

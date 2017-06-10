@@ -376,6 +376,7 @@
                         android:background="@drawable/rounded_unreadmsg"
                         android:gravity="center"
                         android:layout_height="12dp"
+                        android:visibility="gone"
                         android:layout_alignParentTop="true"
                         android:layout_marginRight="10dp"
                         android:layout_alignRight="@+id/update_id"

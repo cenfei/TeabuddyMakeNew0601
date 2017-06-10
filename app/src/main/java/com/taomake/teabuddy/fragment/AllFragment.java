@@ -22,6 +22,7 @@ import android.widget.TextView;
 import com.taomake.teabuddy.R;
 import com.taomake.teabuddy.activity.MainActivity;
 import com.taomake.teabuddy.adapter.FuncControlGridAdapter;
+import com.taomake.teabuddy.base.MainApp;
 import com.taomake.teabuddy.component.FoxProgressbarInterface;
 import com.taomake.teabuddy.component.One_Permission_Popwindow;
 import com.taomake.teabuddy.component.Record_Setting_Popwindow;
@@ -179,7 +180,7 @@ String code=null;
                     }else{
                         code="EB03";
                         final String codef=code;
-new One_Permission_Popwindow().showPopwindow(getActivity(), shutdown_line, "主人，您确定要关闭灯光吗？", "确认", "取消", new One_Permission_Popwindow.CallBackPayWindow() {
+new One_Permission_Popwindow().showPopwindow(getActivity(), shutdown_line, "主人，您确定\n要关闭灯光吗？", "确认", "取消", new One_Permission_Popwindow.CallBackPayWindow() {
     @Override
     public void handleCallBackChangeUser() {//确定
 
@@ -244,13 +245,18 @@ new One_Permission_Popwindow().showPopwindow(getActivity(), shutdown_line, "主�
     public void connectFindDevice(final Context context) {
         if(!MyStringUtils.isopenBluetooth(getActivity())) return;
 
-        foxProgressbarInterface=new FoxProgressbarInterface();
-        foxProgressbarInterface.startProgressBar(getActivity(),"茶密初始化");
+//        foxProgressbarInterface=new FoxProgressbarInterface();
+//        foxProgressbarInterface.startProgressBar(getActivity(),"茶密初始化");
 
         if (MyStringUtils.isNotNullAndEmpty(QuinticBleAPISdkBase.resultDevice)) {
             resultDeviceAll = QuinticBleAPISdkBase.resultDevice;
             // ************处理动作
-            getLightStatus(context, false);
+            MainApp mainApp=(MainApp)getActivity().getApplicationContext();
+            long starttime=mainApp.starttime;
+            long endtime=System.currentTimeMillis();
+            if(endtime-starttime>6000) {
+                getLightStatus(context, false);
+            }
         } else {
         QuinticDeviceFactoryTea quinticDeviceFactory = QuinticBleAPISdkBase
                 .getInstanceFactory(context);
@@ -268,8 +274,12 @@ new One_Permission_Popwindow().showPopwindow(getActivity(), shutdown_line, "主�
                                         resultDeviceAll = resultDevice;
                                         QuinticBleAPISdkBase.resultDevice = resultDeviceAll;
                                         // ************处理动作
-                                        getLightStatus(context, false);
-
+                                        MainApp mainApp=(MainApp)getActivity().getApplicationContext();
+                                        long starttime=mainApp.starttime;
+                                        long endtime=System.currentTimeMillis();
+                                        if(endtime-starttime>6000) {
+                                            getLightStatus(context, false);
+                                        }
                                     }
                                 });
                     }
@@ -302,12 +312,16 @@ new One_Permission_Popwindow().showPopwindow(getActivity(), shutdown_line, "主�
 
 
     public void connectSendCodeFailUi(String msg) {
+        MainApp mainApp=(MainApp)getActivity().getApplicationContext();
+        mainApp.starttime=System.currentTimeMillis();
         if (foxProgressbarInterface != null)
             foxProgressbarInterface.stopProgressBar();
 
     }
 
     public void connectSendCodeSuccesslUi_Light(int value) {
+        MainApp mainApp=(MainApp)getActivity().getApplicationContext();
+        mainApp.starttime=System.currentTimeMillis();
         if (foxProgressbarInterface != null)
             foxProgressbarInterface.stopProgressBar();
 
@@ -531,7 +545,7 @@ new One_Permission_Popwindow().showPopwindow(getActivity(), shutdown_line, "主�
 
         //跳转到 我的页面
 
-        Util.Toast(getActivity(), "主人，茶密已关机成功");
+        Util.Toast(getActivity(), "主人，茶密已关机成功",null);
         MainActivity mainActivity = (MainActivity) getActivity();
         mainActivity.selectMine();
 

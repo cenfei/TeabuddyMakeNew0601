@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.taomake.teabuddy.R;
 import com.taomake.teabuddy.component.FoxProgressbarInterface;
+import com.taomake.teabuddy.component.FoxToastInterface;
 import com.taomake.teabuddy.network.ProtocolUtil;
 import com.taomake.teabuddy.network.RowMessageHandler;
 import com.taomake.teabuddy.object.BaseJson;
@@ -77,7 +78,7 @@ public class ChooseTeaActivity extends BaseActivity {
 //            saveChooseTea(mapTea.get(chooseValue).id);
             getTeaListInfo(mapTea.get(chooseValue).id);
         } else {
-            Util.Toast(ChooseTeaActivity.this, "请选择茶种");
+            Util.Toast(ChooseTeaActivity.this, "请选择茶种",null);
         }
 
     }
@@ -330,8 +331,13 @@ public class ChooseTeaActivity extends BaseActivity {
             if ((baseJson.rcode + "").equals(Constant.RES_SUCCESS)) {
                 chooseTeaValue=chooseValue;
 
-                Util.Toast(ChooseTeaActivity.this, "选茶成功");
-                finish();
+                Util.Toast(ChooseTeaActivity.this, "选茶成功", new FoxToastInterface.FoxToastCallback() {
+                    @Override
+                    public void toastCloseCallbak() {
+                        finish();
+
+                    }
+                });
 //                getTeaListInfo(teaId);
             }
 
@@ -376,7 +382,7 @@ public class ChooseTeaActivity extends BaseActivity {
                 //指令
                 if (!(teaDetailTimeObjs.size() > 1 && teaDetailTimeObjs.size() < 11)) {
                     //蓝牙设置失败，不符合
-                    Util.Toast(ChooseTeaActivity.this, "主人当前泡茶数为" + teaDetailTimeObjs.size() + "不符合1到10泡的范围，请前往编辑");
+                    Util.Toast(ChooseTeaActivity.this, "主人当前泡茶数为" + teaDetailTimeObjs.size() + "不符合1到10泡的范围，请前往编辑",null);
                     return;
                 } else {
                     //

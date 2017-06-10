@@ -368,7 +368,7 @@ public class Apply_Record_Popwindow {
 
     public void connectSendCodeFailUi(String msg){
 
-        Util.Toast(context,"下载语音到设备失败");
+        Util.Toast(context,"下载语音到设备失败",null);
         closePopupWindow(context);
     }
     public void sendMp3ToDevice() {
@@ -417,7 +417,7 @@ public class Apply_Record_Popwindow {
                                 String trimResult = result.replace(" ", "");
                                 if (trimResult.contains("EB1701")) {
 //
-                                    Util.Toast(context, "应用成功");
+                                    Util.Toast(context, "应用成功",null);
 
                                     closePopupWindow(context);
                                 } else {

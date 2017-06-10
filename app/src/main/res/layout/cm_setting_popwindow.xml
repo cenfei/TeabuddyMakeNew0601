@@ -21,7 +21,7 @@
         android:background="@color/white_alpha000"
         android:layout_height="wrap_content"
         android:horizontalSpacing="0.0dip"
-        android:listSelector="@null"
+        android:listSelector="@color/white_alpha000"
         android:numColumns="4"
         android:scrollbars="none"
         android:stretchMode="columnWidth"

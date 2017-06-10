@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.taomake.teabuddy.R;
 import com.taomake.teabuddy.adapter.MyGridWeekDayAdapter;
 import com.taomake.teabuddy.component.FoxProgressbarInterface;
+import com.taomake.teabuddy.component.FoxToastInterface;
 import com.taomake.teabuddy.prefs.ConfigPref_;
 import com.taomake.teabuddy.util.MyStringUtils;
 import com.taomake.teabuddy.util.Util;
@@ -80,20 +81,27 @@ public class MineRemindsettingActivity extends BaseActivity {
         move_text.setTextColor(getResources().getColor(R.color.text_color));
         intelligence_img.setImageDrawable(getResources().getDrawable(R.drawable.intelligence_icon_gray));
         intelligence_text.setTextColor(getResources().getColor(R.color.text_color));
-
         switch (choosenum){
             case 0:
                 remind_close_img.setImageDrawable(getResources().getDrawable(R.drawable.remind_close));
                 remind_close_text.setTextColor(getResources().getColor(R.color.black));
                 black_line_id.setVisibility(View.VISIBLE);
                 unclick_line.setClickable(false);
+                gridview.setClickable(false);
+                arrayWheel3.setClickable(false);
+                arrayWheel2.setClickable(false);
+                arrayWheel.setClickable(false);
+
                 break;
             case 1:
                 move_img.setImageDrawable(getResources().getDrawable(R.drawable.move_icon));
                 move_text.setTextColor(getResources().getColor(R.color.black));
                 black_line_id.setVisibility(View.GONE);
                 unclick_line.setClickable(true);
-
+                gridview.setClickable(true);
+                arrayWheel3.setClickable(true);
+                arrayWheel2.setClickable(true);
+                arrayWheel.setClickable(true);
 
                 break;
             case 2:
@@ -101,6 +109,11 @@ public class MineRemindsettingActivity extends BaseActivity {
                 intelligence_text.setTextColor(getResources().getColor(R.color.black));
                 black_line_id.setVisibility(View.VISIBLE);
                 unclick_line.setClickable(false);
+                gridview.setClickable(false);
+                arrayWheel3.setClickable(false);
+                arrayWheel2.setClickable(false);
+                arrayWheel.setClickable(false);
+
 
 
                 break;
@@ -147,7 +160,7 @@ Integer chooseNumButton=0;
 
         if(choosePHash.size()==0){
 
-            Util.Toast(MineRemindsettingActivity.this,"选择日期");
+            Util.Toast(MineRemindsettingActivity.this,"选择日期",null);
             return;
         }
 
@@ -378,9 +391,9 @@ Integer chooseNumButton=0;
     public void connectSettingInfoSuccess() {
         if(foxProgressbarInterface!=null)
             foxProgressbarInterface.stopProgressBar();
-        int afternoonbool = 1;
+        int afternoonbool = 0;
         if (hourSetting > 12) {
-            afternoonbool = 2;
+            afternoonbool = 1;
 
             initdataWheel3(hourSetting - 12);
         } else {
@@ -406,6 +419,8 @@ Integer chooseNumButton=0;
 
         myGridDbRecordAdapter.notifyDataSetChanged();
         gridview.invalidate();
+        changeButtonGroup(chooseNumButton);
+
 
     }
 
@@ -427,7 +442,7 @@ Integer chooseNumButton=0;
                             public void run() {
                                 if(foxProgressbarInterface!=null)
                                 foxProgressbarInterface.stopProgressBar();
-                               Util.Toast(MineRemindsettingActivity.this,"设置提醒失败");
+                               Util.Toast(MineRemindsettingActivity.this,"设置提醒失败",null);
                             }
                         });
             }
@@ -450,10 +465,15 @@ Integer chooseNumButton=0;
                                 String trimResult = result.replace(" ", "");
                                 if (trimResult.contains("eb14")) {
                                     byte[] data = QuinticCommon.stringToBytes(trimResult);
-                                    Util.Toast(MineRemindsettingActivity.this, "设置成功");
+                                    Util.ToastFox(MineRemindsettingActivity.this, "设置成功", new FoxToastInterface.FoxToastCallback() {
+                                        @Override
+                                        public void toastCloseCallbak() {
+                                            finish();
+
+                                        }
+                                    });
 
 
-                                    finish();
 
 
                                 }
@@ -505,7 +525,6 @@ connecterror();
                                     byte[] data = QuinticCommon.stringToBytes(trimResult);
                                     chooseNumButton = QuinticCommon.unsignedByteToInt(data[2]);
 
-                                    changeButtonGroup(chooseNumButton);
 //                                    switch1.setChecked(boolOpen == 0 ? false : true);
 
                                     minuteSetting = QuinticCommon.unsignedByteToInt(data[3]);

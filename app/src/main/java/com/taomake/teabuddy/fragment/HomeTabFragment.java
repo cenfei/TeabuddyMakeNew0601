@@ -4,8 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -23,10 +21,10 @@ import com.taomake.teabuddy.activity.MyCollectRecordsActivity_;
 import com.taomake.teabuddy.activity.MyCreateRecordsActivity_;
 import com.taomake.teabuddy.activity.MyGFRecordsActivity_;
 import com.taomake.teabuddy.activity.WelcomeActivity_;
+import com.taomake.teabuddy.base.MainApp;
 import com.taomake.teabuddy.component.FoxProgressbarInterface;
 import com.taomake.teabuddy.component.One_Permission_Popwindow;
 import com.taomake.teabuddy.prefs.ConfigPref_;
-import com.taomake.teabuddy.util.FileUtilQq;
 import com.taomake.teabuddy.util.MyStringUtils;
 import com.taomake.teabuddy.util.Util;
 
@@ -37,7 +35,6 @@ import org.androidannotations.annotations.sharedpreferences.Pref;
 
 import quinticble.QuinticBleAPISdkBase;
 import quinticble.QuinticCallbackTea;
-import quinticble.QuinticDeviceFactoryTea;
 import quinticble.QuinticDeviceTea;
 import quinticble.QuinticException;
 
@@ -258,10 +255,18 @@ public class HomeTabFragment extends Fragment{
 //        }
     }
 public void connectSendCodeFailUi(String msg){
-closeProgress();
+    MainApp mainappAll=(MainApp)getActivity().getApplicationContext();
+
+    mainappAll.starttime=System.currentTimeMillis();
+
+    closeProgress();
     }
 
     public void connectSendCodeSuccessUi(){
+        MainApp   mainappAll=(MainApp)getActivity().getApplicationContext();
+
+        mainappAll.starttime=System.currentTimeMillis();
+
         if(boolInitVoice) {
             main_title_name_id.setText("默认语音");
         }else{
@@ -286,6 +291,10 @@ boolean boolInitVoice=true;
                         .post(new Runnable() {
                             @Override
                             public void run() {
+
+
+
+
                                 connectSendCodeFailUi("查询失败");
                             }
                         });

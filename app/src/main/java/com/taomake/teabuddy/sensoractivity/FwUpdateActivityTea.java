@@ -695,7 +695,7 @@ public class FwUpdateActivityTea extends Activity {
 
 
                     try {
-                        Thread.sleep(15000);
+                        Thread.sleep(60000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }

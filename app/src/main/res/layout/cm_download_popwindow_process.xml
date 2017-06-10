@@ -17,11 +17,11 @@
 
         android:layout_marginTop="36dp"
         android:layout_marginBottom="36dp"
+        android:listSelector="@color/white_alpha000"
 
         android:background="@color/white_alpha000"
         android:layout_height="wrap_content"
         android:horizontalSpacing="0.0dip"
-        android:listSelector="@null"
         android:numColumns="3"
         android:scrollbars="none"
         android:stretchMode="columnWidth"

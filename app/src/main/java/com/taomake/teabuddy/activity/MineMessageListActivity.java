@@ -324,7 +324,7 @@ public class MineMessageListActivity extends BaseActivity {
                     startActivity(intent);
 
                 }else{
-                    Util.Toast(MineMessageListActivity.this,"消息没有内容");
+                    Util.Toast(MineMessageListActivity.this,"消息没有内容",null);
                 }
 
 

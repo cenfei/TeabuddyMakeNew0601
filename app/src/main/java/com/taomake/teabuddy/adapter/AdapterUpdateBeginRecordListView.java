@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.media.MediaPlayer;
 import android.os.Environment;
-import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -96,6 +95,7 @@ String unionid=null;
     public long getItemId(int position) {
         return position;
     }
+    public  Map<Integer,Integer> voiceDbchooseMap=new HashMap<Integer,Integer>();
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
@@ -125,6 +125,7 @@ String unionid=null;
 
         viewholder.record_item_name_id.setText(luyinArrays[position]);
 
+        voiceDbchooseMap.put(position, 0);
 
         //下载每个mp3文件
         String mp3DbUrl = personalRanking.voicefile_url;
@@ -154,11 +155,12 @@ String unionid=null;
                 viewholder.img_record_id.setImageDrawable(context.getResources().getDrawable(R.drawable.cm_bg_record));
                 viewholder.img_download_id.setImageDrawable(context.getResources().getDrawable(R.drawable.cm_bg_db_c));
 
-                new Record_Download_Popwindow().showPopwindow(context, img,unionid,(position+3)+"", new Record_Download_Popwindow.CallBackPayWindow() {
+                new Record_Download_Popwindow().showPopwindow(context, img,voiceDbchooseMap.get(position),unionid,(position+3)+"", new Record_Download_Popwindow.CallBackPayWindow() {
                     @Override
-                    public void handleCallBackDbSelect(String recorddir) {
+                    public void handleCallBackDbSelect(String recorddir,int choosep) {
+                        voiceDbchooseMap.put(position,choosep);
                         downloadMp3(recorddir, recordName,pathR,position);
-                        Util.Toast(context, "更换成功");
+                        Util.Toast(context, "更换成功",null);
 
                     }
                 });
@@ -221,7 +223,7 @@ String unionid=null;
             songplay(pathvoice);
         }
         else{
-            Util.Toast(context, "文件正在下载，请稍等");
+            Util.Toast(context, "文件正在下载，请稍等",null);
         }
     }
 

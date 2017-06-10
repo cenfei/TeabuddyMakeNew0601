@@ -360,7 +360,7 @@ int  month=calendar.get(Calendar.MONTH);
         }
     }
 
-    public static void Toast(Context context, String str) {
+    public static void Toast(Context context, String str,FoxToastInterface.FoxToastCallback foxToastCallback) {
 //        if (context != null && !TextUtils.isEmpty(str)) {
 //            ActivityManager mActivityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
 //            String topActivityName = mActivityManager.getRunningTasks(1).get(0).topActivity.getPackageName();
@@ -369,7 +369,21 @@ int  month=calendar.get(Calendar.MONTH);
 //        }
 
 
-        new FoxToastInterface().startProgressBar(context,str);
+        new FoxToastInterface().startProgressBar(context,str,foxToastCallback);
+
+
+    }
+
+    public static void ToastFox(Context context, String str,FoxToastInterface.FoxToastCallback foxToastCallback) {
+//        if (context != null && !TextUtils.isEmpty(str)) {
+//            ActivityManager mActivityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+//            String topActivityName = mActivityManager.getRunningTasks(1).get(0).topActivity.getPackageName();
+////            if (topActivityName.contains("ishuashua"))
+//            Toast.makeText(context, str, Toast.LENGTH_SHORT).show();
+//        }
+
+
+        new FoxToastInterface().startProgressBar(context,str,foxToastCallback);
 
 
     }

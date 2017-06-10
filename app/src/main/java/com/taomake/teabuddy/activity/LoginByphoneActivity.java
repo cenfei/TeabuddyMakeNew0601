@@ -117,7 +117,7 @@ if(!sexType){
         String phonenum = phone_edittext_id.getText().toString();
 
         if (phonenum == null || phonenum.equals("") || phonenum.length() != 11) {
-            Util.Toast(LoginByphoneActivity.this, "手机号码有误");
+            Util.Toast(LoginByphoneActivity.this, "手机号码有误",null);
             return;
         }
         //调用服务器获取验证码----并且同时开始计时
@@ -133,34 +133,34 @@ if(!sexType){
         String phonenum = phone_edittext_id.getText().toString();
 
         if (phonenum == null || phonenum.equals("")) {
-            Util.Toast(LoginByphoneActivity.this, "手机号码不能为空");
+            Util.Toast(LoginByphoneActivity.this, "手机号码不能为空",null);
             return;
         }
 
         String phonecodeText = code_edittext_id.getText().toString();
 
         if (phonecodeText == null || phonecodeText.equals("")) {
-            Util.Toast(LoginByphoneActivity.this, "验证码不能为空");
+            Util.Toast(LoginByphoneActivity.this, "验证码不能为空",null);
             return;
         }
         if (!phonecode.equals(phonecodeText)) {
-            Util.Toast(LoginByphoneActivity.this, "验证码错误");
+            Util.Toast(LoginByphoneActivity.this, "验证码错误",null);
             return;
         }
         String age_edittext_idText = age_edittext_id.getText().toString();
 
         if (age_edittext_idText == null || age_edittext_idText.equals("")) {
-            Util.Toast(LoginByphoneActivity.this, "年龄不能为空");
+            Util.Toast(LoginByphoneActivity.this, "年龄不能为空",null);
             return;
         }else{
             try {
                 Integer ageint = Integer.valueOf(age_edittext_idText);
                 if (ageint > 120) {
-                    Util.Toast(LoginByphoneActivity.this, "年龄不能最大120岁");
+                    Util.Toast(LoginByphoneActivity.this, "年龄不能最大120岁",null);
                     return;
                 }
             }catch (Exception e){
-                Util.Toast(LoginByphoneActivity.this, "年龄格式不对");
+                Util.Toast(LoginByphoneActivity.this, "年龄格式不对",null);
 
             }
         }
@@ -169,7 +169,7 @@ if(!sexType){
 
 
         if (unionid == null || unionid.equals("")) {
-            Util.Toast(LoginByphoneActivity.this, "登录失效，请重新登录");
+            Util.Toast(LoginByphoneActivity.this, "登录失效，请重新登录",null);
             Util.startActivity(LoginByphoneActivity.this, LoginActivity_.class);
             finish();
             return;

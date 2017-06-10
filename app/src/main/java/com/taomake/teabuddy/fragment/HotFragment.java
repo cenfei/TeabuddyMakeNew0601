@@ -14,9 +14,11 @@ import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -62,6 +64,8 @@ import quinticble.QuinticCommon;
 import quinticble.QuinticDeviceFactoryTea;
 import quinticble.QuinticDeviceTea;
 import quinticble.QuinticException;
+
+import static android.content.Context.WINDOW_SERVICE;
 
 @EFragment(R.layout.cm_tea_main)
 
@@ -274,7 +278,7 @@ public class HotFragment extends Fragment {
 
 //        init();
     }
-
+    int width=0;
     public void init(View view) {
 
         TextView pay_button_id = (TextView) view.findViewById(R.id.pay_button_id);
@@ -301,8 +305,15 @@ public class HotFragment extends Fragment {
         tea_sum_cub_text_id = (TextView) view.findViewById(R.id.tea_sum_cub_text_id);
         tea_tryagainconnect_comment = (TextView) view.findViewById(R.id.tea_tryagainconnect_comment);
         tea_unconnect_comment = (TextView) view.findViewById(R.id.tea_unconnect_comment);
+        WindowManager wm = (WindowManager) getActivity().getSystemService(WINDOW_SERVICE);
 
-        tea_sum_cub_text_id.setTextSize(getResources().getDimension(R.dimen.font_100));
+        Display d = wm.getDefaultDisplay();
+
+         width = d.getWidth();
+
+        int height = d.getHeight();
+        tea_sum_cub_text_id.setTextSize(width*45/320);
+
         update_device_id = (ImageView) view.findViewById(R.id.update_device_id);
         update_device_id.setBackgroundResource(R.drawable.cm_update_device);
 
@@ -313,9 +324,9 @@ public class HotFragment extends Fragment {
 
         cicrle_line_id = (LinearLayout) view.findViewById(R.id.cicrle_line_id);
 
-        LinearLayout  right_title = (LinearLayout) view.findViewById(R.id.right_title_line);
+        LinearLayout right_title = (LinearLayout) view.findViewById(R.id.right_title_line);
         right_title.setVisibility(View.GONE);
-        LinearLayout  left_title_line = (LinearLayout) view.findViewById(R.id.left_title_line);
+        LinearLayout left_title_line = (LinearLayout) view.findViewById(R.id.left_title_line);
 
         left_title_line.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -385,6 +396,10 @@ public class HotFragment extends Fragment {
 
 
     public void connectSuccessUi() {
+        MainApp mainappAll = (MainApp) getActivity().getApplicationContext();
+
+        mainappAll.starttime = System.currentTimeMillis();
+
         cicrle_line_id.setVisibility(View.VISIBLE);
 
         connectUi();
@@ -402,8 +417,10 @@ public class HotFragment extends Fragment {
 
         }
 
+//        teaingCountValue=22;
         if (teaingCountValue < 10) {
             tea_sum_cub_text_id.setText(teaingCountValue + "");
+            MyStringUtils.checkAndroidSex(getActivity());
 //            if (MyStringUtils.checkAndroidSex(getActivity())) {
 //                Log.d("checkAndroidSiz","true");
 //                tea_sum_cub_text_id.setTextSize(getResources().getDimension(R.dimen.font_140));
@@ -413,13 +430,15 @@ public class HotFragment extends Fragment {
 //                tea_sum_cub_text_id.setTextSize(getResources().getDimension(R.dimen.font_200));
 //
 //            }
-            tea_sum_cub_text_id.setTextSize(getResources().getDimension(R.dimen.font_140));
+            tea_sum_cub_text_id.setTextSize(width*45/320);
 
 //            tea_sum_cub_text_id.setTextSize(getResources().getDimension(R.dimen.font_140));
 
         } else {
             tea_sum_cub_text_id.setText(teaingCountValue + "");
-            tea_sum_cub_text_id.setTextSize(getResources().getDimension(R.dimen.font_60));
+//            tea_sum_cub_text_id.setTextSize(getResources().getDimension(R.dimen.font_60));
+            tea_sum_cub_text_id.setTextSize(width*26/320);
+
         }
 
 
@@ -465,10 +484,15 @@ public class HotFragment extends Fragment {
     int teaingIsNull = 1;//是否空杯 1空杯  0 非空
 
     public void connectSendCodeFailUi(String msg) {
+        QuinticBleAPISdkBase.resultDevice=null;
+        MainApp mainappAll = (MainApp) getActivity().getApplicationContext();
+
+        mainappAll.starttime = System.currentTimeMillis();
+
         if (foxProgressbarInterface != null) {
             foxProgressbarInterface.stopProgressBar();
         }
-        if(connect_status_commnet_id!=null) {
+        if (connect_status_commnet_id != null) {
             connect_status_commnet_id.setText(msg);
 
             unconnectUi();
@@ -599,7 +623,7 @@ public class HotFragment extends Fragment {
             deviceVersion = configPref.userDeviceVersion().get();
         }
         if (deviceVersion == null) {
-            Util.Toast(getActivity(), "设备当前没有版本号");
+            Util.Toast(getActivity(), "设备当前没有版本号", null);
 
             mustUpdate = false;
 
@@ -634,13 +658,13 @@ public class HotFragment extends Fragment {
 
             Double return_code_int = (Double) orderMap.get("rcode");
             if (return_code_int == 0) {
-                configPref.userDeviceVersion().put(deviceVersion);
+//                configPref.userDeviceVersion().put(deviceVersion);
 
                 MainApp mainApp = (MainApp) getActivity().getApplicationContext();
-
-                mainApp.boolupdateSuccess = 2;
+                sysUpdateVersion = configPref.userDeviceVersion().get();
+                mainApp.boolupdateSuccess = 0;
                 needupdate = false;
-
+//                configPref.userDeviceVersion().put();
                 update_device_id.setBackgroundResource(R.drawable.cm_update_device);
 
 
@@ -659,7 +683,7 @@ public class HotFragment extends Fragment {
                 MainApp mainApp = (MainApp) getActivity().getApplicationContext();
 
                 if (deviceVersionObj != null && deviceVersionObj.url != null && !deviceVersionObj.url.equals("")) {
-mainApp.deviceVersionObj=deviceVersionObj;
+                    mainApp.deviceVersionObj = deviceVersionObj;
 
                     //将固件升级信息保存起来
 
@@ -682,7 +706,7 @@ mainApp.deviceVersionObj=deviceVersionObj;
                         configPref.userDeviceVersion().put(deviceVersion);
 
 
-                        mainApp.boolupdateSuccess = 2;
+                        mainApp.boolupdateSuccess = 0;
                         needupdate = false;
 
                         update_device_id.setBackgroundResource(R.drawable.cm_update_device);
@@ -693,7 +717,7 @@ mainApp.deviceVersionObj=deviceVersionObj;
                     configPref.userDeviceVersion().put(deviceVersion);
 
 
-                    mainApp.boolupdateSuccess = 2;
+                    mainApp.boolupdateSuccess = 0;
                     needupdate = false;
 
                     update_device_id.setBackgroundResource(R.drawable.cm_update_device);
@@ -735,13 +759,13 @@ mainApp.deviceVersionObj=deviceVersionObj;
         if (!MyStringUtils.isopenBluetooth(getActivity())) {
 
 
-if(showcontnect) {
-    connectSendCodeFailUi("");
-}else{
-    connectUi();
-    bluetooth_rel.setVisibility(View.VISIBLE);
+            if (showcontnect) {
+                connectSendCodeFailUi("");
+            } else {
+                connectUi();
+                bluetooth_rel.setVisibility(View.VISIBLE);
 
-}
+            }
             return;
         }
 
@@ -758,10 +782,15 @@ if(showcontnect) {
         foxProgressbarInterface.startProgressBar(getActivity(), "主人茶密加载中...");
 
         if (MyStringUtils.isNotNullAndEmpty(QuinticBleAPISdkBase.resultDevice)) {
+
+//            Log.e("QuinticBleAPISdkBaseresultDevice", "not null");
+
             resultDeviceAll = QuinticBleAPISdkBase.resultDevice;
             // ************处理动作
             getCzidBle();
         } else {
+//            Log.e("QuinticBleAPISdkBaseresultDevice", " null");
+
             final Context context = getActivity();
             QuinticDeviceFactoryTea quinticDeviceFactory = QuinticBleAPISdkBase
                     .getInstanceFactory(context);
@@ -785,7 +814,7 @@ if(showcontnect) {
                                             if (QuinticBleAPISdkBase.getInstanceFactory(getActivity()).conn != null) {
                                                 QuinticBleAPISdkBase.getInstanceFactory(getActivity()).conn.disconnect();
                                             }
-                                            Util.Toast(getActivity(), "将立马前往升级");
+                                            Util.Toast(getActivity(), "将立马前往升级", null);
 
                                             mustUpdate = true;
                                             checkDeviceUpdateToServer();
@@ -838,6 +867,7 @@ if(showcontnect) {
 ////                                                connectFindDevice();
 //                                                countError++;
 //                                            } else {
+                                            QuinticBleAPISdkBase.resultDevice=null;
                                             closeProgress();
                                             unconnectUi();
 
@@ -1122,8 +1152,8 @@ if(showcontnect) {
 
                                     deviceVersion = versionD + "";
 //                                    deviceVersion="2.45";//fox测试
-                                    if(deviceVersion.length()==3){
-                                        deviceVersion=deviceVersion+"0";
+                                    if (deviceVersion.length() == 3) {
+                                        deviceVersion = deviceVersion + "0";
                                     }
                                     configPref.userDeviceVersion().put(deviceVersion);
                                     checkDeviceUpdateToServer();
@@ -1221,15 +1251,15 @@ if(showcontnect) {
                         if (mainApp.boolupdateSuccess == 1) {
                             deviceVersion = null;
                         } else if (mainApp.boolupdateSuccess == 2) {
+                            if (!TextUtils.isEmpty(sysUpdateVersion)) {
+                                configPref.userDeviceVersion().put(sysUpdateVersion);
+                            }
+                            needupdate = mainApp.boolupdateSuccess == 2 ? false : true;
 
-                            configPref.userDeviceVersion().put(sysUpdateVersion);
-                        }
-
-                        needupdate = mainApp.boolupdateSuccess == 2 ? false : true;
-                        if (!needupdate) {
                             update_device_id.setBackgroundResource(R.drawable.cm_update_device);
-
                         }
+
+
                         changeui();
 
 
@@ -1318,7 +1348,7 @@ if(showcontnect) {
                             break;
                         case BluetoothAdapter.STATE_TURNING_OFF://蓝牙关掉---切换到没有连接页面
                             Log.e("HOT", "onReceive---------STATE_TURNING_OFF");
-                            if (mainApp.boolupdateSuccess == 2||mainApp.boolupdateSuccess == 1) {
+                            if (mainApp.boolupdateSuccess == 2 || mainApp.boolupdateSuccess == 1) {
                                 openBle();
                             }
 

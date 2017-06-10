@@ -131,11 +131,11 @@ public class AdapterMineSortListView extends BaseAdapter {
                         notifyDataSetChanged();
                         clickLoveServer(personalRanking.unionid, view);
                     } else {
-                        Util.Toast(context, "主人您已点过赞");
+                        Util.Toast(context, "主人您已点过赞",null);
 
                     }
                 } else {
-                    Util.Toast(context, "主人不可以给自己点赞哦");
+                    Util.Toast(context, "主人不可以给自己点赞哦",null);
                 }
 
             }
@@ -282,7 +282,7 @@ public class AdapterMineSortListView extends BaseAdapter {
         if (resp != null && !resp.equals("")) {
             LoveBackJson dbRecordsJson = new Gson().fromJson(resp, LoveBackJson.class);
             if ((dbRecordsJson.rcode + "").equals(Constant.RES_SUCCESS)) {
-                Util.Toast(context, "点赞成功");
+                Util.Toast(context, "点赞成功",null);
                 ImageView imageView = (ImageView) clickView;
                 imageView.setImageDrawable(context.getResources().getDrawable(R.drawable.sort_love1));
 
@@ -300,7 +300,7 @@ public class AdapterMineSortListView extends BaseAdapter {
 //                getMyCreateRecordListInfo();
             } else if ((dbRecordsJson.rcode + "").equals("2")) {
 
-                Util.Toast(context, MyStringUtils.decodeUnicode(dbRecordsJson.obj));
+                Util.Toast(context, MyStringUtils.decodeUnicode(dbRecordsJson.obj),null);
 
             }
         }

@@ -3,7 +3,6 @@ package com.taomake.teabuddy.component;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
-import android.os.Handler;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -13,19 +12,15 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
-import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.taomake.teabuddy.R;
-import com.taomake.teabuddy.adapter.MyGridAdapter;
 import com.taomake.teabuddy.adapter.MyGridDbRecordAdapter;
 import com.taomake.teabuddy.network.ProtocolUtil;
 import com.taomake.teabuddy.network.RowMessageHandler;
 import com.taomake.teabuddy.object.DbRecordInfoObj;
 import com.taomake.teabuddy.object.DbRecordsJson;
-import com.taomake.teabuddy.object.TeaDetailJson;
 import com.taomake.teabuddy.util.Constant;
-import com.taomake.teabuddy.util.MyStringUtils;
 import com.taomake.teabuddy.util.Util;
 
 import java.util.ArrayList;
@@ -43,18 +38,20 @@ public class Record_Download_Popwindow {
     Activity activity;
     View relView;
     View view;
+    int choosepostion;
     /**
      * 显示popupWindow
      */
-    public void showPopwindow(final Activity activity, View relView,String unionid,String voiceid,CallBackPayWindow callBackPayWindow) {
+    public void showPopwindow(final Activity activity, View relView,int chooseposition,String unionid,String voiceid,CallBackPayWindow callBackPayWindow) {
         // 利用layoutInflater获得View
+        this.choosepostion=chooseposition;
+
         this.callBackPayWindow=callBackPayWindow;
         context = activity;
         LayoutInflater inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
          view = inflater.inflate(R.layout.cm_download_popwindow_process, null);
 this.relView=relView;
         this.activity=activity;
-
 
         getTheVoiceRecordListInfo(unionid,voiceid);
        // initUi(activity, view, relView);
@@ -76,6 +73,7 @@ private List<DbRecordInfoObj> dbRecordInfoObjList=new ArrayList<DbRecordInfoObj>
     /**
      * @param view
      */
+    MyGridDbRecordAdapter myGridDbRecordAdapter;
     public void initUi(final Activity activity, View view, View relView) {
 
 
@@ -100,8 +98,8 @@ private List<DbRecordInfoObj> dbRecordInfoObjList=new ArrayList<DbRecordInfoObj>
 
         gridview.setLayoutParams(linearParams);
 
-        MyGridDbRecordAdapter myGridDbRecordAdapter=new MyGridDbRecordAdapter(context,dbRecordInfoObjList);
-
+         myGridDbRecordAdapter=new MyGridDbRecordAdapter(context,dbRecordInfoObjList);
+        myGridDbRecordAdapter.setSeclection(choosepostion);
         gridview.setAdapter(myGridDbRecordAdapter);
         gridview.setOnItemClickListener(new ItemClickListener());
 
@@ -186,7 +184,7 @@ private List<DbRecordInfoObj> dbRecordInfoObjList=new ArrayList<DbRecordInfoObj>
 
     public interface CallBackPayWindow {
 
-        void handleCallBackDbSelect(String recorddir);
+        void handleCallBackDbSelect(String recorddir,int choosePostion);
 
 //        void handleCallBackPayWindowFromLib();
 
@@ -227,7 +225,10 @@ private List<DbRecordInfoObj> dbRecordInfoObjList=new ArrayList<DbRecordInfoObj>
             DbRecordInfoObj dbRecordInfoObj=dbRecordInfoObjList.get(postion);
 
             // 显示所选Item的ItemText   选中的地址
-           callBackPayWindow.handleCallBackDbSelect(dbRecordInfoObj.voicefile_url);
+//            myGridDbRecordAdapter.setSeclection(choosepostion);
+            Log.d("choose item",postion+"");
+
+            callBackPayWindow.handleCallBackDbSelect(dbRecordInfoObj.voicefile_url,postion);
             closePopupWindow(activity);
 
 

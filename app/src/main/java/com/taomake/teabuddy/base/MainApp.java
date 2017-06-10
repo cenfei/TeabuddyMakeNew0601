@@ -33,7 +33,7 @@ public static WebView webView;
     public IWeiboShareAPI mWeiboShareAPI;
 
     public String registrationId;
-
+public long starttime=0;
     public  boolean openBluetooth=true;
 
     public  Tencent mTencent;

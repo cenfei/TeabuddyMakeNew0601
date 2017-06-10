@@ -39,6 +39,7 @@ import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.taomake.teabuddy.R;
 import com.taomake.teabuddy.adapter.AdapterBeginRecordListView;
 import com.taomake.teabuddy.component.FoxProgressbarInterface;
+import com.taomake.teabuddy.component.FoxToastInterface;
 import com.taomake.teabuddy.component.SZ_PayPopwindow_Avar;
 import com.taomake.teabuddy.network.ProtocolUtil;
 import com.taomake.teabuddy.network.RowMessageHandler;
@@ -106,34 +107,40 @@ public class BeginRecordActivity extends BaseActivity {
 
     @Click(R.id.left_title_line)
     void onLeftTitleLine() {
-        if(unionid.equals("gost001")){
+        if (unionid.equals("gost001")) {
             Util.startActivity(BeginRecordActivity.this, MainActivity_.class);
 
 
-            Intent intent = new Intent(BeginRecordActivity.this,MainActivity_.class);
-            intent.putExtra("FromActivity","BeginRecordActivity");
+            Intent intent = new Intent(BeginRecordActivity.this, MainActivity_.class);
+            intent.putExtra("FromActivity", "BeginRecordActivity");
             startActivity(intent);
             finish();
-        }else {
+        } else {
             finish();
         }
     }
 
-    boolean boolSave=true;
+    boolean boolSave = true;
+
     @Click(R.id.right_title_line)
     void onright_title_line() {//完成，上传编辑语音组
-if(boolSave) {
-boolSave=false;
-    String cbr_nickname_idValue = cbr_nickname_id.getText().toString();
-    if (cbr_nickname_idValue == null || cbr_nickname_idValue.equals("")) {
+        if (boolSave) {
+            boolSave = false;
+            String cbr_nickname_idValue = cbr_nickname_id.getText().toString();
+            if (cbr_nickname_idValue == null || cbr_nickname_idValue.equals("")) {
 
 
-        Util.Toast(BeginRecordActivity.this, "请填写语音名称");
-        return;
-    }
+                Util.Toast(BeginRecordActivity.this, "请填写语音名称", new FoxToastInterface.FoxToastCallback() {
+                    @Override
+                    public void toastCloseCallbak() {
 
-    addBcNineRecords(cbr_nickname_idValue);
-}
+                    }
+                });
+                return;
+            }
+
+            addBcNineRecords(cbr_nickname_idValue);
+        }
 
     }
 
@@ -141,6 +148,7 @@ boolSave=false;
     void oncbr_avar_click_id() {
         changeAvar();
     }
+
     @Click(R.id.cbr_avar_id)
     void oncbr_avar_id() {
         changeAvar();
@@ -198,16 +206,15 @@ boolSave=false;
 
     }
 
-String unionid=null;
+    String unionid = null;
 
     public void initUi() {
-        unionid=configPref.userUnion().get();
+        unionid = configPref.userUnion().get();
 
-        if(unionid==null||unionid.equals("")){
+        if (unionid == null || unionid.equals("")) {
 //            unionidIntent =getIntent().getStringExtra("unionid");
-            unionid="gost001";
+            unionid = "gost001";
         }
-
 
 
         imageLoader = ImageLoader.getInstance();
@@ -246,7 +253,6 @@ String unionid=null;
         initdata();
 
 
-
         permissionBle();
     }
 
@@ -279,8 +285,9 @@ String unionid=null;
 
     }
 
-    int RECORD_AUDIO_ID=3004;
-    public void  permissionBle(){
+    int RECORD_AUDIO_ID = 3004;
+
+    public void permissionBle() {
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
 //请求权限
@@ -498,7 +505,7 @@ String unionid=null;
                     downloadMp3List();
                 }
 
-                }
+            }
 
         }
     }
@@ -516,16 +523,16 @@ String unionid=null;
             if (file.exists()) {
                 fileList.add(file);
             } else {
-                Util.Toast(BeginRecordActivity.this, "请先录音");
+                Util.Toast(BeginRecordActivity.this, "请先录音", null);
                 return;
             }
 
         }
 
-        String voiceTypeJson=new Gson().toJson(adapterHomeDesignListView.voiceMap);
+        String voiceTypeJson = new Gson().toJson(adapterHomeDesignListView.voiceMap);
 
         ProtocolUtil.addBcRecordList(this, new UpdateBcNineRecordsHandler(), unionid
-                , cbr_nickname_idValue, avarByte, fileList,voiceTypeJson);//devno 空表示所有
+                , cbr_nickname_idValue, avarByte, fileList, voiceTypeJson);//devno 空表示所有
 
 
     }
@@ -536,30 +543,35 @@ String unionid=null;
         public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
             foxProgressbarInterface.stopProgressBar();
             String bodyResp = new String(responseBody);
-            Util.Toast(BeginRecordActivity.this, "上传成功");
-            Log.i("bodyResp", bodyResp);
-            if(unionid.equals("gost001")){
-                Util.startActivity(BeginRecordActivity.this, MainActivity_.class);
+            Util.Toast(BeginRecordActivity.this, "上传成功", new FoxToastInterface.FoxToastCallback() {
+                @Override
+                public void toastCloseCallbak() {
+//                    Log.i("bodyResp", bodyResp);
+                    if (unionid.equals("gost001")) {
+                        Util.startActivity(BeginRecordActivity.this, MainActivity_.class);
 
 
-                Intent intent = new Intent(BeginRecordActivity.this,MainActivity_.class);
-                intent.putExtra("FromActivity","BeginRecordActivity");
-                startActivity(intent);
-                finish();
-            }else {
-                finish();
-            }
+                        Intent intent = new Intent(BeginRecordActivity.this, MainActivity_.class);
+                        intent.putExtra("FromActivity", "BeginRecordActivity");
+                        startActivity(intent);
+                        finish();
+                    } else {
+                        finish();
+                    }
+                }
+            });
+
         }
 
         @Override
         public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
             foxProgressbarInterface.stopProgressBar();
-if(responseBody!=null) {
-    String bodyResp = new String(responseBody);
-    Log.i("bodyResp", bodyResp);
-}
-            Util.Toast(BeginRecordActivity.this, "上传失败");
-            boolSave=false;
+            if (responseBody != null) {
+                String bodyResp = new String(responseBody);
+                Log.i("bodyResp", bodyResp);
+            }
+            Util.Toast(BeginRecordActivity.this, "上传失败", null);
+            boolSave = false;
 
         }
 //        @Override
@@ -583,19 +595,13 @@ if(responseBody!=null) {
     }
 
 
+    public void downloadMp3List() {
 
-
-
-
-
-    public  void downloadMp3List() {
-
-        for(int position=0;position<designRoomInfos.size();position++)
-        {
+        for (int position = 0; position < designRoomInfos.size(); position++) {
             RecordInfoObj personalRanking = designRoomInfos.get(position);
             String mp3DbUrl = personalRanking.voicefile_url;
             final String recordName = AdapterBeginRecordListView.luyinArrays[position] + ".mp3";
-            downloadMp3(mp3DbUrl,recordName);
+            downloadMp3(mp3DbUrl, recordName);
 
         }
 
@@ -610,11 +616,11 @@ if(responseBody!=null) {
     }
 
     ExecutorService fixedThreadPool = Executors.newFixedThreadPool(3);
-    public static   String  path = "teabuddy_record_file";
-    public static   String  Voice_Path = Environment.getExternalStorageDirectory() + "/" + path + "/" ;
+    public static String path = "teabuddy_record_file";
+    public static String Voice_Path = Environment.getExternalStorageDirectory() + "/" + path + "/";
 
 
-    public  void downloadMp3(final String urlStr, final String fileName) {
+    public void downloadMp3(final String urlStr, final String fileName) {
 
         fixedThreadPool.execute(new Runnable() {
             @Override
@@ -648,7 +654,7 @@ if(responseBody!=null) {
                     File file = new File(pathName);
                     InputStream input = conn.getInputStream();
                     if (file.exists()) {
-                       Log.d("exits","exits");
+                        Log.d("exits", "exits");
 //                        file.delete();
 //                        return;
                     } else {
@@ -673,8 +679,8 @@ if(responseBody!=null) {
                     e.printStackTrace();
                 } finally {
                     try {
-                        if(output!=null)
-                        output.close();
+                        if (output != null)
+                            output.close();
                         System.out.println("success");
                     } catch (IOException e) {
                         System.out.println("fail");
@@ -688,15 +694,6 @@ if(responseBody!=null) {
 
 
     }
-
-
-
-
-
-
-
-
-
 
 
     public List<String> setTestData() {

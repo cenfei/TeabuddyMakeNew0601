@@ -1,6 +1,7 @@
 package com.taomake.teabuddy.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,9 +64,29 @@ public class MyGridDbRecordAdapter extends BaseAdapter {
 		// TODO Auto-generated method stub
 		return position;
 	}
+	private int clickTemp = -1;
+	//标识选择的Item
+	public void setSeclection(int position) {
+		clickTemp = position;
+	}
+
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
+//		if (convertView == null) {
+//			convertView = LayoutInflater.from(mContext).inflate(
+//					R.layout.cm_download_popwindow_item, parent, false);
+//		}
+//		DbRecordInfoObj dbRecordInfoObj=dbRecordInfoObjList.get(position);
+//		TextView tv = BaseViewHolder.get(convertView, R.id.db_text_id);
+//		ImageView iv = BaseViewHolder.get(convertView, R.id.db_img_id);
+////		iv.setBackgroundResource(imgs[position]);
+//		imageLoader.displayImage(dbRecordInfoObj.sys_headurl,iv,options);
+//		tv.setText(MyStringUtils.decodeUnicode(dbRecordInfoObj.voicefile_title));
+//
+//		return convertView;
+
+
 		if (convertView == null) {
 			convertView = LayoutInflater.from(mContext).inflate(
 					R.layout.cm_download_popwindow_item, parent, false);
@@ -73,7 +94,26 @@ public class MyGridDbRecordAdapter extends BaseAdapter {
 		DbRecordInfoObj dbRecordInfoObj=dbRecordInfoObjList.get(position);
 		TextView tv = BaseViewHolder.get(convertView, R.id.db_text_id);
 		ImageView iv = BaseViewHolder.get(convertView, R.id.db_img_id);
+
+		ImageView db_img_select_id = BaseViewHolder.get(convertView, R.id.db_img_select_id);
+
 //		iv.setBackgroundResource(imgs[position]);
+
+
+		Log.d("chose clicktemp",clickTemp+"");
+			if (clickTemp == position) {
+				db_img_select_id.setVisibility(View.VISIBLE);
+				db_img_select_id.setImageDrawable(mContext.getResources().getDrawable(R.drawable.rc_voice_s));
+
+			} else {
+				db_img_select_id.setVisibility(View.GONE);
+			}
+//			Log.e("gougou:", dbRecordInfoObj.gougou);
+//			if(dbRecordInfoObj.gougou!=null&&dbRecordInfoObj.gougou.equals("1")){
+//				db_img_select_id.setVisibility(View.VISIBLE);
+//				db_img_select_id.setImageDrawable(mContext.getResources().getDrawable(R.drawable.rc_default));
+//			}
+
 		imageLoader.displayImage(dbRecordInfoObj.sys_headurl,iv,options);
 		tv.setText(MyStringUtils.decodeUnicode(dbRecordInfoObj.voicefile_title));
 

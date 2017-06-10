@@ -6,7 +6,6 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.PowerManager;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -42,7 +41,6 @@ import com.taomake.teabuddy.object.VoiceGroupJson;
 import com.taomake.teabuddy.object.VoiceGroupObj;
 import com.taomake.teabuddy.prefs.ConfigPref_;
 import com.taomake.teabuddy.util.Constant;
-import com.taomake.teabuddy.util.FileUtilQq;
 import com.taomake.teabuddy.util.MyStringUtils;
 import com.taomake.teabuddy.util.Util;
 import com.taomake.teabuddy.wxapi.WechatShareManager;
@@ -270,7 +268,7 @@ public class MyGFRecordsActivity extends BaseActivity implements IWeiboHandler.R
         if (resp != null && !resp.equals("")) {
             BaseJson dbRecordsJson = new Gson().fromJson(resp, BaseJson.class);
             if ((dbRecordsJson.rcode + "").equals(Constant.RES_SUCCESS)) {
-                Util.Toast(MyGFRecordsActivity.this, "收藏成功");
+                Util.Toast(MyGFRecordsActivity.this, "收藏成功",null);
                 collectBool = false;
 //                getMyCreateRecordListInfo();
             }
@@ -311,7 +309,7 @@ public class MyGFRecordsActivity extends BaseActivity implements IWeiboHandler.R
         if (resp != null && !resp.equals("")) {
             BaseJson dbRecordsJson = new Gson().fromJson(resp, BaseJson.class);
             if ((dbRecordsJson.rcode + "").equals(Constant.RES_SUCCESS)) {
-                Util.Toast(MyGFRecordsActivity.this, "已取消收藏");
+                Util.Toast(MyGFRecordsActivity.this, "已取消收藏",null);
                 collectBool = true;
 //                getMyCreateRecordListInfo();
             }

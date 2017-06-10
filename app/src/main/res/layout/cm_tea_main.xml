@@ -273,10 +273,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
 
-                android:layout_above="@+id/tea_cub_num_smaller_line"
-                android:layout_marginLeft="60dp"
-                android:layout_marginBottom="30dp"
-                android:textColor="@color/white_alpha60"
+                android:layout_marginLeft="45dp"
+                android:layout_marginTop="65dp"
+                android:textColor="@color/white"
                 android:textSize="15sp" />
 
 
@@ -287,8 +286,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
               android:layout_alignParentBottom="true"
-                android:layout_marginBottom="20dp"
+                android:layout_marginBottom="15dp"
                 android:layout_marginLeft="30dp"
+                android:gravity="bottom"
                 android:orientation="horizontal">
 
                 <TextView
@@ -296,6 +296,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="第"
+                    android:layout_gravity="bottom"
                     android:includeFontPadding="false"
                     android:textColor="@color/white_alpha60"
                     android:textSize="12sp" />
@@ -306,16 +307,18 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="0"
+                    android:layout_gravity="bottom"
+
                     android:includeFontPadding="false"
                     android:textColor="@color/white_alpha60"
                      />
-
                 <TextView
 
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="泡"
                     android:includeFontPadding="false"
+                    android:layout_gravity="bottom"
 
                     android:textColor="@color/white_alpha60"
                     android:textSize="12sp" />
@@ -332,7 +335,6 @@
             android:layout_below="@+id/pc_tea_choose_line"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="30dp"
-            android:text="正在连接中"
             android:textColor="@color/white"
             android:textSize="17sp" />
     </RelativeLayout>
@@ -503,7 +505,7 @@
             android:text="-- or --"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="60dp"
-            android:textColor="@color/font_titie2"
+            android:textColor="@color/white_alpha80"
             android:textSize="18sp" />
         <TextView
 

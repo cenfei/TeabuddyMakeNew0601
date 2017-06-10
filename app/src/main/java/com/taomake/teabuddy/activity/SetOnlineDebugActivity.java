@@ -62,7 +62,7 @@ public class SetOnlineDebugActivity extends BaseActivity {
         if (codeStr == null || codeStr.equals("")) {
 
 
-            Util.Toast(SetOnlineDebugActivity.this, "请您填写客服提供的诊断验证码，谢谢");
+            Util.Toast(SetOnlineDebugActivity.this, "请您填写客服提供的诊断验证码，谢谢",null);
 
             return;
         }

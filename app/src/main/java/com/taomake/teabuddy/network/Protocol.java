@@ -32,7 +32,7 @@ public class Protocol {
             if (Util.netState(context)) {
                 makeAsyncRequest(url, paramMap);
             } else {
-                Util.Toast(context, "网络连接不可用，请稍后重试");
+                Util.Toast(context, "网络不可用\n请稍后重试",null);
                 call.getMessage("", url);
             }
         }
@@ -46,7 +46,7 @@ public class Protocol {
             mMainAsync = new Main(paramMap);
             mMainAsync.execute(url);
         } else {
-            Util.Toast(context, "网络连接不可用，请稍后重试");
+            Util.Toast(context, "网络连接\n请稍后重试",null);
             call.getMessage("", url);
         }
     }
@@ -109,14 +109,14 @@ return;
                         call.getMessage(result, url);
                     } else if (return_code==0) {
                         if(!returnMsg.contains("fail")) {
-                            Util.Toast(context, returnMsg);
+                            Util.Toast(context, returnMsg,null);
                         }
                         call.getMessage(result, url);
                     } else if (return_code==2) {
 //                        Util.Toast(context, returnMsg);
                         call.getMessage(result, url);
                     } else if (return_code==3) {
-                        Util.Toast(context, returnMsg);
+                        Util.Toast(context, returnMsg,null);
                         call.getMessage(result, url);
                     } else if (return_code.equals("6000021")) {
                         Log.i("return_code", "请求参数不合法");
@@ -180,27 +180,26 @@ return;
 
                     } else if (return_code.equals("e0002")) {
                         Log.i("return_code", returnMsg);
-                        Util.Toast(context, "Token过期请重新登录");
+                        Util.Toast(context, returnMsg,null);
 
 
                         call.getMessage(result, url);
 
                     } else if (return_code.equals("e002")) {
                         Log.i("return_code", returnMsg);
-                        Util.Toast(context, "Token过期请重新登录");
 
 
                         call.getMessage(result, url);
 
                     } else {
                         Log.i("return_code", "未知错误码" + return_code);
-                        Util.Toast(context, returnMsg);
+                        Util.Toast(context, returnMsg,null);
 
                     }
 
                 } catch (Exception e) {
                     call.getMessage(null, url);
-                    Util.Toast(context, "服务器错误");
+                    Util.Toast(context, "服务器错误",null);
 
                     System.out.println("Exception : " + e);
                     Log.e("Exception", "Exception", e);
@@ -208,7 +207,8 @@ return;
             } else {
                 // WalletUtil.makeText(context, "网络连接超时!",
                 // Toast.LENGTH_SHORT).show();.
-                Util.Toast(context, "网络连接超时!");
+                Util.Toast(context, "网络连接超时!",null);
+
                 // call.getMessage(null, url);
                 call.getMessage(null, url);// 网络请求失败-客户端进行处理
             }

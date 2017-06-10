@@ -3,7 +3,6 @@ package com.taomake.teabuddy.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -31,7 +30,6 @@ import com.taomake.teabuddy.object.VoiceGroupJson;
 import com.taomake.teabuddy.object.VoiceGroupObj;
 import com.taomake.teabuddy.prefs.ConfigPref_;
 import com.taomake.teabuddy.util.Constant;
-import com.taomake.teabuddy.util.FileUtilQq;
 import com.taomake.teabuddy.util.MyStringUtils;
 import com.taomake.teabuddy.util.Util;
 import com.taomake.teabuddy.wxapi.WechatShareManager;
@@ -261,7 +259,7 @@ getMyCreateRecordListInfo();
         if (resp != null && !resp.equals("")) {
             BaseJson dbRecordsJson = new Gson().fromJson(resp, BaseJson.class);
             if ((dbRecordsJson.rcode + "").equals(Constant.RES_SUCCESS)) {
-                Util.Toast(MyCollectRecordsActivity.this, "已取消收藏");
+                Util.Toast(MyCollectRecordsActivity.this, "已取消收藏",null);
 
 //                getMyCreateRecordListInfo();
             }
@@ -323,7 +321,13 @@ getMyCreateRecordListInfo();
                     public void handleCallBackCollect() {
 
                         voiceGroupObj.fav="0";
+
                         delcollectMyCreateRecordListInfo(voiceGroupObj.voicefile_index);
+                        voiceGroupObjList.remove(postion);
+                        myGridCreateRecordAdapter.setSeclection(selectTemp);
+
+                        myGridCreateRecordAdapter.notifyDataSetChanged();
+                        gridview.invalidate();
                     }
 
                     @Override

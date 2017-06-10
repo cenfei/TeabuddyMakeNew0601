@@ -323,7 +323,7 @@ public class SetOnlineDebugTwoActivity extends BaseActivity {
 
     public void connectSendCodeFailUi(String failMsg) {
         Log.e("getLogHistory", failMsg);
-        Util.Toast(SetOnlineDebugTwoActivity.this,"诊断数据查询没有数据");
+        Util.Toast(SetOnlineDebugTwoActivity.this,"诊断数据查询没有数据",null);
         finish();
 
     }

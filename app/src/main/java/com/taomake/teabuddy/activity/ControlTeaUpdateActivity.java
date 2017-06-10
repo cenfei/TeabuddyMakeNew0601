@@ -18,6 +18,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.taomake.teabuddy.R;
 import com.taomake.teabuddy.adapter.AdapterUpdateTeasListView;
 import com.taomake.teabuddy.component.FoxProgressbarInterface;
+import com.taomake.teabuddy.component.FoxToastInterface;
 import com.taomake.teabuddy.network.ProtocolUtil;
 import com.taomake.teabuddy.network.RowMessageHandler;
 import com.taomake.teabuddy.object.BaseJson;
@@ -91,7 +92,7 @@ public class ControlTeaUpdateActivity extends BaseActivity {
         Integer second = fenP * 60 + fenS;
 
         if (second < 20) {
-            Util.Toast(ControlTeaUpdateActivity.this, "主人，不能少于20秒,请重新选择");
+            Util.Toast(ControlTeaUpdateActivity.this, "主人，不能少于20秒,请重新选择",null);
             return;
         }
 
@@ -130,7 +131,7 @@ public class ControlTeaUpdateActivity extends BaseActivity {
 
         String teaName = tea_detail_name_editText.getText().toString();
         if (teaName == null || teaName.equals("")) {
-            Util.Toast(ControlTeaUpdateActivity.this, "请设置茶名");
+            Util.Toast(ControlTeaUpdateActivity.this, "请设置茶名",null);
             return;
         }
         if (designRoomInfos.size() > 0) {
@@ -138,11 +139,11 @@ public class ControlTeaUpdateActivity extends BaseActivity {
         }
 
         if (designRoomInfos.size() < 1) {
-            Util.Toast(ControlTeaUpdateActivity.this, "主人，最少需要1泡");
+            Util.Toast(ControlTeaUpdateActivity.this, "主人，最少需要1泡",null);
             return;
         }
         if (designRoomInfos.size() > 10) {
-            Util.Toast(ControlTeaUpdateActivity.this, "主人，最多10泡哦");
+            Util.Toast(ControlTeaUpdateActivity.this, "主人，最多10泡哦",null);
             return;
         }
 
@@ -312,7 +313,7 @@ public class ControlTeaUpdateActivity extends BaseActivity {
             public void addCallFunc(int postion) {
 
                 if (designRoomInfos.size() == 11) {
-                    Util.Toast(ControlTeaUpdateActivity.this, "主人最多10泡茶");
+                    Util.Toast(ControlTeaUpdateActivity.this, "主人最多10泡茶",null);
                     return;
                 }
 
@@ -352,7 +353,7 @@ public class ControlTeaUpdateActivity extends BaseActivity {
             public void deleteCallFunc(int postion) {
                 //删除girdview
                 if (designRoomInfos.size() == 3) {
-                    Util.Toast(ControlTeaUpdateActivity.this, "主人最少2泡茶");
+                    Util.Toast(ControlTeaUpdateActivity.this, "主人最少2泡茶",null);
                     return;
                 }
 
@@ -570,8 +571,13 @@ public class ControlTeaUpdateActivity extends BaseActivity {
             BaseJson baseJson = new Gson().fromJson(resp, BaseJson.class);
             if ((baseJson.rcode + "").equals(Constant.RES_SUCCESS)) {
 
-                Util.Toast(ControlTeaUpdateActivity.this, "设置成功");
-                finish();
+                Util.Toast(ControlTeaUpdateActivity.this, "设置成功", new FoxToastInterface.FoxToastCallback() {
+                    @Override
+                    public void toastCloseCallbak() {
+                        finish();
+                    }
+                });
+
             }
         }
     }

@@ -262,7 +262,11 @@ class QuinticDeviceTeaImpl implements QuinticDeviceTea {
                             Log.e("MP3","MP3第"+position+"成功");
 
                             position++;
-
+//                            try {
+//                                Thread.sleep(60000);
+//                            } catch (InterruptedException e) {
+//                                e.printStackTrace();
+//                            }
 
                             convertCodeMap3(code, callback);
                         } else {//最后一包已经发完

@@ -274,7 +274,7 @@ public class Record_Play_Popwindow {
             recordInfoObjGloabl = teaDetailJsonGloabl.rows;
 
             if(recordInfoObjGloabl==null||recordInfoObjGloabl.size()==0){
-                Util.Toast(context,"服务器没有录音数据");
+                Util.Toast(context,"服务器没有录音数据",null);
                 closePopupWindow(context);
                 return;
             }
@@ -310,7 +310,7 @@ public class Record_Play_Popwindow {
 
 
         }else{
-            Util.Toast(context,"服务器没有录音数据");
+            Util.Toast(context,"服务器没有录音数据",null);
             closePopupWindow(context);
         }
     }

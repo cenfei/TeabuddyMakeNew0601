@@ -33,11 +33,11 @@ import com.taomake.teabuddy.R;
 import com.taomake.teabuddy.adapter.AdapterBeginRecordListView;
 import com.taomake.teabuddy.adapter.AdapterUpdateBeginRecordListView;
 import com.taomake.teabuddy.component.FoxProgressbarInterface;
+import com.taomake.teabuddy.component.FoxToastInterface;
 import com.taomake.teabuddy.component.SZ_PayPopwindow_Avar;
 import com.taomake.teabuddy.network.ProtocolUtil;
 import com.taomake.teabuddy.network.RowMessageHandler;
 import com.taomake.teabuddy.object.NineRecordsJson;
-import com.taomake.teabuddy.object.RecordInfoObj;
 import com.taomake.teabuddy.object.UpdateNineRecordsJson;
 import com.taomake.teabuddy.object.UpdateRecordHeadInfoObj;
 import com.taomake.teabuddy.object.UpdateRecordInfoObj;
@@ -114,7 +114,7 @@ public class UpdateRecordActivity extends BaseActivity {
         if (cbr_nickname_idValue == null || cbr_nickname_idValue.equals("")) {
 
 
-            Util.Toast(UpdateRecordActivity.this, "请填写语音名称");
+            Util.Toast(UpdateRecordActivity.this, "请填写语音名称",null);
             return;
         }
 
@@ -443,7 +443,7 @@ public class UpdateRecordActivity extends BaseActivity {
             if (file.exists()) {
                 fileList.add(file);
             } else {
-                Util.Toast(UpdateRecordActivity.this, "请先录音");
+                Util.Toast(UpdateRecordActivity.this, "请先录音",null);
                 return;
             }
 
@@ -461,17 +461,22 @@ public class UpdateRecordActivity extends BaseActivity {
         @Override
         public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
             foxProgressbarInterface.stopProgressBar();
-            String bodyResp = new String(responseBody);
-            Util.Toast(UpdateRecordActivity.this, "上传成功");
-            Log.i("bodyResp", bodyResp);
-            finish();
+          final   String bodyResp = new String(responseBody);
+            Util.Toast(UpdateRecordActivity.this, "上传成功", new FoxToastInterface.FoxToastCallback() {
+                @Override
+                public void toastCloseCallbak() {
+                    Log.i("bodyResp", bodyResp);
+                    finish();
+                }
+            });
+
 //            updateBcNineRecordsHandler(resp);
         }
 
         @Override
         public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
             foxProgressbarInterface.stopProgressBar();
-            Util.Toast(UpdateRecordActivity.this, "上传失败");
+            Util.Toast(UpdateRecordActivity.this, "上传失败",null);
 
             if(responseBody!=null) {
     String bodyResp = new String(responseBody);

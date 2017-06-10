@@ -37,6 +37,7 @@ import com.taomake.teabuddy.activity.MainActivity_;
 import com.taomake.teabuddy.activity.SecondQrCode;
 import com.taomake.teabuddy.base.MainApp;
 import com.taomake.teabuddy.component.FoxProgressbarInterface;
+import com.taomake.teabuddy.component.FoxToastInterface;
 import com.taomake.teabuddy.network.ProtocolUtil;
 import com.taomake.teabuddy.network.RowMessageHandler;
 import com.taomake.teabuddy.object.BindDeviceCodeJson;
@@ -536,7 +537,7 @@ public class WXEntryActivity extends AppCompatActivity implements IWXAPIEventHan
 
 		if (TextUtils.isEmpty(nickname) || (headurl==null||headurl.length==0)) {
 
-			Util.Toast(context, "请重新微信登录获取用户信息");
+			Util.Toast(context, "请重新微信登录获取用户信息",null);
 			return;
 		}
 
@@ -566,9 +567,14 @@ public class WXEntryActivity extends AppCompatActivity implements IWXAPIEventHan
 				Log.i("bodyResp", bodyResp);
 
 			}
-			Util.Toast(WXEntryActivity.this, "新建用户失败");
+			Util.Toast(WXEntryActivity.this, "新建用户失败", new FoxToastInterface.FoxToastCallback() {
+				@Override
+				public void toastCloseCallbak() {
+					finish();
+				}
+			});
 
-			finish();
+
 		}
 
 	}
