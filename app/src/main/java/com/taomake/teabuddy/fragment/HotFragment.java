@@ -36,7 +36,7 @@ import com.taomake.teabuddy.activity.DeviceUpdateTwoActivity_;
 import com.taomake.teabuddy.activity.WebViewActivity_;
 import com.taomake.teabuddy.base.MainApp;
 import com.taomake.teabuddy.component.DynamicWave;
-import com.taomake.teabuddy.component.FoxProgressbarInterface;
+import com.taomake.teabuddy.component.FoxProgressbarInterfaceHot;
 import com.taomake.teabuddy.component.One_Permission_Popwindow;
 import com.taomake.teabuddy.network.ProtocolUtil;
 import com.taomake.teabuddy.network.RowMessageHandler;
@@ -245,9 +245,11 @@ public class HotFragment extends Fragment {
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (!isVisibleToUser) {
-//            Log.d("HotFragment", "不可见");
+            Log.d("HotFragment", "不可见");
 
         } else {
+            Log.d("HotFragment", "当前可见");
+
 //
 //            changeui();
 //            firstchange++;
@@ -260,7 +262,7 @@ public class HotFragment extends Fragment {
 
         connectFindDevice();
 
-        Log.d("HotFragment", "当前可见");
+        Log.d("HotFragment", "changeui");
     }
 
 
@@ -529,7 +531,7 @@ public class HotFragment extends Fragment {
     //************************服务器接口*********************************
 
     //**********获取筛选的后的list***************/
-    FoxProgressbarInterface foxProgressbarInterface;
+    FoxProgressbarInterfaceHot foxProgressbarInterface;
 
     public void getTeaInfoByUnionid(String czid) {
 //        foxProgressbarInterface = new FoxProgressbarInterface();
@@ -777,9 +779,19 @@ public class HotFragment extends Fragment {
 //        configPref.userDeviceMac().put("884AEA83A562");
         Log.e("blindDeviceId:", blindDeviceId);
 //            getTeaInfoByUnionid();
-        foxProgressbarInterface = new FoxProgressbarInterface();
+        if(foxProgressbarInterface!=null){
+            foxProgressbarInterface.stopProgressBar();
+            foxProgressbarInterface=null;
+        }
+        foxProgressbarInterface = new FoxProgressbarInterfaceHot();
 
-        foxProgressbarInterface.startProgressBar(getActivity(), "主人茶密加载中...");
+        foxProgressbarInterface.startProgressBar(getActivity(), "主人茶密加载中...", 30, new FoxProgressbarInterfaceHot.FoxHotCallback() {
+            @Override
+            public void foxhotCallback() {//超过时间还没有返回则跳转到失败页面
+                connectSendCodeFailUi("");
+
+            }
+        });
 
         if (MyStringUtils.isNotNullAndEmpty(QuinticBleAPISdkBase.resultDevice)) {
 
@@ -843,7 +855,7 @@ public class HotFragment extends Fragment {
                                     .post(new Runnable() {
                                         @Override
                                         public void run() {
-                                            closeProgress();
+//                                            closeProgress();
                                             resultDeviceAll = resultDevice;
                                             QuinticBleAPISdkBase.resultDevice = resultDeviceAll;
                                             // ************处理动作
@@ -867,7 +879,7 @@ public class HotFragment extends Fragment {
 ////                                                connectFindDevice();
 //                                                countError++;
 //                                            } else {
-                                            QuinticBleAPISdkBase.resultDevice=null;
+                                            QuinticBleAPISdkBase.resultDevice = null;
                                             closeProgress();
                                             unconnectUi();
 

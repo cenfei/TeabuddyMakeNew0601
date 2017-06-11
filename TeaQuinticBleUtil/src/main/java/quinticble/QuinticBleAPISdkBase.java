@@ -1,7 +1,6 @@
 package quinticble;
 
 import android.content.Context;
-import android.os.Handler;
 import android.util.Log;
 
 import java.util.concurrent.CountDownLatch;
@@ -17,12 +16,12 @@ public class QuinticBleAPISdkBase {
 			quinticDeviceFactory = new QuinticDeviceFactoryTea(context);
 
 
-			new Handler().postDelayed(new Runnable() {
-				@Override
-				public void run() {
-					QuinticBleAPISdkBase.resultDevice=null;
-				}
-			},300000);
+//			new Handler().postDelayed(new Runnable() {
+//				@Override
+//				public void run() {
+//					QuinticBleAPISdkBase.resultDevice=null;
+//				}
+//			},300000);
 		}
 		return quinticDeviceFactory;
 	}

@@ -6,6 +6,7 @@ public class Constant {
 	public static String path = "teabuddy_record_file";
 	public static String path_bin_name = "MAD1.3_V2.30_0701.bin";
 
+	public static String path_bin_name2 = "MAD1.3_OAD_V2.50_0715.bin";
 
 	public static final String DESIGN_DETAIL_ID = "DESIGN_DETAIL_ID";
 

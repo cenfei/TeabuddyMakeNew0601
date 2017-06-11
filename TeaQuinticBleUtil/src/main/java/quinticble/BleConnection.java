@@ -282,9 +282,15 @@ public class BleConnection {
 
                     Log.i("----- ble write -----", QuinticCommon.unsignedBytesToHexString(characteristic.getValue(), " "));
 
+                    String trimResult = writedata.replace(" ", "");
 
-                    connectTimeout.restart(15000);
 
+                    if (trimResult.contains("eb0cffff")) {
+                        connectTimeout.restart(600000);
+                    }else{
+                        connectTimeout.restart(15000);
+
+                    }
 
                     for (BleDataObserver bleDataObserver : Observers.getBleDataObservers()) {
                         bleDataObserver.onDataWrite(characteristic.getValue());
@@ -294,7 +300,6 @@ public class BleConnection {
                     bleStateChangeCallback.onWrite(characteristic.getValue());
 
 
-                    String trimResult = writedata.replace(" ", "");
                     if (trimResult.equals("eb0501")) {
                         bleStateChangeCallback.onNotify(characteristic.getValue());
 
@@ -322,10 +327,14 @@ public class BleConnection {
                 for (BleDataObserver bleDataObserver : Observers.getBleDataObservers()) {
                     bleDataObserver.onDataNotify(characteristic.getValue());
                 }
+                String trimResult = notifydata.replace(" ", "");
 
+                if (trimResult.contains("eb0c00")) {
+                    connectTimeout.restart(600000);
+                }
 
                 if (characteristic.getValue() != null && !(characteristic.getValue().length == 2 && QuinticCommon.matchData(characteristic.getValue(), new byte[]{0, 0}))) {
-                    connectTimeout.restart(15000);
+                    connectTimeout.restart(600000);
                     Log.i("----- keep notify -----", "notify");
                     bleStateChangeCallback.onNotify(characteristic.getValue());
 

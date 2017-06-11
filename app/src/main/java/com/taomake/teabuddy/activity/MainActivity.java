@@ -169,6 +169,7 @@ MainApp  mainappAll=null;
 //        if (flag == 0) {
             selectPay();
         }else{
+
         changePage(fragmentPaocha);
             changePage(fragmentMine);
             selectRun();
@@ -234,7 +235,7 @@ long endtime=System.currentTimeMillis();
         tab_luyin_img_c.setVisibility(View.VISIBLE);
         tab_luyin_text.setTextColor(getResources().getColor(R.color.white));
 long starttime=mainappAll.starttime;
-        if(endtime-starttime>6000) {
+        if(endtime-starttime>2000) {
             Intent intent = new Intent(HomeTabFragment.MYACTION_UPDATE_HOME);
             Log.i("Broadcast Change home", "change home fragment");
 
@@ -264,7 +265,7 @@ long starttime=mainappAll.starttime;
 long endtime=System.currentTimeMillis();
 
              long starttime=mainappAll.starttime;
-             if(endtime-starttime>6000) {
+             if(endtime-starttime>2000) {
 
                  Intent intent = new Intent(HotFragment.MYACTION_UPDATE);
                  Log.i("Broadcast Change Hot", "change hot fragment");
@@ -317,7 +318,7 @@ long endtime=System.currentTimeMillis();
             long endtime=System.currentTimeMillis();
 
             long starttime=mainappAll.starttime;
-            if(endtime-starttime>6000) {
+            if(endtime-starttime>2000) {
                 Intent intent = new Intent(MineTabFragment.MYACTION_UPDATE_Mine);
                 Log.i("Broadcast Change MINE", "change MINE fragment");
 

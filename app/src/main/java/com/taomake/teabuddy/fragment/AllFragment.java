@@ -534,9 +534,9 @@ new One_Permission_Popwindow().showPopwindow(getActivity(), shutdown_line, "主�
         if (foxProgressbarInterface != null)
             foxProgressbarInterface.stopProgressBar();
         shutDownCount++;
-        if (shutDownCount < 3) {
-            shutDownCub(getActivity());
-        }
+//        if (shutDownCount < 3) {
+//            shutDownCub(getActivity());
+//        }
     }
 
     public void connectSendCodeSuccesslUiShutDown() {
@@ -545,7 +545,7 @@ new One_Permission_Popwindow().showPopwindow(getActivity(), shutdown_line, "主�
 
         //跳转到 我的页面
 
-        Util.Toast(getActivity(), "主人，茶密已关机成功",null);
+        Util.Toast(getActivity(), "主人，茶密\n已关机成功",null);
         MainActivity mainActivity = (MainActivity) getActivity();
         mainActivity.selectMine();
 
@@ -593,9 +593,14 @@ new One_Permission_Popwindow().showPopwindow(getActivity(), shutdown_line, "主�
                                 if (trimResult.contains("eb01")) {
 
                                     connectSendCodeSuccesslUiShutDown();
-                                    QuinticDeviceFactoryTea quinticDeviceFactory = QuinticBleAPISdkBase
-                                            .getInstanceFactory(context);
-                                    quinticDeviceFactory.abort();
+//                                    QuinticDeviceFactoryTea quinticDeviceFactory = QuinticBleAPISdkBase
+//                                            .getInstanceFactory(context);
+//                                    quinticDeviceFactory.abort();
+
+                                    if (QuinticBleAPISdkBase.getInstanceFactory(getActivity()).conn != null) {
+                                        QuinticBleAPISdkBase.getInstanceFactory(getActivity()).conn.disconnect();
+                                    }
+                                    QuinticBleAPISdkBase.resultDevice=null;
                                 } else {
 
                                     connectSendCodeFailUiShutDown(msg);

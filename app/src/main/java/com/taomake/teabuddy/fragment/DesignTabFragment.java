@@ -1,5 +1,6 @@
 package com.taomake.teabuddy.fragment;
 
+import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -161,6 +162,20 @@ public class DesignTabFragment extends Fragment{
 
             if(arg0==0){
                 positionSelect=mPager.getCurrentItem();
+                if(positionSelect==0){
+
+                    long endtime=System.currentTimeMillis();
+                    MainApp mainappAll=(MainApp)getActivity().getApplicationContext();
+                    long starttime=mainappAll.starttime;
+                    if(endtime-starttime>0) {
+
+                        Intent intent = new Intent(HotFragment.MYACTION_UPDATE);
+                        Log.i("Broadcast Change Hot", "change hot fragment");
+
+                        getActivity().sendBroadcast(intent);
+                    }
+                }
+
             }
 
             MainApp mainApp=(MainApp)getActivity().getApplicationContext();
