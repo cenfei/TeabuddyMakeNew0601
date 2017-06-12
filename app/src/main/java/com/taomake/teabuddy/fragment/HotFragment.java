@@ -697,7 +697,10 @@ public class HotFragment extends Fragment {
                     //当前版本和固件版本比较
                     Double sysUpdateVersionD = Double.valueOf(sysUpdateVersion);
                     String deviceVersion = configPref.userDeviceVersion().get();
-                    Double deviceVersionD = Double.valueOf(deviceVersion);
+                    double deviceVersionD =0;
+                    if(!TextUtils.isEmpty(deviceVersion)) {
+                        deviceVersionD=Double.valueOf(deviceVersion);
+                    }
                     if (sysUpdateVersionD > deviceVersionD) {
 
                         sysdownloadsize = deviceVersionObj.downloadsize;
@@ -705,8 +708,10 @@ public class HotFragment extends Fragment {
                         update_device_id.setBackgroundResource(R.drawable.cm_update_device_c);
                         perssion_func(update_device_id, "您的茶密有固件了", "立即更新", "取消");
                     } else {
-                        configPref.userDeviceVersion().put(deviceVersion);
+                        if(!TextUtils.isEmpty(deviceVersion)) {
 
+                            configPref.userDeviceVersion().put(deviceVersion);
+                        }
 
                         mainApp.boolupdateSuccess = 0;
                         needupdate = false;
