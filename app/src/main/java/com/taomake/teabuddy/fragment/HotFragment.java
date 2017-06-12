@@ -763,16 +763,27 @@ public class HotFragment extends Fragment {
 
     public void connectFindDevice() {
 
+        MainApp mainappAll=(MainApp)getActivity().getApplicationContext();
+        long endtime=System.currentTimeMillis();
+
+        long starttime=mainappAll.starttime;
+        if(endtime-starttime<2000) {
+            return;
+
+        }
+
+
+
         if (!MyStringUtils.isopenBluetooth(getActivity())) {
+            connectSendCodeFailUi("");
 
-
-            if (showcontnect) {
-                connectSendCodeFailUi("");
-            } else {
-                connectUi();
-                bluetooth_rel.setVisibility(View.VISIBLE);
-
-            }
+//            if (showcontnect) {
+//                connectSendCodeFailUi("");
+//            } else {
+//                connectUi();
+//                bluetooth_rel.setVisibility(View.VISIBLE);
+//
+//            }
             return;
         }
 
@@ -795,6 +806,12 @@ public class HotFragment extends Fragment {
             public void foxhotCallback() {//超过时间还没有返回则跳转到失败页面
                 connectSendCodeFailUi("");
 
+                if (QuinticBleAPISdkBase.getInstanceFactory(getActivity()).conn != null) {
+                    Log.e("QuinticBleAPISdkBase","do disconnect");
+                    QuinticBleAPISdkBase.getInstanceFactory(getActivity()).deviceMap.clear();
+//                    QuinticBleAPISdkBase.getInstanceFactory(getActivity()).abort();
+                    QuinticBleAPISdkBase.getInstanceFactory(getActivity()).conn.disconnect();
+                }
             }
         });
 
@@ -941,6 +958,9 @@ public class HotFragment extends Fragment {
                                     getTeaInfoByUnionid(czid + "");
 
                                     getbatteryLevel();
+                                    MainApp mainappAll=(MainApp)getActivity().getApplicationContext();
+                                    mainappAll.starttime=System.currentTimeMillis();
+
                                 } else {
                                     connectSendCodeFailUi("茶种id查询失败");
                                 }
@@ -992,6 +1012,9 @@ public class HotFragment extends Fragment {
                                     batteryLevelValue = QuinticCommon.unsignedByteToInt(data[3]);
                                     Log.d("当前电量", batteryLevelValue + "");
                                     getTeaStatus();
+                                    MainApp mainappAll=(MainApp)getActivity().getApplicationContext();
+                                    mainappAll.starttime=System.currentTimeMillis();
+
                                 } else {
                                     connectSendCodeFailUi("电量查询失败");
                                 }
@@ -1049,6 +1072,8 @@ public class HotFragment extends Fragment {
                                     Log.d("当前teaingTimeValue", teaingTimeValue + "");
 
                                     getCubIsNull();
+                                    MainApp mainappAll=(MainApp)getActivity().getApplicationContext();
+                                    mainappAll.starttime=System.currentTimeMillis();
 
                                 } else {
                                     connectSendCodeFailUi(failMsg);
@@ -1108,6 +1133,8 @@ public class HotFragment extends Fragment {
                                         getLogHistory();//同时获取log日志  2.并且向网络判断当前版本更新ui
 
                                     }
+                                    MainApp mainappAll=(MainApp)getActivity().getApplicationContext();
+                                    mainappAll.starttime=System.currentTimeMillis();
 
                                 } else {
                                     connectSendCodeFailUi(failMsg);
@@ -1168,7 +1195,7 @@ public class HotFragment extends Fragment {
                                     Log.d("当前固件版本versionD", versionD + "");
 
                                     deviceVersion = versionD + "";
-//                                    deviceVersion="2.45";//fox测试
+                                    deviceVersion="2.45";//fox测试
                                     if (deviceVersion.length() == 3) {
                                         deviceVersion = deviceVersion + "0";
                                     }
@@ -1176,6 +1203,8 @@ public class HotFragment extends Fragment {
                                     checkDeviceUpdateToServer();
                                     getLogHistory();//同时获取log日志  2.并且向网络判断当前版本更新ui
 
+                                    MainApp mainappAll=(MainApp)getActivity().getApplicationContext();
+                                    mainappAll.starttime=System.currentTimeMillis();
 
 //                                    connectSuccessUi();
                                 } else {
@@ -1230,6 +1259,8 @@ public class HotFragment extends Fragment {
                                             QuinticCommon.unsignedByteToInt(data[4]);
                                     Log.d("是否空杯", teaingIsNull + "");
                                     Log.d("log总数", logValue + "");
+                                    MainApp mainappAll=(MainApp)getActivity().getApplicationContext();
+                                    mainappAll.starttime=System.currentTimeMillis();
 
                                     connectSuccessUi();
                                 } else {
@@ -1354,7 +1385,7 @@ public class HotFragment extends Fragment {
                             Log.e("HOT", "onReceive---------STATE_TURNING_ON");
                             if (showcontnect) {
                                 bluetooth_rel.setVisibility(View.GONE);
-                                unconnectUi();
+//                                unconnectUi();
                             }
 
 
@@ -1366,6 +1397,7 @@ public class HotFragment extends Fragment {
                         case BluetoothAdapter.STATE_TURNING_OFF://蓝牙关掉---切换到没有连接页面
                             Log.e("HOT", "onReceive---------STATE_TURNING_OFF");
                             if (mainApp.boolupdateSuccess == 2 || mainApp.boolupdateSuccess == 1) {
+                                QuinticBleAPISdkBase.resultDevice=null;
                                 openBle();
                             }
 
@@ -1373,10 +1405,10 @@ public class HotFragment extends Fragment {
 //                            BleUtil.toReset(mContext);
                             break;
                         case BluetoothAdapter.STATE_OFF:
-                            if (showcontnect) {
-                                bluetooth_rel.setVisibility(View.VISIBLE);
-                                //应该提示打开蓝牙
-                            }
+//                            if (showcontnect) {
+//                                bluetooth_rel.setVisibility(View.VISIBLE);
+//                                //应该提示打开蓝牙
+//                            }
 
                             Log.e("HOT", "onReceive---------STATE_OFF");
 //                            BleUtil.toReset(mContext);

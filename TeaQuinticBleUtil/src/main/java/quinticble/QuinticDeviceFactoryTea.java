@@ -32,7 +32,7 @@ public class QuinticDeviceFactoryTea {
     /**
      * 已知设备清单
      */
-    private static Map<String, QuinticDeviceTea> deviceMap = new HashMap<>();
+    public static Map<String, QuinticDeviceTea> deviceMap = new HashMap<>();
     private static QuinticScanner scanner;
 
     /**
@@ -77,7 +77,9 @@ public class QuinticDeviceFactoryTea {
 //            quinticDevice = new QuinticDevice03(bleConnection, this.context, device);
 //        }
 
+        Log.d("QuinticDeviceTeaImpl","QuinticDeviceTeaImpl");
         quinticDevice = new QuinticDeviceTeaImpl(bleConnection, this.context, device);
+        Log.d("QueueSupportTea","QueueSupportTea");
 
         quinticDevice = new QuinticDeviceWithQueueSupportTea(quinticDevice);
         deviceMap.put(quinticDevice.getAddress(), quinticDevice);
@@ -233,9 +235,13 @@ public class QuinticDeviceFactoryTea {
             public void run() {
                 LockUtil.getInstance().aquireLock(LOCK_FIND_DEVICE);
                 if (deviceMap.containsKey(deviceAddress)) {
+                    Log.d("findDevice", "containsKey---------");
+
                     LockUtil.getInstance().releaseLock(LOCK_FIND_DEVICE);
                     callback.onComplete(deviceMap.get(deviceAddress));
                 } else {
+                    Log.d("findDevice", "leConnect---------");
+
                     leConnect(deviceAddress, new QuinticCallbackTea<QuinticDeviceTea>() {
                         @Override
                         public void onComplete(QuinticDeviceTea result) {

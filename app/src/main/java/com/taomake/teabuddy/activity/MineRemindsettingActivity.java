@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.taomake.teabuddy.R;
 import com.taomake.teabuddy.adapter.MyGridWeekDayAdapter;
+import com.taomake.teabuddy.base.MainApp;
 import com.taomake.teabuddy.component.FoxProgressbarInterface;
 import com.taomake.teabuddy.component.FoxToastInterface;
 import com.taomake.teabuddy.prefs.ConfigPref_;
@@ -261,8 +262,25 @@ Integer chooseNumButton=0;
         gridview.setAdapter(myGridDbRecordAdapter);
         gridview.setOnItemClickListener(new ItemClickListener());
 
+        MainApp mainappAll=(MainApp)getApplicationContext();
+        long endtime=System.currentTimeMillis();
 
-        connectFindDevice();
+        long starttime=mainappAll.starttime;
+        if(endtime-starttime>2000) {
+            connectFindDevice();
+        }else{
+            foxProgressbarInterface = new FoxProgressbarInterface();
+
+            foxProgressbarInterface.startProgressBar(MineRemindsettingActivity.this, "数据读取中...");
+
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    connectFindDevice();
+                }
+            },endtime-starttime);
+
+        }
         initdata();
     }
 
@@ -370,9 +388,11 @@ Integer chooseNumButton=0;
 
             return;
         }
-                foxProgressbarInterface = new FoxProgressbarInterface();
+        if(foxProgressbarInterface==null) {
+            foxProgressbarInterface = new FoxProgressbarInterface();
+            foxProgressbarInterface.startProgressBar(MineRemindsettingActivity.this, "数据读取中...");
 
-        foxProgressbarInterface.startProgressBar(MineRemindsettingActivity.this, "数据读取中...");
+        }
 
         if (MyStringUtils.isNotNullAndEmpty(QuinticBleAPISdkBase.resultDevice)) {
             resultDeviceAll = QuinticBleAPISdkBase.resultDevice;
@@ -423,10 +443,13 @@ Integer chooseNumButton=0;
 
 
     }
-
+boolean boolset=true;
 
     public void setSettingInfo(String code) {
         if (resultDeviceAll == null) return;
+        if(!boolset) return;
+
+        boolset=false;
 //        String code = "EA14";
         foxProgressbarInterface = new FoxProgressbarInterface();
 
@@ -442,6 +465,7 @@ Integer chooseNumButton=0;
                             public void run() {
                                 if(foxProgressbarInterface!=null)
                                 foxProgressbarInterface.stopProgressBar();
+                                boolset=true;
                                Util.Toast(MineRemindsettingActivity.this,"设置提醒失败",null);
                             }
                         });
@@ -476,6 +500,8 @@ Integer chooseNumButton=0;
 
 
 
+                                }else{
+                                    boolset=true;
                                 }
 
 
@@ -535,6 +561,10 @@ connecterror();
                                     Log.e("read setting","chooseNumButton:"+chooseNumButton+ ",minuteSetting:"+minuteSetting+",hourSetting:"+hourSetting+",eventArray:"+eventArray);
                                     weekIntCharArray = eventArray.toCharArray();
                                     connectSettingInfoSuccess();
+
+                                    MainApp   mainappAll=(MainApp)getApplicationContext();
+
+                                    mainappAll.starttime=System.currentTimeMillis();
 //                                    Log.d("当前电量", batteryLevelValue + "");
 //                                    getTeaStatus();
                                 }

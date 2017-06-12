@@ -457,6 +457,7 @@ new One_Permission_Popwindow().showPopwindow(getActivity(), shutdown_line, "主�
         final String msg = "呼叫茶杯失败";
 //        process = 1;
 //        writehandler.post(runnable);
+
         funcControlGridAdapter.setSeclectionLook(3, false);
 
 

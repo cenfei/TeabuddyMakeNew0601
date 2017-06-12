@@ -40,6 +40,8 @@ public class FuncControlGridAdapter extends BaseAdapter {
 		return position;
 	}
 	private int clickTemp = -1;
+	private int clickTempMusic = -1;
+
 	//标识选择的Item
 	public void setSeclectionLight(int position,boolean isLight) {
 		clickTemp = position;
@@ -48,7 +50,7 @@ public class FuncControlGridAdapter extends BaseAdapter {
 
 	//标识选择的Item
 	public void setSeclectionLook(int position,boolean isLook) {
-		clickTemp = position;
+		clickTempMusic = position;
 		this.isLook=isLook;
 	}
 	private  boolean isLook;
@@ -77,10 +79,10 @@ public class FuncControlGridAdapter extends BaseAdapter {
 		}
 
 
-		if (clickTemp==position&&position==3&&isLook) {
+		if (clickTempMusic==position&&position==3&&isLook) {
 			iv.setBackgroundResource(imgs[position]);
 
-		}else if(clickTemp==position&&position==3&&!isLook) {
+		}else if(clickTempMusic==position&&position==3&&!isLook) {
 
 			iv.setBackgroundResource(R.drawable.fc_search_c);
 

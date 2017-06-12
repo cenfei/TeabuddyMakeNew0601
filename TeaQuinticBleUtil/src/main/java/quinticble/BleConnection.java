@@ -409,6 +409,8 @@ public class BleConnection {
                 BleConnection.this.deviceAddress = deviceAddress;
                 BleConnection.this.bleStateChangeCallback = callback;
                 if (isConnected()) {
+                    Log.d("connectDevice", "isConnected---------");
+
                     LockUtil.getInstance().releaseLock(LOCK_CONNECT_DEVICE);
                     callback.onConnected(bluetoothDevice);
                 } else {
@@ -416,6 +418,8 @@ public class BleConnection {
                         LockUtil.getInstance().releaseLock(LOCK_CONNECT_DEVICE);
                         callback.onError(new BleException(BleException.BLUETOOTH_NOT_OPENED, "蓝牙未打开"));
                     } else {
+                        Log.d("connectDevice", "QuinticScanCallback---------");
+
                         try {
                             if (Build.VERSION.SDK_INT <= 18||true) {
                                 QuinticScanCallback cb = new QuinticScanCallback() {
@@ -497,7 +501,7 @@ public class BleConnection {
     }
 
     void abort() {
-        Log.e("abort", "abort");
+        Log.e("bleconnection abort", "abort");
         isRealConnected = false;
         LockUtil.getInstance().releaseLock(LOCK_CONNECT_DEVICE);
         connectTimeout.cancel();
@@ -522,6 +526,8 @@ public class BleConnection {
         new Thread(new Runnable() {
             @Override
             public void run() {
+                Log.d("Bleconnection","do disconnect");
+
                 LockUtil.getInstance().aquireLock(LOCK_CONNECT_DEVICE);
                 abort();
             }

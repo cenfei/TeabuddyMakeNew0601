@@ -77,6 +77,7 @@ import com.example.ti.ble.sensortag.FileActivity;
 import com.example.ti.ble.sensortag.R;
 import com.example.ti.util.Conversion;
 import com.taomake.teabuddy.base.MainApp;
+import com.taomake.teabuddy.object.DeviceVersionObj;
 import com.taomake.teabuddy.util.Constant;
 
 import java.io.File;
@@ -111,9 +112,9 @@ public class FwUpdateActivityTea extends Activity {
 //  private static final int OAD_IMG_HDR_SIZE = 8;
 
 
-    private static final short OAD_CONN_INTERVAL = 10; // 12.5 msec
+    private static final short OAD_CONN_INTERVAL = 39; // 12.5 msec  39  默认10
 
-    private static final short OAD_SUPERVISION_TIMEOUT = 100; // 1 second
+    private static final short OAD_SUPERVISION_TIMEOUT = 700; // 1 second  700 默认100
 
     private static final int PKT_INTERVAL = 20; // Milliseconds
 
@@ -246,16 +247,26 @@ public class FwUpdateActivityTea extends Activity {
                 finish();
             }
         });
+        MainApp mainApp = (MainApp) getApplicationContext();
 
+        DeviceVersionObj deviceVersionObj=mainApp.deviceVersionObj;
+        String  version =deviceVersionObj.ver;
+        if(!TextUtils.isEmpty(version)) {
+            tea_os_version.setText("Cha OS " +version);
 
-        String version = getIntent().getStringExtra("upversion");
-
-        if (!TextUtils.isEmpty(version)) {
-            tea_os_version.setText("Cha OS " + version);
-        } else {
+        }else{
             tea_os_version.setText("Cha OS 1.0");
 
         }
+
+//        String version = getIntent().getStringExtra("upversion");
+//
+//        if (!TextUtils.isEmpty(version)) {
+//            tea_os_version.setText("Cha OS " + version);
+//        } else {
+//            tea_os_version.setText("Cha OS 1.0");
+//
+//        }
 
 
         // Icon padding
@@ -695,7 +706,7 @@ public class FwUpdateActivityTea extends Activity {
 
 
                     try {
-                        Thread.sleep(60000);
+                        Thread.sleep(10000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -709,6 +720,10 @@ public class FwUpdateActivityTea extends Activity {
 //
 //                AlertDialog d = b.create();
 //                d.show();
+//                            if (QuinticBleAPISdkBase.getInstanceFactory(FwUpdateActivityTea.this).conn != null) {
+//                                QuinticBleAPISdkBase.getInstanceFactory(FwUpdateActivityTea.this).abort();
+//                                QuinticBleAPISdkBase.getInstanceFactory(FwUpdateActivityTea.this).conn.disconnect();
+//                            }
                             mProgramming = false;
                             update_process_sucess_text.setVisibility(View.VISIBLE);
                             update_process_rel.setVisibility(View.GONE);

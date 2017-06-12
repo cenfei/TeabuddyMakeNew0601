@@ -107,9 +107,12 @@ public class MineTabFragment extends Fragment implements SwipeRefreshLayout.OnRe
     @Click(R.id.mine_remind_id)
     void onmine_remind_id() {
 
-        if(resultDeviceAll==null){
+        if (!MyStringUtils.isNotNullAndEmpty(QuinticBleAPISdkBase.resultDevice)) {
             Util.Toast(getActivity(),"主人请先链接茶密",null);
         }else {
+
+
+
             Util.startActivity(getActivity(), MineRemindsettingActivity_.class);
         }
     }
