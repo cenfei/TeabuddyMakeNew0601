@@ -75,7 +75,8 @@ public class DesignTabFragment extends Fragment{
         mPager.setCurrentItem(0);
 
 
-
+        MainApp mainappAll=(MainApp)getActivity().getApplicationContext();
+        mainappAll.mPager=mPager;
 
         ll_container = (LinearLayout) parentView.findViewById(R.id.ll_container);
         for (int i = 0; i < 2; i++) {
@@ -127,6 +128,9 @@ public class DesignTabFragment extends Fragment{
 
         @Override
         public void onPageSelected(int position) {
+
+            Log.i("aa", "onPageSelected");
+
 //            if(mPager.getCurrentItem()==0&&!HotFragment.canChangePager){
 //                mPager.setIsCanScroll(false);
 //                ll_container.setVisibility(View.GONE);
@@ -177,6 +181,9 @@ public class DesignTabFragment extends Fragment{
                 }
 
             }
+            Log.d((HotFragment.canChangePager?"true":"false"), "HotFragment.canChangePager");
+
+
 
             MainApp mainApp=(MainApp)getActivity().getApplicationContext();
             mainApp.boolchoosePaocha=positionSelect==0?true:false;

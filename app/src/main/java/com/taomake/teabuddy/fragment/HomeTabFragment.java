@@ -121,7 +121,15 @@ public class HomeTabFragment extends Fragment{
             if (MYACTION_UPDATE_HOME.equals(intent.getAction())) {
                 Log.i("onReceive", "change HOME...");
 
-                connectFindDevice();
+         String updatetype=       intent.getStringExtra("updatetype");
+                if(TextUtils.isEmpty(updatetype)){
+                    connectFindDevice();
+
+                }else{
+                    boolInitVoice=false;
+                    connectSendCodeSuccessUi();
+                }
+
             }
         }
     };
@@ -335,6 +343,9 @@ boolean boolInitVoice=true;
 
 
     public void setVoicePlay() {
+
+
+
         if(!MyStringUtils.isopenBluetooth(getActivity())) return;
 
         if (resultDeviceAll == null) return;

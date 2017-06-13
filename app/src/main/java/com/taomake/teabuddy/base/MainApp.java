@@ -8,6 +8,7 @@ import android.webkit.WebView;
 
 import com.sina.weibo.sdk.api.share.IWeiboShareAPI;
 import com.sina.weibo.sdk.api.share.WeiboShareSDK;
+import com.taomake.teabuddy.component.MyViewpager;
 import com.taomake.teabuddy.object.DeviceVersionObj;
 import com.taomake.teabuddy.util.ImageLoaderUtil;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
@@ -35,6 +36,7 @@ public static WebView webView;
     public String registrationId;
 public long starttime=0;
     public  boolean openBluetooth=true;
+    public MyViewpager mPager;
 
     public  Tencent mTencent;
 

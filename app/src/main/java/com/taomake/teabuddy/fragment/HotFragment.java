@@ -380,6 +380,7 @@ public class HotFragment extends Fragment {
         showcontnect = false;
         cicrle_line_id.setVisibility(View.GONE);
         canChangePager = false;
+
         pc_connecting_rel.setVisibility(View.GONE);
         pc_unconnected_rel.setVisibility(View.VISIBLE);
         pc_tryagain_rel.setVisibility(View.GONE);
@@ -406,6 +407,7 @@ public class HotFragment extends Fragment {
 
         connectUi();
         canChangePager = true;
+        mainappAll.mPager.setIsCanScroll(true);
 
         if (foxProgressbarInterface != null) {
             foxProgressbarInterface.stopProgressBar();

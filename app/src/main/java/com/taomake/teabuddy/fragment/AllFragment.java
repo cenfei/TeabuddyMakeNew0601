@@ -455,8 +455,8 @@ new One_Permission_Popwindow().showPopwindow(getActivity(), shutdown_line, "主�
         if (resultDeviceAll == null) return;
         String code = "EB0501";
         final String msg = "呼叫茶杯失败";
-//        process = 1;
-//        writehandler.post(runnable);
+        process = 1;
+        writehandler.post(runnable);
 
         funcControlGridAdapter.setSeclectionLook(3, false);
 
@@ -486,7 +486,12 @@ new One_Permission_Popwindow().showPopwindow(getActivity(), shutdown_line, "主�
                             public void run() {
 //BACK ea 09 01 00 00 00 00 00 01 e2 63 00
                                 String trimResult = result.replace(" ", "");
-                                if (trimResult.contains("ea0201")) {
+                                if (trimResult.contains("ea0501")) {
+                                    MainApp mainApp=(MainApp)getActivity().getApplicationContext();
+                                    mainApp.starttime=System.currentTimeMillis();
+                                    if (foxProgressbarInterface != null)
+                                        foxProgressbarInterface.stopProgressBar();
+
 
 
                                 } else {
@@ -512,7 +517,7 @@ new One_Permission_Popwindow().showPopwindow(getActivity(), shutdown_line, "主�
             if (process <= 2) {
 
 
-                writehandler.postDelayed(this, 15000);
+                writehandler.postDelayed(this, 1000);
                 process = process + 1;
             } else {
 //if(foxProgressbarInterface05!=null)

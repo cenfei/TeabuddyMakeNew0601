@@ -2,6 +2,7 @@ package com.taomake.teabuddy.component;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Environment;
 import android.os.Handler;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.taomake.teabuddy.R;
 import com.taomake.teabuddy.adapter.AdapterBeginRecordListView;
+import com.taomake.teabuddy.fragment.HomeTabFragment;
 import com.taomake.teabuddy.network.ProtocolUtil;
 import com.taomake.teabuddy.network.RowMessageHandler;
 import com.taomake.teabuddy.object.UpdateNineRecordsJson;
@@ -418,6 +420,14 @@ public class Apply_Record_Popwindow {
                                 if (trimResult.contains("EB1701")) {
 //
                                     Util.Toast(context, "应用成功",null);
+
+                                    //需要设置
+                                    Intent intent = new Intent(HomeTabFragment.MYACTION_UPDATE_HOME);
+                                    Log.i("Broadcast Change home", "change home fragment");
+                                    intent.putExtra("updatetype", "1");
+
+                                    context.sendBroadcast(intent);
+
 
                                     closePopupWindow(context);
                                 } else {

@@ -126,7 +126,7 @@ public class AdapterMineSortListView extends BaseAdapter {
                         Integer favInt = Integer.valueOf(fav);
                         favInt = favInt + 1;
 
-
+                        sortInfoObj.isclicked="1";
                         sortInfoObj.fav = favInt + "";
                         notifyDataSetChanged();
                         clickLoveServer(personalRanking.unionid, view);
@@ -283,11 +283,11 @@ public class AdapterMineSortListView extends BaseAdapter {
             LoveBackJson dbRecordsJson = new Gson().fromJson(resp, LoveBackJson.class);
             if ((dbRecordsJson.rcode + "").equals(Constant.RES_SUCCESS)) {
                 Util.Toast(context, "点赞成功",null);
-                ImageView imageView = (ImageView) clickView;
-                imageView.setImageDrawable(context.getResources().getDrawable(R.drawable.sort_love1));
+//                ImageView imageView = (ImageView) clickView;
+//                imageView.setImageDrawable(context.getResources().getDrawable(R.drawable.sort_love1));
 
-                SortInfoObj sortInfoObj = mPersonal.get(selectPos);
-                sortInfoObj.isclicked = "1";
+//                SortInfoObj sortInfoObj = mPersonal.get(selectPos);
+//                sortInfoObj.isclicked = "1";
 //                String fav=sortInfoObj.fav;
 //                Integer  favInt=Integer.valueOf(fav);
 //                favInt=favInt+1;
