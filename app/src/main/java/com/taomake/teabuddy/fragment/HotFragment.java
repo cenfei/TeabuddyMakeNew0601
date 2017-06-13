@@ -314,7 +314,8 @@ public class HotFragment extends Fragment {
          width = d.getWidth();
 
         int height = d.getHeight();
-        tea_sum_cub_text_id.setTextSize(width*45/320);
+        tea_sum_cub_text_id.setTextSize(110);
+
 
         update_device_id = (ImageView) view.findViewById(R.id.update_device_id);
         update_device_id.setBackgroundResource(R.drawable.cm_update_device);
@@ -424,24 +425,14 @@ public class HotFragment extends Fragment {
 //        teaingCountValue=22;
         if (teaingCountValue < 10) {
             tea_sum_cub_text_id.setText(teaingCountValue + "");
-            MyStringUtils.checkAndroidSex(getActivity());
-//            if (MyStringUtils.checkAndroidSex(getActivity())) {
-//                Log.d("checkAndroidSiz","true");
-//                tea_sum_cub_text_id.setTextSize(getResources().getDimension(R.dimen.font_140));
-//            } else {
-//                Log.d("checkAndroidSiz","false");
-//
-//                tea_sum_cub_text_id.setTextSize(getResources().getDimension(R.dimen.font_200));
-//
-//            }
-            tea_sum_cub_text_id.setTextSize(width*45/320);
+            tea_sum_cub_text_id.setTextSize(110);
 
-//            tea_sum_cub_text_id.setTextSize(getResources().getDimension(R.dimen.font_140));
+
 
         } else {
             tea_sum_cub_text_id.setText(teaingCountValue + "");
 //            tea_sum_cub_text_id.setTextSize(getResources().getDimension(R.dimen.font_60));
-            tea_sum_cub_text_id.setTextSize(width*26/320);
+            tea_sum_cub_text_id.setTextSize(55);
 
         }
 
@@ -810,7 +801,7 @@ public class HotFragment extends Fragment {
 
                 if (QuinticBleAPISdkBase.getInstanceFactory(getActivity()).conn != null) {
                     Log.e("QuinticBleAPISdkBase","do disconnect");
-                    QuinticBleAPISdkBase.getInstanceFactory(getActivity()).deviceMap.clear();
+//                    QuinticBleAPISdkBase.getInstanceFactory(getActivity()).deviceMap.clear();
 //                    QuinticBleAPISdkBase.getInstanceFactory(getActivity()).abort();
                     QuinticBleAPISdkBase.getInstanceFactory(getActivity()).conn.disconnect();
                 }
@@ -1197,7 +1188,7 @@ public class HotFragment extends Fragment {
                                     Log.d("当前固件版本versionD", versionD + "");
 
                                     deviceVersion = versionD + "";
-                                    deviceVersion="2.45";//fox测试
+//                                    deviceVersion="2.45";//fox测试
                                     if (deviceVersion.length() == 3) {
                                         deviceVersion = deviceVersion + "0";
                                     }
@@ -1387,7 +1378,7 @@ public class HotFragment extends Fragment {
                             Log.e("HOT", "onReceive---------STATE_TURNING_ON");
                             if (showcontnect) {
                                 bluetooth_rel.setVisibility(View.GONE);
-//                                unconnectUi();
+                                unconnectUi();
                             }
 
 

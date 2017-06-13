@@ -1,6 +1,7 @@
 package quinticble;
 
 import android.bluetooth.BluetoothDevice;
+import android.util.Log;
 
 import java.util.List;
 
@@ -25,12 +26,15 @@ class QuinticDeviceWithQueueSupportTea implements QuinticDeviceTea {
                     @Override
                     public void onComplete(Void result) {
                         super.onComplete(result);
+                        Log.d("SupportTea", "onComplete");
+
                         isTimeoutBusy = false;
                         autoReconnectTimeout.restart();
                     }
 
                     @Override
                     public void oadUpdate(Void result) {
+                        Log.d("SupportTea", "oadUpdate");
 
                         disconnect();
                         super.oadUpdate(result);
@@ -39,6 +43,8 @@ class QuinticDeviceWithQueueSupportTea implements QuinticDeviceTea {
                     @Override
                     public void onError(QuinticException ex) {
                         super.onError(ex);
+                        Log.d("SupportTea", "onError");
+
                         isTimeoutBusy = false;
                         autoReconnectTimeout.restart();
                     }
@@ -63,8 +69,12 @@ class QuinticDeviceWithQueueSupportTea implements QuinticDeviceTea {
         new Thread(new Runnable() {
             @Override
             public void run() {
+                Log.d("SupportTea", "reconnect");
+
                 aquire();
                 device.reconnect(new QCallback<>(callback));
+                Log.d("SupportTea", "reconnect");
+
             }
         }).start();
     }

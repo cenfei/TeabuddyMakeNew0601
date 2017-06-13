@@ -222,10 +222,10 @@ public class ChooseTeaActivity extends BaseActivity {
                 temp++;
             }
         }
-        monthAdapter = new ArrayWheelAdapter<String>(ChooseTeaActivity.this, PLANETS, R.id.wheel_text, temp, true);
+        monthAdapter = new ArrayWheelAdapter<String>(ChooseTeaActivity.this, PLANETS, R.id.wheel_text, temp-1, true);
         chooseValue=PLANETS[temp-1];
         arrayWheel.setViewAdapter(monthAdapter);
-        arrayWheel.setCurrentItem(temp);
+        arrayWheel.setCurrentItem(temp-1);
         arrayWheel.addChangingListener(wheellistener);
         arrayWheel.addScrollingListener(onWheelScrollListener);
         setTextviewSize(PLANETS[temp-1], monthAdapter);

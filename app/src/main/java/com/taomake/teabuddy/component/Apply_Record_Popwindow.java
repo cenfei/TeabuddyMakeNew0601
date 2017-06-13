@@ -431,6 +431,8 @@ public class Apply_Record_Popwindow {
 
                                     closePopupWindow(context);
                                 } else {
+
+
                                     connectSendCodeFailUi("下载录音失败");
                                 }
 

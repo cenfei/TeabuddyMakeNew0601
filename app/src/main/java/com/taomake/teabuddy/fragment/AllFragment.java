@@ -606,7 +606,7 @@ new One_Permission_Popwindow().showPopwindow(getActivity(), shutdown_line, "ä¸»ä
                                     if (QuinticBleAPISdkBase.getInstanceFactory(getActivity()).conn != null) {
                                         QuinticBleAPISdkBase.getInstanceFactory(getActivity()).conn.disconnect();
                                     }
-                                    QuinticBleAPISdkBase.resultDevice=null;
+//                                    QuinticBleAPISdkBase.resultDevice=null;
                                 } else {
 
                                     connectSendCodeFailUiShutDown(msg);

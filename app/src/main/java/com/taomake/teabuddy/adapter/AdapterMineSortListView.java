@@ -122,7 +122,7 @@ public class AdapterMineSortListView extends BaseAdapter {
                 if (position != 0) {
                     if (isclicked != null && !isclicked.equals("1")) {
                         SortInfoObj sortInfoObj = mPersonal.get(position);
-                        String fav = favValue;
+                        String fav = sortInfoObj.fav;
                         Integer favInt = Integer.valueOf(fav);
                         favInt = favInt + 1;
 

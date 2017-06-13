@@ -156,7 +156,7 @@ public class MineTabFragment extends Fragment implements SwipeRefreshLayout.OnRe
         @Override
         public void onReceive(Context context, Intent intent) {
             if (MYACTION_UPDATE_Mine.equals(intent.getAction())) {
-                Log.i("onReceive", "change hot...");
+                Log.i("onReceive", "change receiverMine...");
 
                 changeui();
             }

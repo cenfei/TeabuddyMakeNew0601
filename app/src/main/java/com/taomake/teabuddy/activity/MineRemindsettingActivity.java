@@ -72,6 +72,8 @@ public class MineRemindsettingActivity extends BaseActivity {
     @ViewById(R.id.unclick_line)
     LinearLayout unclick_line;
 
+    boolean  canClick=true;
+
     public void changeButtonGroup(int choosenum){
 
         chooseNumButton=choosenum;
@@ -87,33 +89,21 @@ public class MineRemindsettingActivity extends BaseActivity {
                 remind_close_img.setImageDrawable(getResources().getDrawable(R.drawable.remind_close));
                 remind_close_text.setTextColor(getResources().getColor(R.color.black));
                 black_line_id.setVisibility(View.VISIBLE);
-                unclick_line.setClickable(false);
-                gridview.setClickable(false);
-                arrayWheel3.setClickable(false);
-                arrayWheel2.setClickable(false);
-                arrayWheel.setClickable(false);
+                canClick=false;
 
                 break;
             case 1:
                 move_img.setImageDrawable(getResources().getDrawable(R.drawable.move_icon));
                 move_text.setTextColor(getResources().getColor(R.color.black));
                 black_line_id.setVisibility(View.GONE);
-                unclick_line.setClickable(true);
-                gridview.setClickable(true);
-                arrayWheel3.setClickable(true);
-                arrayWheel2.setClickable(true);
-                arrayWheel.setClickable(true);
-
+                canClick=true;
                 break;
             case 2:
                 intelligence_img.setImageDrawable(getResources().getDrawable(R.drawable.intelligence_icon));
                 intelligence_text.setTextColor(getResources().getColor(R.color.black));
                 black_line_id.setVisibility(View.VISIBLE);
-                unclick_line.setClickable(false);
-                gridview.setClickable(false);
-                arrayWheel3.setClickable(false);
-                arrayWheel2.setClickable(false);
-                arrayWheel.setClickable(false);
+                canClick=false;
+
 
 
 
@@ -300,10 +290,11 @@ Integer chooseNumButton=0;
 //           callBackPayWindow.handleCallBackDbSelect(dbRecordInfoObj.voicefile_url);
 //            closePopupWindow(activity);
 
-
-            myGridDbRecordAdapter.setSeclection(postion);
-            myGridDbRecordAdapter.notifyDataSetChanged();
-            gridview.invalidate();
+if(canClick) {
+    myGridDbRecordAdapter.setSeclection(postion);
+    myGridDbRecordAdapter.notifyDataSetChanged();
+    gridview.invalidate();
+}
 
 //            setbatteryLevel(context);
 
@@ -592,8 +583,10 @@ connecterror();
         OnWheelChangedListener wheellistener = new OnWheelChangedListener() {
             @Override
             public void onChanged(WheelView wheel, int oldValue, int newValue) {
-                String currentText = (String) monthAdapter.getItemText(wheel.getCurrentItem());
-                setTextviewSize(currentText, monthAdapter);
+
+
+                    String currentText = (String) monthAdapter.getItemText(wheel.getCurrentItem());
+                    setTextviewSize(currentText, monthAdapter);
 
 
             }
@@ -610,10 +603,11 @@ connecterror();
             @Override
             public void onScrollingFinished(WheelView wheel) {
 //                Log.e("finish",wheel.getCurrentItem()+"");
-                String currentText = (String) monthAdapter.getItemText(wheel.getCurrentItem());
+                    String currentText = (String) monthAdapter.getItemText(wheel.getCurrentItem());
 
-                afterNoon = wheel.getCurrentItem();
-                setTextviewSize(currentText, monthAdapter);
+                    afterNoon = wheel.getCurrentItem();
+                    setTextviewSize(currentText, monthAdapter);
+
             }
         };
 
@@ -623,7 +617,6 @@ connecterror();
 
         arrayWheel.setViewAdapter(monthAdapter);
         arrayWheel.setCurrentItem(temp);
-
         arrayWheel.addChangingListener(wheellistener);
         arrayWheel.addScrollingListener(onWheelScrollListener);
         setTextviewSize(PLANETS[temp], monthAdapter);

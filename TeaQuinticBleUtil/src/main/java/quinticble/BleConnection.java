@@ -62,6 +62,8 @@ public class BleConnection {
 
     private boolean isRealConnected = false;
 
+    private boolean needMoreTimeout=false;
+
     /**
      * 初始化ble连接
      *
@@ -331,10 +333,19 @@ public class BleConnection {
 
                 if (trimResult.contains("eb0c00")) {
                     connectTimeout.restart(600000);
+                    needMoreTimeout=true;
+                }if (trimResult.contains("eb0c0b")) {
+                    connectTimeout.restart(600000);
+                    needMoreTimeout=false;
                 }
 
                 if (characteristic.getValue() != null && !(characteristic.getValue().length == 2 && QuinticCommon.matchData(characteristic.getValue(), new byte[]{0, 0}))) {
-                    connectTimeout.restart(600000);
+                    if(needMoreTimeout) {
+                        connectTimeout.restart(600000);
+                    }else{
+                        connectTimeout.restart(15000);
+
+                    }
                     Log.i("----- keep notify -----", "notify");
                     bleStateChangeCallback.onNotify(characteristic.getValue());
 
