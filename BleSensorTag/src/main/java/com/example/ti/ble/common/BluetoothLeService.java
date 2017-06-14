@@ -663,6 +663,29 @@ public class BluetoothLeService extends Service {
 		}
 	}
 
+    public void closedisconnect() {
+        if (mBtAdapter == null) {
+            // Log.w(TAG, "disconnect: BluetoothAdapter not initialized");
+            return;
+        }
+        if(mBluetoothDeviceAddress!=null) {
+            final BluetoothDevice device = mBtAdapter.getRemoteDevice(mBluetoothDeviceAddress);
+            int connectionState = mBluetoothManager.getConnectionState(device,
+                    BluetoothProfile.GATT);
+
+            if (mBluetoothGatt != null) {
+                if (connectionState != BluetoothProfile.STATE_DISCONNECTED) {
+                    mBluetoothGatt.disconnect();
+
+
+                    mBluetoothGatt.close();
+                } else {
+                    // Log.w(TAG, "Attempt to disconnect in state: " + connectionState);
+                }
+            }
+        }
+    }
+
 	/**
 	 * After using a given BLE device, the app must call this method to ensure
 	 * resources are released properly.

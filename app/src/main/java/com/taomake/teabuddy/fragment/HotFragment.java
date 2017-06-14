@@ -803,7 +803,7 @@ public class HotFragment extends Fragment {
                     Log.e("QuinticBleAPISdkBase","do disconnect");
 //                    QuinticBleAPISdkBase.getInstanceFactory(getActivity()).deviceMap.clear();
 //                    QuinticBleAPISdkBase.getInstanceFactory(getActivity()).abort();
-                    QuinticBleAPISdkBase.getInstanceFactory(getActivity()).conn.disconnect();
+//                    QuinticBleAPISdkBase.getInstanceFactory(getActivity()).conn.disconnect();
                 }
             }
         });

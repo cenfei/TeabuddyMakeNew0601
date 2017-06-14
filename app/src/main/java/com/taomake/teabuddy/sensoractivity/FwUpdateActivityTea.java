@@ -88,6 +88,8 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import quinticble.QuinticBleAPISdkBase;
+
 public class FwUpdateActivityTea extends Activity {
     public final static String EXTRA_MESSAGE = "com.example.ti.ble.sensortag.MESSAGE";
     // Log
@@ -112,9 +114,9 @@ public class FwUpdateActivityTea extends Activity {
 //  private static final int OAD_IMG_HDR_SIZE = 8;
 
 
-    private static final short OAD_CONN_INTERVAL = 39; // 12.5 msec  39  默认10
+    private static final short OAD_CONN_INTERVAL = 10; // 12.5 msec  39  默认10
 
-    private static final short OAD_SUPERVISION_TIMEOUT = 700; // 1 second  700 默认100
+    private static final short OAD_SUPERVISION_TIMEOUT = 100; // 1 second  700 默认100
 
     private static final int PKT_INTERVAL = 20; // Milliseconds
 
@@ -706,7 +708,7 @@ public class FwUpdateActivityTea extends Activity {
 
 
                     try {
-                        Thread.sleep(10000);
+                        Thread.sleep(60000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -730,6 +732,12 @@ public class FwUpdateActivityTea extends Activity {
                             update_process_success_rel.setVisibility(View.VISIBLE);
                             MainApp mainApp = (MainApp) getApplicationContext();
                             mainApp.boolupdateSuccess = 2;
+
+Log.d("closedisconnect","closedisconnect");
+                            if(mLeService!=null){
+                                mLeService.closedisconnect();
+                            }
+                            QuinticBleAPISdkBase.resultDevice=null;
 
                             closeBle();
                             //这里蓝牙重启
