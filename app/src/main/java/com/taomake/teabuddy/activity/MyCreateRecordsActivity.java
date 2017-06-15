@@ -200,8 +200,9 @@ public class MyCreateRecordsActivity extends BaseActivity {
 
         pageNum = 1;
 
-        getDataFromServer();
-    }
+        if(boolCanusePress) {
+            getDataFromServer();
+        }    }
 
 
     //**********获取筛选的后的list***************/

@@ -201,8 +201,9 @@ getMyCreateRecordListInfo();
 
         pageNum = 1;
 
-        getDataFromServer();
-    }
+        if(boolCanusePress) {
+            getDataFromServer();
+        }    }
 
 
 

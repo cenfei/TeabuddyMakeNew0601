@@ -208,8 +208,9 @@ public class MyGFRecordsActivity extends BaseActivity implements IWeiboHandler.R
         super.onResume();
 
         pageNum = 1;
-
-        getDataFromServer();
+if(boolCanusePress) {
+    getDataFromServer();
+}
     }
 
     boolean boolCanusePress=true;

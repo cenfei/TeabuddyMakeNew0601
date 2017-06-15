@@ -26,7 +26,6 @@ import com.taomake.teabuddy.R;
 import com.taomake.teabuddy.activity.MainActivity;
 import com.taomake.teabuddy.activity.MineAppsettingActivity_;
 import com.taomake.teabuddy.activity.MineMessageListActivity_;
-import com.taomake.teabuddy.activity.MineRemindsettingActivity;
 import com.taomake.teabuddy.activity.MineRemindsettingActivity_;
 import com.taomake.teabuddy.activity.MineSortListActivity_;
 import com.taomake.teabuddy.activity.WelcomeActivity_;
@@ -112,6 +111,8 @@ public class MineTabFragment extends Fragment implements SwipeRefreshLayout.OnRe
         if (!MyStringUtils.isNotNullAndEmpty(QuinticBleAPISdkBase.resultDevice)) {
             Util.Toast(getActivity(), "主人请先链接茶密", null);
         } else {
+            resultDeviceAll = QuinticBleAPISdkBase.resultDevice;
+
             foxProgressbarInterfaceHot = new FoxProgressbarInterfaceHot();
 
             foxProgressbarInterfaceHot.startProgressBar(getActivity(), "加载中..", 15, new FoxProgressbarInterfaceHot.FoxHotCallback() {
