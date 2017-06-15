@@ -32,7 +32,9 @@ import com.taomake.teabuddy.activity.ChooseTeaActivity;
 import com.taomake.teabuddy.activity.ChooseTeaActivity_;
 import com.taomake.teabuddy.activity.DeviceManagerActivity_;
 import com.taomake.teabuddy.activity.DeviceUpdateActivity_;
+import com.taomake.teabuddy.activity.DeviceUpdateTwoActivity;
 import com.taomake.teabuddy.activity.DeviceUpdateTwoActivity_;
+import com.taomake.teabuddy.activity.MineRemindsettingActivity;
 import com.taomake.teabuddy.activity.WebViewActivity_;
 import com.taomake.teabuddy.base.MainApp;
 import com.taomake.teabuddy.component.DynamicWave;
@@ -293,6 +295,7 @@ public class HotFragment extends Fragment {
                     intent.putExtra("url", payUrl);
                     intent.putExtra("title", "购买");
                     startActivity(intent);
+
                 }
             });
         }
@@ -802,8 +805,14 @@ public class HotFragment extends Fragment {
                 if (QuinticBleAPISdkBase.getInstanceFactory(getActivity()).conn != null) {
                     Log.e("QuinticBleAPISdkBase","do disconnect");
 //                    QuinticBleAPISdkBase.getInstanceFactory(getActivity()).deviceMap.clear();
+                    QuinticBleAPISdkBase.resultDevice=null;
 //                    QuinticBleAPISdkBase.getInstanceFactory(getActivity()).abort();
 //                    QuinticBleAPISdkBase.getInstanceFactory(getActivity()).conn.disconnect();
+
+
+                    Util.Toast(getActivity(),"设备此时难以被连接\n建议重新插电重启",null);
+
+
                 }
             }
         });
@@ -1390,8 +1399,10 @@ public class HotFragment extends Fragment {
                         case BluetoothAdapter.STATE_TURNING_OFF://蓝牙关掉---切换到没有连接页面
                             Log.e("HOT", "onReceive---------STATE_TURNING_OFF");
                             if (mainApp.boolupdateSuccess == 2 || mainApp.boolupdateSuccess == 1) {
-                                QuinticBleAPISdkBase.resultDevice=null;
                                 openBle();
+
+
+
                             }
 
                             unconnectUi();
@@ -1424,8 +1435,13 @@ public class HotFragment extends Fragment {
         if (!mBluetoothAdapter.isEnabled()) {
             // 用enable()方法来开启，无需询问用户(实惠无声息的开启蓝牙设备),这时就需要用到android.permission.BLUETOOTH_ADMIN权限。
             mBluetoothAdapter.enable();
+
+
         }
 
 
     }
+
+
+
 }

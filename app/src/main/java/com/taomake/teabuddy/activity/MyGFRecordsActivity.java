@@ -1,11 +1,15 @@
 package com.taomake.teabuddy.activity;
 
+import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.PowerManager;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -87,8 +91,12 @@ public class MyGFRecordsActivity extends BaseActivity implements IWeiboHandler.R
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mShareManager = WechatShareManager.getInstance(MyGFRecordsActivity.this);
-//        PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-//   mWakeLock = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "My Tag");
+        if (ContextCompat.checkSelfPermission(MyGFRecordsActivity.this,
+                Manifest.permission.WAKE_LOCK) == PackageManager.PERMISSION_GRANTED) {
+            PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+            mWakeLock = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "My Tag");
+        }
+
 //        setContentView(R.layout.design_personal);
 //        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
@@ -204,6 +212,16 @@ public class MyGFRecordsActivity extends BaseActivity implements IWeiboHandler.R
         getDataFromServer();
     }
 
+    boolean boolCanusePress=true;
+
+    @Override
+    public void onBackPressed() {
+        if(boolCanusePress) {
+            super.onBackPressed();
+        }else{
+            Util.Toast(this,"当前不能返回\n请耐心等待",null);
+        }
+    }
 
     //**********获取筛选的后的list***************/
     FoxProgressbarInterface foxProgressbarInterface;
@@ -432,15 +450,25 @@ public class MyGFRecordsActivity extends BaseActivity implements IWeiboHandler.R
                 public void handleCallBackApply() {
                     if (!MyStringUtils.isopenBluetooth(MyGFRecordsActivity.this)) return;
 
+                    boolCanusePress=false;
                     String blindDeviceId = configPref.userDeviceMac().get();
                     blindDeviceId = MyStringUtils.macStringToUpper(blindDeviceId);
                     Log.e("blindDeviceId:", blindDeviceId);
-//                        mWakeLock.acquire();
+
+                    if (ContextCompat.checkSelfPermission(MyGFRecordsActivity.this,
+                            Manifest.permission.WAKE_LOCK) == PackageManager.PERMISSION_GRANTED) {
+                        mWakeLock.acquire();
+                    }
+
                     new Apply_Record_Popwindow().showPopwindow(MyGFRecordsActivity.this, imageView, blindDeviceId,
                             configPref.userUnion().get(), voiceGroupObj.voicefile_index, new Apply_Record_Popwindow.CallBackPayWindow() {
                                 @Override
                                 public void handleCallBackPayWindowFromStop(String recorddir) {
-//                                mWakeLock.release();
+                                    boolCanusePress=true;
+                                if (ContextCompat.checkSelfPermission(MyGFRecordsActivity.this,
+                                    Manifest.permission.WAKE_LOCK) == PackageManager.PERMISSION_GRANTED) {
+                                        mWakeLock.release();
+                                    }
                                 }
 
                                 @Override

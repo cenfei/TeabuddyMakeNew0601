@@ -222,6 +222,9 @@ public class Apply_Record_Popwindow {
      * 关闭窗口
      */
     public void closePopupWindow(Activity activity) {
+        if(callBackPayWindow!=null)
+        callBackPayWindow.handleCallBackPayWindowFromStart("");
+
         WindowManager.LayoutParams params = activity.getWindow().getAttributes();
         params.alpha = 1f;
         activity.getWindow().setAttributes(params);
@@ -353,6 +356,7 @@ public class Apply_Record_Popwindow {
                                                             + ex.getMessage());
                                             connectFindDevice(context);
                                             countError++;
+                                            callBackPayWindow.handleCallBackPayWindowFromStop("");
                                         } else {
 //                                            unconnectUi();
                                             // *****************连接失败

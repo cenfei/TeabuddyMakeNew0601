@@ -1,8 +1,13 @@
 package com.taomake.teabuddy.activity;
 
+import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.PowerManager;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -72,12 +77,17 @@ public class MyCollectRecordsActivity extends BaseActivity {
         finish();
 
     }
+    PowerManager.WakeLock mWakeLock;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mShareManager = WechatShareManager.getInstance(MyCollectRecordsActivity.this);
-
+        if (ContextCompat.checkSelfPermission(MyCollectRecordsActivity.this,
+                Manifest.permission.WAKE_LOCK) == PackageManager.PERMISSION_GRANTED) {
+            PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+            mWakeLock = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "My Tag");
+        }
 //        setContentView(R.layout.design_personal);
 //        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
@@ -277,7 +287,16 @@ getMyCreateRecordListInfo();
 
         return jobJsons;
     }
+    boolean boolCanusePress=true;
 
+    @Override
+    public void onBackPressed() {
+        if(boolCanusePress) {
+            super.onBackPressed();
+        }else{
+            Util.Toast(this,"当前不能返回\n请耐心等待",null);
+        }
+    }
 
     int selectTemp=-1;
     class ItemClickListener implements AdapterView.OnItemClickListener {
@@ -392,16 +411,23 @@ getMyCreateRecordListInfo();
                     @Override
                     public void handleCallBackApply() {
                         if(!MyStringUtils.isopenBluetooth(MyCollectRecordsActivity.this)) return;
-
+                        boolCanusePress=false;
                         String   blindDeviceId = configPref.userDeviceMac().get();
                         blindDeviceId = MyStringUtils.macStringToUpper(blindDeviceId);
                         Log.e("blindDeviceId:", blindDeviceId);
-
+                        if (ContextCompat.checkSelfPermission(MyCollectRecordsActivity.this,
+                                Manifest.permission.WAKE_LOCK) == PackageManager.PERMISSION_GRANTED) {
+                            mWakeLock.acquire();
+                        }
                         new Apply_Record_Popwindow().showPopwindow(MyCollectRecordsActivity.this, imageView,blindDeviceId,
                                 configPref.userUnion().get(),voiceGroupObj.voicefile_index, new Apply_Record_Popwindow.CallBackPayWindow() {
                                     @Override
                                     public void handleCallBackPayWindowFromStop(String recorddir) {
-
+                                        boolCanusePress=true;
+                                        if (ContextCompat.checkSelfPermission(MyCollectRecordsActivity.this,
+                                                Manifest.permission.WAKE_LOCK) == PackageManager.PERMISSION_GRANTED) {
+                                            mWakeLock.release();
+                                        }
                                     }
 
                                     @Override

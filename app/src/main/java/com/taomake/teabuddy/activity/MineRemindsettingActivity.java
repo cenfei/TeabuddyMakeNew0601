@@ -2,6 +2,7 @@ package com.taomake.teabuddy.activity;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -72,11 +73,11 @@ public class MineRemindsettingActivity extends BaseActivity {
     @ViewById(R.id.unclick_line)
     LinearLayout unclick_line;
 
-    boolean  canClick=true;
+    boolean canClick = true;
 
-    public void changeButtonGroup(int choosenum){
+    public void changeButtonGroup(int choosenum) {
 
-        chooseNumButton=choosenum;
+        chooseNumButton = choosenum;
         remind_close_img.setImageDrawable(getResources().getDrawable(R.drawable.remind_close_gray));
         remind_close_text.setTextColor(getResources().getColor(R.color.text_color));
 
@@ -84,27 +85,25 @@ public class MineRemindsettingActivity extends BaseActivity {
         move_text.setTextColor(getResources().getColor(R.color.text_color));
         intelligence_img.setImageDrawable(getResources().getDrawable(R.drawable.intelligence_icon_gray));
         intelligence_text.setTextColor(getResources().getColor(R.color.text_color));
-        switch (choosenum){
+        switch (choosenum) {
             case 0:
                 remind_close_img.setImageDrawable(getResources().getDrawable(R.drawable.remind_close));
                 remind_close_text.setTextColor(getResources().getColor(R.color.black));
                 black_line_id.setVisibility(View.VISIBLE);
-                canClick=false;
+                canClick = false;
 
                 break;
             case 1:
                 move_img.setImageDrawable(getResources().getDrawable(R.drawable.move_icon));
                 move_text.setTextColor(getResources().getColor(R.color.black));
                 black_line_id.setVisibility(View.GONE);
-                canClick=true;
+                canClick = true;
                 break;
             case 2:
                 intelligence_img.setImageDrawable(getResources().getDrawable(R.drawable.intelligence_icon));
                 intelligence_text.setTextColor(getResources().getColor(R.color.black));
                 black_line_id.setVisibility(View.VISIBLE);
-                canClick=false;
-
-
+                canClick = false;
 
 
                 break;
@@ -115,26 +114,27 @@ public class MineRemindsettingActivity extends BaseActivity {
     }
 
 
-
     @Click(R.id.remind_close_line)
     void onremind_close_line() {
 
         changeButtonGroup(0);
 
     }
+
     @Click(R.id.move_line)
     void onmove_line() {
 
         changeButtonGroup(1);
 
     }
+
     @Click(R.id.intelligence_line)
     void onintelligence_line() {
 
         changeButtonGroup(2);
     }
 
-Integer chooseNumButton=0;
+    Integer chooseNumButton = 0;
 
     @Click(R.id.left_title_line)
     void onLeftTitleLine() {
@@ -149,16 +149,15 @@ Integer chooseNumButton=0;
 
         Set<Integer> choosePHash = myGridDbRecordAdapter.clickTempHash;
 
-        if(choosePHash.size()==0){
+        if (choosePHash.size() == 0) {
 
-            Util.Toast(MineRemindsettingActivity.this,"选择日期",null);
+            Util.Toast(MineRemindsettingActivity.this, "选择日期", null);
             return;
         }
 
 
-
         StringBuffer sb = new StringBuffer();
-        for (int i = 7; i >=0; i--) {
+        for (int i = 7; i >= 0; i--) {
             if (choosePHash.contains(i)) {
                 sb.append("1");
 
@@ -166,7 +165,7 @@ Integer chooseNumButton=0;
                 sb.append("0");
             }
         }
-        Log.e("write setting","chooseNumButton:"+chooseNumButton+ ",minuteSetting:"+minuteSetting+",hourSetting:"+hourSetting+",eventArray:"+sb.toString());
+        Log.e("write setting", "chooseNumButton:" + chooseNumButton + ",minuteSetting:" + minuteSetting + ",hourSetting:" + hourSetting + ",eventArray:" + sb.toString());
 
         Integer weekDayValue = Integer.valueOf(sb.toString(), 2);//周期 位开关
 
@@ -242,8 +241,6 @@ Integer chooseNumButton=0;
 //        });
 
 
-
-
         gridview = (GridView) findViewById(R.id.gridview);
 
 
@@ -252,26 +249,34 @@ Integer chooseNumButton=0;
         gridview.setAdapter(myGridDbRecordAdapter);
         gridview.setOnItemClickListener(new ItemClickListener());
 
-        MainApp mainappAll=(MainApp)getApplicationContext();
-        long endtime=System.currentTimeMillis();
+//        MainApp mainappAll=(MainApp)getApplicationContext();
+//        long endtime=System.currentTimeMillis();
+//
+//        long starttime=mainappAll.starttime;
+//        if(endtime-starttime>2000) {
+//            connectFindDevice();
+//        }else{
+//            foxProgressbarInterface = new FoxProgressbarInterface();
+//
+//            foxProgressbarInterface.startProgressBar(MineRemindsettingActivity.this, "数据读取中...");
+//
+//            new Handler().postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//                    connectFindDevice();
+//                }
+//            },endtime-starttime);
+//
+//        }
 
-        long starttime=mainappAll.starttime;
-        if(endtime-starttime>2000) {
-            connectFindDevice();
-        }else{
-            foxProgressbarInterface = new FoxProgressbarInterface();
 
-            foxProgressbarInterface.startProgressBar(MineRemindsettingActivity.this, "数据读取中...");
-
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    connectFindDevice();
-                }
-            },endtime-starttime);
-
+        String trimResult = getIntent().getStringExtra("trimResult");
+        if (TextUtils.isEmpty(trimResult)) {
+            initdata(trimResult);
+        } else {
+            connecterror();
         }
-        initdata();
+
     }
 
     GridView gridview;
@@ -290,11 +295,11 @@ Integer chooseNumButton=0;
 //           callBackPayWindow.handleCallBackDbSelect(dbRecordInfoObj.voicefile_url);
 //            closePopupWindow(activity);
 
-if(canClick) {
-    myGridDbRecordAdapter.setSeclection(postion);
-    myGridDbRecordAdapter.notifyDataSetChanged();
-    gridview.invalidate();
-}
+            if (canClick) {
+                myGridDbRecordAdapter.setSeclection(postion);
+                myGridDbRecordAdapter.notifyDataSetChanged();
+                gridview.invalidate();
+            }
 
 //            setbatteryLevel(context);
 
@@ -337,8 +342,31 @@ if(canClick) {
     }
 
 
-    void initdata() {
+    void initdata(String trimResult) {
+        if (MyStringUtils.isNotNullAndEmpty(QuinticBleAPISdkBase.resultDevice)) {
+            resultDeviceAll = QuinticBleAPISdkBase.resultDevice;
+            // ************处理动作
 
+
+        }
+
+        byte[] data = QuinticCommon.stringToBytes(trimResult);
+        chooseNumButton = QuinticCommon.unsignedByteToInt(data[2]);
+
+//                                    switch1.setChecked(boolOpen == 0 ? false : true);
+
+        minuteSetting = QuinticCommon.unsignedByteToInt(data[3]);
+
+        hourSetting = QuinticCommon.unsignedByteToInt(data[4]);
+        weekInt = QuinticCommon.unsignedByteToInt(data[5]);
+        String eventArray = Integer.toBinaryString(weekInt);
+        Log.e("read setting", "chooseNumButton:" + chooseNumButton + ",minuteSetting:" + minuteSetting + ",hourSetting:" + hourSetting + ",eventArray:" + eventArray);
+        weekIntCharArray = eventArray.toCharArray();
+        connectSettingInfoSuccess();
+
+        MainApp mainappAll = (MainApp) getApplicationContext();
+
+        mainappAll.starttime = System.currentTimeMillis();
     }
 
 
@@ -362,14 +390,15 @@ if(canClick) {
     private QuinticDeviceTea resultDeviceAll;
     private Integer countError = 0;
 
-    public void connecterror(){
-        if(foxProgressbarInterface!=null)
+    public void connecterror() {
+        if (foxProgressbarInterface != null)
             foxProgressbarInterface.stopProgressBar();
         initdataWheel(0);
         initdataWheel2(0);
         initdataWheel3(0);
         changeButtonGroup(chooseNumButton);
     }
+
     FoxProgressbarInterface foxProgressbarInterface;
 
     public void connectFindDevice() {
@@ -379,7 +408,7 @@ if(canClick) {
 
             return;
         }
-        if(foxProgressbarInterface==null) {
+        if (foxProgressbarInterface == null) {
             foxProgressbarInterface = new FoxProgressbarInterface();
             foxProgressbarInterface.startProgressBar(MineRemindsettingActivity.this, "数据读取中...");
 
@@ -395,12 +424,12 @@ if(canClick) {
         }
     }
 
-    int  minuteSetting=0, hourSetting=0, weekInt=0;
+    int minuteSetting = 0, hourSetting = 0, weekInt = 0;
     char[] weekIntCharArray;
     int afterNoon = 0;
 
     public void connectSettingInfoSuccess() {
-        if(foxProgressbarInterface!=null)
+        if (foxProgressbarInterface != null)
             foxProgressbarInterface.stopProgressBar();
         int afternoonbool = 0;
         if (hourSetting > 12) {
@@ -419,10 +448,10 @@ if(canClick) {
         initdataWheel2(minuteSetting);
 
         //星期初始化
-        for(int i=weekIntCharArray.length;i>=1;i--){
-          if(weekIntCharArray[i-1]=='1'){
-              myGridDbRecordAdapter.clickTempHash.add(weekIntCharArray.length-i);
-          }
+        for (int i = weekIntCharArray.length; i >= 1; i--) {
+            if (weekIntCharArray[i - 1] == '1') {
+                myGridDbRecordAdapter.clickTempHash.add(weekIntCharArray.length - i);
+            }
 
 
         }
@@ -434,13 +463,14 @@ if(canClick) {
 
 
     }
-boolean boolset=true;
+
+    boolean boolset = true;
 
     public void setSettingInfo(String code) {
         if (resultDeviceAll == null) return;
-        if(!boolset) return;
+        if (!boolset) return;
 
-        boolset=false;
+        boolset = false;
 //        String code = "EA14";
         foxProgressbarInterface = new FoxProgressbarInterface();
 
@@ -454,10 +484,10 @@ boolean boolset=true;
                         .post(new Runnable() {
                             @Override
                             public void run() {
-                                if(foxProgressbarInterface!=null)
-                                foxProgressbarInterface.stopProgressBar();
-                                boolset=true;
-                               Util.Toast(MineRemindsettingActivity.this,"设置提醒失败",null);
+                                if (foxProgressbarInterface != null)
+                                    foxProgressbarInterface.stopProgressBar();
+                                boolset = true;
+                                Util.Toast(MineRemindsettingActivity.this, "设置提醒失败", null);
                             }
                         });
             }
@@ -475,8 +505,8 @@ boolean boolset=true;
                             @Override
                             public void run() {
 //BACK 0A 04 01 53result
-                              if(foxProgressbarInterface!=null)
-                                foxProgressbarInterface.stopProgressBar();
+                                if (foxProgressbarInterface != null)
+                                    foxProgressbarInterface.stopProgressBar();
                                 String trimResult = result.replace(" ", "");
                                 if (trimResult.contains("eb14")) {
                                     byte[] data = QuinticCommon.stringToBytes(trimResult);
@@ -489,10 +519,8 @@ boolean boolset=true;
                                     });
 
 
-
-
-                                }else{
-                                    boolset=true;
+                                } else {
+                                    boolset = true;
                                 }
 
 
@@ -518,7 +546,7 @@ boolean boolset=true;
                         .post(new Runnable() {
                             @Override
                             public void run() {
-connecterror();
+                                connecterror();
                             }
                         });
 
@@ -549,13 +577,13 @@ connecterror();
                                     hourSetting = QuinticCommon.unsignedByteToInt(data[4]);
                                     weekInt = QuinticCommon.unsignedByteToInt(data[5]);
                                     String eventArray = Integer.toBinaryString(weekInt);
-                                    Log.e("read setting","chooseNumButton:"+chooseNumButton+ ",minuteSetting:"+minuteSetting+",hourSetting:"+hourSetting+",eventArray:"+eventArray);
+                                    Log.e("read setting", "chooseNumButton:" + chooseNumButton + ",minuteSetting:" + minuteSetting + ",hourSetting:" + hourSetting + ",eventArray:" + eventArray);
                                     weekIntCharArray = eventArray.toCharArray();
                                     connectSettingInfoSuccess();
 
-                                    MainApp   mainappAll=(MainApp)getApplicationContext();
+                                    MainApp mainappAll = (MainApp) getApplicationContext();
 
-                                    mainappAll.starttime=System.currentTimeMillis();
+                                    mainappAll.starttime = System.currentTimeMillis();
 //                                    Log.d("当前电量", batteryLevelValue + "");
 //                                    getTeaStatus();
                                 }
@@ -574,7 +602,8 @@ connecterror();
 
     private WheelView arrayWheel;
     ArrayWheelAdapter monthAdapter;
-    String[] PLANETS= {"上午", "下午"};
+    String[] PLANETS = {"上午", "下午"};
+
     void initdataWheel(int temp) {
 
         //测试数据
@@ -585,8 +614,8 @@ connecterror();
             public void onChanged(WheelView wheel, int oldValue, int newValue) {
 
 
-                    String currentText = (String) monthAdapter.getItemText(wheel.getCurrentItem());
-                    setTextviewSize(currentText, monthAdapter);
+                String currentText = (String) monthAdapter.getItemText(wheel.getCurrentItem());
+                setTextviewSize(currentText, monthAdapter);
 
 
             }
@@ -603,10 +632,10 @@ connecterror();
             @Override
             public void onScrollingFinished(WheelView wheel) {
 //                Log.e("finish",wheel.getCurrentItem()+"");
-                    String currentText = (String) monthAdapter.getItemText(wheel.getCurrentItem());
+                String currentText = (String) monthAdapter.getItemText(wheel.getCurrentItem());
 
-                    afterNoon = wheel.getCurrentItem();
-                    setTextviewSize(currentText, monthAdapter);
+                afterNoon = wheel.getCurrentItem();
+                setTextviewSize(currentText, monthAdapter);
 
             }
         };
@@ -686,10 +715,11 @@ connecterror();
 
     private WheelView arrayWheel3;
     ArrayWheelAdapter monthAdapter3;
+
     void initdataWheel3(int temp) {
 
         //测试数据
-        String[]   PLANETS3 = setdatawheel(12);
+        String[] PLANETS3 = setdatawheel(12);
 
         arrayWheel3 = (WheelView) findViewById(R.id.wheel_view_wv3);
         OnWheelChangedListener wheellistener = new OnWheelChangedListener() {

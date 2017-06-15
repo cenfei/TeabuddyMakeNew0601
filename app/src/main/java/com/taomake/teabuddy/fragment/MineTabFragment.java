@@ -26,11 +26,13 @@ import com.taomake.teabuddy.R;
 import com.taomake.teabuddy.activity.MainActivity;
 import com.taomake.teabuddy.activity.MineAppsettingActivity_;
 import com.taomake.teabuddy.activity.MineMessageListActivity_;
+import com.taomake.teabuddy.activity.MineRemindsettingActivity;
 import com.taomake.teabuddy.activity.MineRemindsettingActivity_;
 import com.taomake.teabuddy.activity.MineSortListActivity_;
 import com.taomake.teabuddy.activity.WelcomeActivity_;
 import com.taomake.teabuddy.base.MainApp;
 import com.taomake.teabuddy.component.FoxProgressbarInterface;
+import com.taomake.teabuddy.component.FoxProgressbarInterfaceHot;
 import com.taomake.teabuddy.network.ProtocolUtil;
 import com.taomake.teabuddy.network.RowMessageHandler;
 import com.taomake.teabuddy.object.MinePersonInfoJson;
@@ -95,6 +97,7 @@ public class MineTabFragment extends Fragment implements SwipeRefreshLayout.OnRe
         Util.startActivity(getActivity(), MineAppsettingActivity_.class);
 
     }
+
     @Click(R.id.mine_msg_id)
     void onmine_msg_id() {
 
@@ -103,17 +106,38 @@ public class MineTabFragment extends Fragment implements SwipeRefreshLayout.OnRe
     }
 
 
-
     @Click(R.id.mine_remind_id)
     void onmine_remind_id() {
 
         if (!MyStringUtils.isNotNullAndEmpty(QuinticBleAPISdkBase.resultDevice)) {
-            Util.Toast(getActivity(),"主人请先链接茶密",null);
-        }else {
+            Util.Toast(getActivity(), "主人请先链接茶密", null);
+        } else {
+            foxProgressbarInterfaceHot = new FoxProgressbarInterfaceHot();
+
+            foxProgressbarInterfaceHot.startProgressBar(getActivity(), "加载中..", 15, new FoxProgressbarInterfaceHot.FoxHotCallback() {
+                @Override
+                public void foxhotCallback() {//超过时间还没有返回则跳转到失败页面
+                    connecterror();
+                }
+            });
+            MainApp mainappAll=(MainApp)getActivity().getApplicationContext();
+            long endtime=System.currentTimeMillis();
+
+            long starttime=mainappAll.starttime;
+            if(endtime-starttime>2000) {
+                getSettingInfo();
+            }else{
 
 
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        getSettingInfo();
+                    }
+                },endtime-starttime);
 
-            Util.startActivity(getActivity(), MineRemindsettingActivity_.class);
+            }
+
         }
     }
 
@@ -132,18 +156,20 @@ public class MineTabFragment extends Fragment implements SwipeRefreshLayout.OnRe
         IntentFilter filterMine = new IntentFilter();
         filterMine.addAction(MYACTION_UPDATE_Mine);
         getActivity().registerReceiver(receiverMine, filterMine);
-          mine_msg_line=(LinearLayout)chatView.findViewById(R.id.mine_msg_line);
-          mine_msg_num_id=(TextView)chatView.findViewById(R.id.mine_msg_num_id);
+        mine_msg_line = (LinearLayout) chatView.findViewById(R.id.mine_msg_line);
+        mine_msg_num_id = (TextView) chatView.findViewById(R.id.mine_msg_num_id);
 
-        int msgnum=  configPref.sedentaryInterval().get();
-        if(msgnum!=0){
+        int msgnum = configPref.sedentaryInterval().get();
+        if (msgnum != 0) {
             mine_msg_line.setVisibility(View.VISIBLE);
-            mine_msg_num_id.setText(msgnum+"");
+            mine_msg_num_id.setText(msgnum + "");
         }
         return chatView;
     }
-    LinearLayout  mine_msg_line;
-    TextView  mine_msg_num_id;
+
+    LinearLayout mine_msg_line;
+    TextView mine_msg_num_id;
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -164,13 +190,13 @@ public class MineTabFragment extends Fragment implements SwipeRefreshLayout.OnRe
     };
 
 
-    public void changeui(){
+    public void changeui() {
 
-        int msgnum=  configPref.sedentaryInterval().get();
-        if(msgnum!=0){
+        int msgnum = configPref.sedentaryInterval().get();
+        if (msgnum != 0) {
             mine_msg_line.setVisibility(View.VISIBLE);
-            mine_msg_num_id.setText(msgnum+"");
-        }else{
+            mine_msg_num_id.setText(msgnum + "");
+        } else {
             mine_msg_line.setVisibility(View.GONE);
 //            mine_msg_num_id.setText(msgnum+"");
         }
@@ -184,7 +210,8 @@ public class MineTabFragment extends Fragment implements SwipeRefreshLayout.OnRe
     }
 
 
-    public static     String MYACTION_UPDATE_Mine = "com.changemine.broadcast";
+    public static String MYACTION_UPDATE_Mine = "com.changemine.broadcast";
+
     public void initUi(View view) {
 
         RelativeLayout main_title_id = (RelativeLayout) view.findViewById(R.id.main_title_id);
@@ -223,10 +250,7 @@ public class MineTabFragment extends Fragment implements SwipeRefreshLayout.OnRe
         options = ImageLoaderUtil.getAvatarOptionsInstance();
 
 
-
-
     }
-
 
 
     @Override
@@ -235,10 +259,9 @@ public class MineTabFragment extends Fragment implements SwipeRefreshLayout.OnRe
     }
 
 
-
-
     SwipeRefreshLayout mSwipeLayout;
-    public void initFresh(View View){
+
+    public void initFresh(View View) {
         mSwipeLayout = (SwipeRefreshLayout) View.findViewById(R.id.swipe_container);
         mSwipeLayout.setOnRefreshListener(this);
         // 设置下拉圆圈上的颜色，蓝色、绿色、橙色、红色
@@ -264,7 +287,6 @@ public class MineTabFragment extends Fragment implements SwipeRefreshLayout.OnRe
     }
 
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -276,11 +298,11 @@ public class MineTabFragment extends Fragment implements SwipeRefreshLayout.OnRe
     public void onResume() {
 
         super.onResume();
-        if(MainActivity.current==2) {
+        if (MainActivity.current == 2) {
 
         }
 
-        }
+    }
 
 
     @Override
@@ -298,14 +320,14 @@ public class MineTabFragment extends Fragment implements SwipeRefreshLayout.OnRe
     @AfterViews
     void init() {
 
-        String mineInfo=configPref.likeListJson().get();
-        if(mineInfo!=null&&!mineInfo.equals("")){
-            MinePersonInfoObj minePersonInfoObj=new Gson().fromJson(mineInfo, MinePersonInfoObj.class);
+        String mineInfo = configPref.likeListJson().get();
+        if (mineInfo != null && !mineInfo.equals("")) {
+            MinePersonInfoObj minePersonInfoObj = new Gson().fromJson(mineInfo, MinePersonInfoObj.class);
             imageLoader.displayImage(minePersonInfoObj.headimgurl, mine_avar_id, options);//设置头像
-            String username=MyStringUtils.decodeUnicode(minePersonInfoObj.nickname);
+            String username = MyStringUtils.decodeUnicode(minePersonInfoObj.nickname);
             configPref.userName().put(username);
             mine_name_id.setText(username);
-            if(!TextUtils.isEmpty(minePersonInfoObj.favtea)) {
+            if (!TextUtils.isEmpty(minePersonInfoObj.favtea)) {
                 mine_even_tea_id.setText(MyStringUtils.decodeUnicode(minePersonInfoObj.favtea));
             }
             mine_today_num_id.setText(minePersonInfoObj.today);
@@ -313,7 +335,6 @@ public class MineTabFragment extends Fragment implements SwipeRefreshLayout.OnRe
             mine_month_num_id.setText(minePersonInfoObj.month);
 
         }
-
 
 
     }
@@ -331,8 +352,6 @@ public class MineTabFragment extends Fragment implements SwipeRefreshLayout.OnRe
     }
 
 
-
-
     private class GetMinePersonInfoFuncHandler extends RowMessageHandler {
         @Override
         protected void handleResp(String resp) {
@@ -344,25 +363,25 @@ public class MineTabFragment extends Fragment implements SwipeRefreshLayout.OnRe
     public void getMinePersonInfoFuncHandler(String resp) {
         foxProgressbarInterface.stopProgressBar();
         if (resp != null && !resp.equals("")) {
-            MinePersonInfoJson    teaDetailJsonGloabl = new Gson().fromJson(resp, MinePersonInfoJson.class);
+            MinePersonInfoJson teaDetailJsonGloabl = new Gson().fromJson(resp, MinePersonInfoJson.class);
             if ((teaDetailJsonGloabl.rcode + "").equals(Constant.RES_SUCCESS)) {
 
 //    {"rcode":1,"rmsg":"ok","obj":{
 // "headimgurl":"http:\/\/wx.qlogo.cn\/mmopen\/ajNVdqHZLLDyPPpNXr09Z3pPiauWkGbCrDssJS9IeWkn5q4U1tfXdjUT4kicB9ggHhUcCjoQQ8PKpTJw9sdTjAQA\/0",
 // "nickname":"\u654f\u654f","location":"\u4e0a\u6d77.","favtea":"\u9ed8\u8ba4\u8336",
 // "activetime":"2016-04-20","yc_date":"2017-04-26","yc_day":371,"today":0,"week":0,"month":59,"percent":84}}
-                MinePersonInfoObj minePersonInfoObj=teaDetailJsonGloabl.obj;
-                if(!TextUtils.isEmpty(minePersonInfoObj.headimgurl))
+                MinePersonInfoObj minePersonInfoObj = teaDetailJsonGloabl.obj;
+                if (!TextUtils.isEmpty(minePersonInfoObj.headimgurl))
 
                     imageLoader.displayImage(minePersonInfoObj.headimgurl, mine_avar_id, options);//设置头像
-                if(!TextUtils.isEmpty(minePersonInfoObj.nickname)) {
+                if (!TextUtils.isEmpty(minePersonInfoObj.nickname)) {
 
                     String username = MyStringUtils.decodeUnicode(minePersonInfoObj.nickname);
                     configPref.userName().put(username);
                     mine_name_id.setText(username);
                 }
-                if(!TextUtils.isEmpty(minePersonInfoObj.favtea))
-                mine_even_tea_id.setText(MyStringUtils.decodeUnicode(minePersonInfoObj.favtea));
+                if (!TextUtils.isEmpty(minePersonInfoObj.favtea))
+                    mine_even_tea_id.setText(MyStringUtils.decodeUnicode(minePersonInfoObj.favtea));
                 mine_today_num_id.setText(minePersonInfoObj.today);
                 mine_week_num_id.setText(minePersonInfoObj.week);
                 mine_month_num_id.setText(minePersonInfoObj.month);
@@ -371,20 +390,12 @@ public class MineTabFragment extends Fragment implements SwipeRefreshLayout.OnRe
                 configPref.likeListJson().put(new Gson().toJson(minePersonInfoObj));
 
 
-
-
             }
 
         }
 
 
-
-
     }
-
-
-
-
 
 
     //************************蓝牙操作*********************************
@@ -397,7 +408,7 @@ public class MineTabFragment extends Fragment implements SwipeRefreshLayout.OnRe
     private Integer countError = 0;
 
     public void connectFindDevice() {
-        if(!MyStringUtils.isopenBluetooth(getActivity())) {
+        if (!MyStringUtils.isopenBluetooth(getActivity())) {
 
             getMinePersonInfoFunc();
             return;
@@ -411,7 +422,7 @@ public class MineTabFragment extends Fragment implements SwipeRefreshLayout.OnRe
             // ************处理动作
             getLogHistory();
 
-        } else{
+        } else {
             getMinePersonInfoFunc();
         }
 //        else {
@@ -469,18 +480,19 @@ public class MineTabFragment extends Fragment implements SwipeRefreshLayout.OnRe
 //        }
     }
 
-public void connectSendCodeFailUi(String failMsg){
-    Log.e("getLogHistory",failMsg);
-    MainApp mainappAll=(MainApp)getActivity().getApplicationContext();
+    public void connectSendCodeFailUi(String failMsg) {
+        Log.e("getLogHistory", failMsg);
+        MainApp mainappAll = (MainApp) getActivity().getApplicationContext();
 
-    mainappAll.starttime=System.currentTimeMillis();
+        mainappAll.starttime = System.currentTimeMillis();
 
-    getMinePersonInfoFunc();
-}
+        getMinePersonInfoFunc();
+    }
+
     public void getLogHistory() {
-        if(!MyStringUtils.isopenBluetooth(getActivity())) return;
+        if (!MyStringUtils.isopenBluetooth(getActivity())) return;
 
-        if(foxProgressbarInterface!=null) foxProgressbarInterface.stopProgressBar();
+        if (foxProgressbarInterface != null) foxProgressbarInterface.stopProgressBar();
 
         if (resultDeviceAll == null) return;
         String code = "EA07";
@@ -495,7 +507,8 @@ public void connectSendCodeFailUi(String failMsg){
                             @Override
                             public void run() {
                                 connectSendCodeFailUi(failMsg);
-                            }});
+                            }
+                        });
 
             }
 
@@ -512,9 +525,9 @@ public void connectSendCodeFailUi(String failMsg){
                             @Override
                             public void run() {
 //BACK 0A 10 01
-                                MainApp   mainappAll=(MainApp)getActivity().getApplicationContext();
+                                MainApp mainappAll = (MainApp) getActivity().getApplicationContext();
 
-                                mainappAll.starttime=System.currentTimeMillis();
+                                mainappAll.starttime = System.currentTimeMillis();
 
                                 String trimResult = result.replace(" ", "");
 
@@ -525,7 +538,7 @@ public void connectSendCodeFailUi(String failMsg){
                                     Log.d("log总数", logValue + "");
 
                                     try {
-                                        Thread.sleep(logValue*1000);//等n秒再向服务器请求
+                                        Thread.sleep(logValue * 1000);//等n秒再向服务器请求
                                     } catch (InterruptedException e) {
                                         e.printStackTrace();
                                     }
@@ -546,4 +559,69 @@ public void connectSendCodeFailUi(String failMsg){
 
     }
 
+    FoxProgressbarInterfaceHot foxProgressbarInterfaceHot;
+
+    public void connecterror() {
+        if (foxProgressbarInterfaceHot != null) foxProgressbarInterfaceHot.stopProgressBar();
+        Util.Toast(getActivity(), "提醒数据读取失败", null);
+    }
+
+    public void getSettingInfo() {
+
+        if (resultDeviceAll == null) return;
+        String code = "EA14";
+
+
+
+        resultDeviceAll.sendCommonCode(code, new QuinticCallbackTea<String>() {
+            @Override
+            public void onError(QuinticException ex) {
+                super.onError(ex);
+                new Handler(getActivity().getMainLooper())
+                        .post(new Runnable() {
+                            @Override
+                            public void run() {
+                                connecterror();
+                            }
+                        });
+
+            }
+
+            @Override
+            public void onComplete(final String result) {
+                super.onComplete(result);
+                if (result == null) {
+//                    connectSendCodeFailUi("电量查询失败");
+
+                    return;
+                }
+                new Handler(getActivity().getMainLooper())
+                        .post(new Runnable() {
+                            @Override
+                            public void run() {
+//BACK 0A 04 01 53result
+                                String trimResult = result.replace(" ", "");
+                                if (trimResult.contains("ea14")) {
+
+                                    if (foxProgressbarInterfaceHot != null)
+                                        foxProgressbarInterfaceHot.stopProgressBar();
+
+                                    Intent intent = new Intent(getActivity(), MineRemindsettingActivity_.class);
+
+                                    intent.putExtra("trimResult", trimResult);
+                                    getActivity().startActivity(intent);
+
+
+                                } else {
+                                    connecterror();
+                                }
+
+
+                            }
+                        });
+
+            }
+        });
+
+    }
 }

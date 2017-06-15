@@ -223,6 +223,10 @@ public class WelcomeActivity extends BaseActivity {
                 Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
             plist.add(Manifest.permission.READ_CONTACTS);
         }
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WAKE_LOCK) != PackageManager.PERMISSION_GRANTED) {
+            plist.add(Manifest.permission.WAKE_LOCK);
+        }
         if(plist.size()>0) {
             String[] toBeStored = plist.toArray(new String[plist.size()]);
 

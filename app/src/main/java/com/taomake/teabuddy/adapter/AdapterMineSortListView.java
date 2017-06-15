@@ -119,9 +119,12 @@ public class AdapterMineSortListView extends BaseAdapter {
         viewholder.sort_love_id.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {//点赞
-                if (position != 0) {
+                SortInfoObj sortInfoObj = mPersonal.get(position);
+
+                String tounionid=sortInfoObj.unionid;
+
+                if (position != 0&&tounionid!=null&& !unionid.equals(tounionid)) {
                     if (isclicked != null && !isclicked.equals("1")) {
-                        SortInfoObj sortInfoObj = mPersonal.get(position);
                         String fav = sortInfoObj.fav;
                         Integer favInt = Integer.valueOf(fav);
                         favInt = favInt + 1;
