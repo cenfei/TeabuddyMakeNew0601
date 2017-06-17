@@ -1,6 +1,7 @@
 package com.taomake.teabuddy.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -11,8 +12,10 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.taomake.teabuddy.R;
+import com.taomake.teabuddy.base.MainApp;
 import com.taomake.teabuddy.component.FoxProgressbarInterface;
 import com.taomake.teabuddy.component.FoxToastInterface;
+import com.taomake.teabuddy.fragment.HotFragment;
 import com.taomake.teabuddy.network.ProtocolUtil;
 import com.taomake.teabuddy.network.RowMessageHandler;
 import com.taomake.teabuddy.object.BaseJson;
@@ -334,6 +337,12 @@ public class ChooseTeaActivity extends BaseActivity {
                 Util.Toast(ChooseTeaActivity.this, "选茶成功", new FoxToastInterface.FoxToastCallback() {
                     @Override
                     public void toastCloseCallbak() {
+                        Intent intent = new Intent(HotFragment.MYACTION_UPDATE);
+                        Log.i("Broadcast Change Hot", "change hot fragment");
+                        intent.putExtra("updateteaid", "1");
+                        sendBroadcast(intent);
+
+
                         finish();
 
                     }
@@ -487,6 +496,13 @@ connectFindDevice(code.toUpperCase());
     boolean mustUpdate=false;
 
     public void connectFindDevice(final String code) {
+    final    MainApp mainApp=(MainApp)getApplicationContext();
+long endtime=System.currentTimeMillis();
+        if(endtime-mainApp.starttime<1000){
+          Util.Toast(this,"正在同步",null);
+            return;
+        }
+
         blindDeviceId = configPref.userDeviceMac().get();
         blindDeviceId = MyStringUtils.macStringToUpper(blindDeviceId);
         Log.e("blindDeviceId:", blindDeviceId);
@@ -519,6 +535,7 @@ connectFindDevice(code.toUpperCase());
                                             QuinticBleAPISdkBase.resultDevice = resultDeviceAll;
                                             // ************处理动作
                                             getbatteryLevel(code);
+                                            mainApp.starttime=System.currentTimeMillis();
 
                                         }
                                     });
@@ -551,7 +568,8 @@ connectFindDevice(code.toUpperCase());
     public void getbatteryLevel(String code) {
         if (resultDeviceAll == null) return;
 //        String code = "EA04";
-
+        MainApp mainApp=(MainApp)getApplicationContext();
+        mainApp.starttime=System.currentTimeMillis();
         resultDeviceAll.sendCommonCode(code, new QuinticCallbackTea<String>() {
             @Override
             public void onError(QuinticException ex) {
@@ -583,6 +601,8 @@ connectFindDevice(code.toUpperCase());
 //                                    byte[] data = QuinticCommon.stringToBytes(trimResult);
 //                                    batteryLevelValue = QuinticCommon.unsignedByteToInt(data[3]);
                                     Log.d("设置茶",   "设置茶成功,前往服务器保存");
+                                    MainApp mainApp=(MainApp)getApplicationContext();
+                                    mainApp.starttime=System.currentTimeMillis();
                                 } else {
                                     connectSendCodeFailUi("设置茶失败");
                                 }

@@ -1,15 +1,11 @@
 package com.taomake.teabuddy.activity;
 
-import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.PowerManager;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -75,17 +71,19 @@ public class MyCreateRecordsActivity extends BaseActivity {
     }
     private WechatShareManager mShareManager;
 
-    PowerManager.WakeLock mWakeLock;
+//    PowerManager.WakeLock mWakeLock;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mShareManager = WechatShareManager.getInstance(MyCreateRecordsActivity.this);
-        if (ContextCompat.checkSelfPermission(MyCreateRecordsActivity.this,
-                Manifest.permission.WAKE_LOCK) == PackageManager.PERMISSION_GRANTED) {
-            PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-            mWakeLock = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "My Tag");
-        }
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
+//        if (ContextCompat.checkSelfPermission(MyCreateRecordsActivity.this,
+//                Manifest.permission.WAKE_LOCK) == PackageManager.PERMISSION_GRANTED) {
+//            PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+//            mWakeLock = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "My Tag");
+//        }
 //        setContentView(R.layout.design_personal);
 //        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
@@ -185,7 +183,7 @@ public class MyCreateRecordsActivity extends BaseActivity {
         //退出activity前关闭菜单
 
         super.onDestroy();
-
+//        mWakeLock.release();
     }
 
     //**********网络***************/
@@ -197,7 +195,7 @@ public class MyCreateRecordsActivity extends BaseActivity {
     @Override
     public void onResume() {
         super.onResume();
-
+//        mWakeLock.acquire();
         pageNum = 1;
 
         if(boolCanusePress) {
@@ -297,6 +295,7 @@ public class MyCreateRecordsActivity extends BaseActivity {
         }
     }
     int selectTemp=-1;
+       String titleShare;
     class ItemClickListener implements AdapterView.OnItemClickListener {
         public void onItemClick(AdapterView<?> arg0,// The AdapterView where the
                                 // click happened
@@ -330,7 +329,7 @@ public class MyCreateRecordsActivity extends BaseActivity {
 //                    imageViewLast = imageView;
 ////                    gridview.invalidate();
 //                }
-                final   String titleShare=configPref.userName().get()+"刚刚分享了叫“"+MyStringUtils.decodeUnicode(voiceGroupObj.voicefile_title)+"”的录音";
+                titleShare=configPref.userName().get()+"刚刚分享了叫“"+MyStringUtils.decodeUnicode(voiceGroupObj.voicefile_title)+"”的录音";
 
                 new SZ_PayPopwindow_MyRecordBottom().showPopwindow(MyCreateRecordsActivity.this, imageView, new SZ_PayPopwindow_MyRecordBottom.CallBackPayWindow() {
 
@@ -431,19 +430,19 @@ public class MyCreateRecordsActivity extends BaseActivity {
                         String   blindDeviceId = configPref.userDeviceMac().get();
                         blindDeviceId = MyStringUtils.macStringToUpper(blindDeviceId);
                         Log.e("blindDeviceId:", blindDeviceId);
-                        if (ContextCompat.checkSelfPermission(MyCreateRecordsActivity.this,
-                                Manifest.permission.WAKE_LOCK) == PackageManager.PERMISSION_GRANTED) {
-                            mWakeLock.acquire();
-                        }
+//                        if (ContextCompat.checkSelfPermission(MyCreateRecordsActivity.this,
+//                                Manifest.permission.WAKE_LOCK) == PackageManager.PERMISSION_GRANTED) {
+//                            mWakeLock.acquire();
+//                        }
                         new Apply_Record_Popwindow().showPopwindow(MyCreateRecordsActivity.this, imageView,blindDeviceId,
                                 configPref.userUnion().get(),voiceGroupObj.voicefile_index, new Apply_Record_Popwindow.CallBackPayWindow() {
                                     @Override
                                     public void handleCallBackPayWindowFromStop(String recorddir) {
                                         boolCanusePress=true;
-                                        if (ContextCompat.checkSelfPermission(MyCreateRecordsActivity.this,
-                                                Manifest.permission.WAKE_LOCK) == PackageManager.PERMISSION_GRANTED) {
-                                            mWakeLock.release();
-                                        }
+//                                        if (ContextCompat.checkSelfPermission(MyCreateRecordsActivity.this,
+//                                                Manifest.permission.WAKE_LOCK) == PackageManager.PERMISSION_GRANTED) {
+//                                            mWakeLock.release();
+//                                        }
                                     }
 
                                     @Override

@@ -3,12 +3,15 @@ package com.taomake.teabuddy.util;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
@@ -42,6 +45,23 @@ import static android.content.Context.WINDOW_SERVICE;
 @SuppressLint("SimpleDateFormat")
 public class MyStringUtils {
 
+    /**
+     * 去市场下载页面
+     */
+    public static void goToMarket(Context context, String packageName) {
+        Uri uri = Uri.parse("market://details?id=" + packageName);
+        Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
+        try {
+            context.startActivity(goToMarket);
+        } catch (ActivityNotFoundException e) {
+        }
+    }
+
+    public static void restartApplication(Context context) {
+        final Intent intent = context.getPackageManager().getLaunchIntentForPackage(context.getPackageName());
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        context.startActivity(intent);
+    }
     public static void closeBle() {
 
         BluetoothAdapter mBluetoothAdapter = BluetoothAdapter

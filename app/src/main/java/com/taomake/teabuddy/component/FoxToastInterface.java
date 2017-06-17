@@ -30,7 +30,6 @@ public class FoxToastInterface {
             if (process <= 1) {
 
 
-
                 writehandler.postDelayed(this, 1000);
                 process = process + 1;
             } else {
@@ -39,23 +38,24 @@ public class FoxToastInterface {
                 stopProgressBar();
 
                 writehandler.removeCallbacks(runnable);
-                if(foxToastCallback!=null)
-                foxToastCallback.toastCloseCallbak();
+                if (foxToastCallback != null)
+                    foxToastCallback.toastCloseCallbak();
             }
         }
     };
 
 
-    public interface   FoxToastCallback{
+    public interface FoxToastCallback {
 
         public void toastCloseCallbak();
 
     }
-    FoxToastCallback  foxToastCallback ;
 
-    public void startProgressBar(Context context,String comment,FoxToastCallback foxToastCallback) {
+    FoxToastCallback foxToastCallback;
+
+    public void startProgressBar(Context context, String comment, FoxToastCallback foxToastCallback) {
         dialog = new Dialog(context, R.style.myprocessstyle);
-this.foxToastCallback=foxToastCallback;
+        this.foxToastCallback = foxToastCallback;
         writehandler.post(runnable);
 
 // 加载popuwindow 菊花
@@ -73,12 +73,12 @@ this.foxToastCallback=foxToastCallback;
         // .findViewById(R.id.wallet_bind_line);
         wallet_bind_image = (ImageView) dialog
                 .findViewById(R.id.wallet_bind_image);
-if(!TextUtils.isEmpty(comment)&&(comment.contains("成功")||comment.contains("完成"))){
-    wallet_bind_image.setImageDrawable(context.getResources().getDrawable(R.drawable.rc_apply));
-}else {
-    wallet_bind_image.setImageDrawable(context.getResources().getDrawable(R.drawable.pc_delete));
+        if (!TextUtils.isEmpty(comment) && (comment.contains("成功") || comment.contains("完成") || comment.contains("最新"))) {
+            wallet_bind_image.setImageDrawable(context.getResources().getDrawable(R.drawable.rc_apply));
+        } else {
+            wallet_bind_image.setImageDrawable(context.getResources().getDrawable(R.drawable.pc_delete));
 
-}
+        }
         TextView wallet_sycn_comment = (TextView) dialog
                 .findViewById(R.id.wallet_sycn_comment);
         wallet_sycn_comment.setText(comment);
@@ -89,7 +89,7 @@ if(!TextUtils.isEmpty(comment)&&(comment.contains("成功")||comment.contains("�
 
     public void stopProgressBar() {
 //        stopWaiting();
-        if(dialog!=null&&dialog.isShowing()) {
+        if (dialog != null && dialog.isShowing()) {
             dialog.dismiss();
         }
     }
@@ -161,8 +161,6 @@ if(!TextUtils.isEmpty(comment)&&(comment.contains("成功")||comment.contains("�
 //		currentIndex = 0;
 //		dots[currentIndex].setEnabled(false);// 设置为白色，即选中状态
     }
-
-
 
 
     /**

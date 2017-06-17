@@ -62,7 +62,9 @@ public class BleConnection {
 
     private boolean isRealConnected = false;
 
-    private boolean needMoreTimeout=false;
+    private boolean needMoreTimeout = false;
+
+    private long lastcodeTime = 0;
 
     /**
      * 初始化ble连接
@@ -282,25 +284,26 @@ public class BleConnection {
                 if (status == BluetoothGatt.GATT_SUCCESS) {
                     String writedata = QuinticCommon.unsignedBytesToHexString(characteristic.getValue(), " ");
 
-                    Log.i("----- ble write -----", QuinticCommon.unsignedBytesToHexString(characteristic.getValue(), " "));
+                    Log.i("----- ble write fox-----", QuinticCommon.unsignedBytesToHexString(characteristic.getValue(), " "));
 
                     String trimResult = writedata.replace(" ", "");
 
 
                     if (trimResult.contains("eb0cffff")) {
                         connectTimeout.restart(600000);
-                    }else{
+                    } else {
                         connectTimeout.restart(15000);
 
                     }
 
-                    for (BleDataObserver bleDataObserver : Observers.getBleDataObservers()) {
-                        bleDataObserver.onDataWrite(characteristic.getValue());
-                    }
-                    writeDataQueue.poll();
-                    doWrite();
-                    bleStateChangeCallback.onWrite(characteristic.getValue());
 
+                        for (BleDataObserver bleDataObserver : Observers.getBleDataObservers()) {
+                            bleDataObserver.onDataWrite(characteristic.getValue());
+                        }
+                        writeDataQueue.poll();
+                        doWrite();
+                        bleStateChangeCallback.onWrite(characteristic.getValue());
+//                    }
 
                     if (trimResult.equals("eb0501")) {
                         bleStateChangeCallback.onNotify(characteristic.getValue());
@@ -333,16 +336,20 @@ public class BleConnection {
 
                 if (trimResult.contains("eb0c00")) {
                     connectTimeout.restart(600000);
-                    needMoreTimeout=true;
-                }if (trimResult.contains("eb0c0b")) {
+                    needMoreTimeout = true;
+                }else{
+                    needMoreTimeout = false;
+
+                }
+                if (trimResult.contains("eb0c0b")) {
                     connectTimeout.restart(600000);
-                    needMoreTimeout=false;
+                    needMoreTimeout = false;
                 }
 
                 if (characteristic.getValue() != null && !(characteristic.getValue().length == 2 && QuinticCommon.matchData(characteristic.getValue(), new byte[]{0, 0}))) {
-                    if(needMoreTimeout) {
+                    if (needMoreTimeout) {
                         connectTimeout.restart(600000);
-                    }else{
+                    } else {
                         connectTimeout.restart(15000);
 
                     }
@@ -368,11 +375,12 @@ public class BleConnection {
                 Log.d("----- ble onDescriptorWrite -----", status + "");
                 if (BluetoothGatt.GATT_SUCCESS == status) {
                     if (descriptor.getUuid().toString().equals(DESCRIPTOR_NOTIFY_UUID)) {
-                        connectTimeout.cancel();
-                        bluetoothDevice = gatt.getDevice();
-                        isRealConnected = true;
-                        LockUtil.getInstance().releaseLock(LOCK_CONNECT_DEVICE);
-                        bleStateChangeCallback.onConnected(bluetoothDevice);
+                            connectTimeout.cancel();
+                            bluetoothDevice = gatt.getDevice();
+                            isRealConnected = true;
+                            LockUtil.getInstance().releaseLock(LOCK_CONNECT_DEVICE);
+                            bleStateChangeCallback.onConnected(bluetoothDevice);
+
                     }
                 } else {
                     errorWhenConnecting(new BleException(BleException.DEVICE_UNREACHABLE, "无法连接设备"));
@@ -432,7 +440,7 @@ public class BleConnection {
                         Log.d("connectDevice", "QuinticScanCallback---------");
 
                         try {
-                            if (Build.VERSION.SDK_INT <= 18||true) {
+                            if (Build.VERSION.SDK_INT <= 18 || true) {
                                 QuinticScanCallback cb = new QuinticScanCallback() {
                                     @Override
                                     public void onScan(QuinticScanResult scanResult) {
@@ -537,7 +545,7 @@ public class BleConnection {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                Log.d("Bleconnection","do disconnect");
+                Log.d("Bleconnection", "do disconnect");
 
                 LockUtil.getInstance().aquireLock(LOCK_CONNECT_DEVICE);
                 abort();

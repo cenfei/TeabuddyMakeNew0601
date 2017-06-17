@@ -86,7 +86,7 @@ class QuinticDeviceWithQueueSupportTea implements QuinticDeviceTea {
             @Override
             public void run() {
                 aquire();
-                device.sendCommonCode(code,new QCallback<String>(callback));
+                device.sendCommonCode(code, new QCallback<String>(callback));
             }
         }).start();
     }
@@ -97,7 +97,7 @@ class QuinticDeviceWithQueueSupportTea implements QuinticDeviceTea {
             @Override
             public void run() {
                 aquire();
-                device.sendListMp3Code(code,new QCallback<String>(callback));
+                device.sendListMp3Code(code, new QCallback<String>(callback));
             }
         }).start();
     }
@@ -109,6 +109,17 @@ class QuinticDeviceWithQueueSupportTea implements QuinticDeviceTea {
         LockUtil.getInstance().releaseLock(LOCK_QUINTICDEVICE_QUEUE);
     }
 
+    @Override
+    public void setConnectionNull() {
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                aquire();
+                device.disconnect();
+            }
+        }).start();
+    }
 
 
     private void aquire() {

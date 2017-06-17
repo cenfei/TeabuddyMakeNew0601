@@ -117,34 +117,35 @@ public class MainActivity extends BaseFragmentActivity {
 
         if (!TextUtils.isEmpty(deviceid)) {
             configPref.userDeviceId().put(deviceid);
-            SharedPreferences.Editor editor = getSharedPreferences("dataUNIION",MODE_PRIVATE).edit();
-            editor.putString("deviceid",deviceid);
+            SharedPreferences.Editor editor = getSharedPreferences("dataUNIION", MODE_PRIVATE).edit();
+            editor.putString("deviceid", deviceid);
             editor.commit();
 
         }
         if (!TextUtils.isEmpty(mac)) {
-            SharedPreferences.Editor editor = getSharedPreferences("dataUNIION",MODE_PRIVATE).edit();
-            editor.putString("mac",mac);
+            SharedPreferences.Editor editor = getSharedPreferences("dataUNIION", MODE_PRIVATE).edit();
+            editor.putString("mac", mac);
             editor.commit();
             configPref.userDeviceMac().put(mac);
         }
         if (!TextUtils.isEmpty(unionid)) {
             configPref.userUnion().put(unionid);
         }
-        SharedPreferences preferences=getSharedPreferences("dataUNIION", MODE_PRIVATE);
-        String nickname=preferences.getString("nickname", "");
+        SharedPreferences preferences = getSharedPreferences("dataUNIION", MODE_PRIVATE);
+        String nickname = preferences.getString("nickname", "");
         if (!TextUtils.isEmpty(nickname)) {
             configPref.userName().put(nickname);
         }
 
-        mainappAll=(MainApp)getApplicationContext();
+        mainappAll = (MainApp) getApplicationContext();
 
 
 //        mine_msg_id= (TextView)   findViewById(R.id.mine_msg_id);
 //        mine_msg_line= (LinearLayout)   findViewById(R.id.mine_msg_line);
 //        mine_msg_line.setVisibility(View.GONE);
     }
-MainApp  mainappAll=null;
+
+    MainApp mainappAll = null;
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -161,16 +162,16 @@ MainApp  mainappAll=null;
         //预先add fragments,防止anr时切换tab导致重复add exception
         String FromActivity = getIntent().getStringExtra("FromActivity");
 
-        if(TextUtils.isEmpty(FromActivity)) {
+        if (TextUtils.isEmpty(FromActivity)) {
             changePage(fragmentLuyin);
 //        changePage(fragmentPaocha);
             changePage(fragmentMine);
 
 //        if (flag == 0) {
             selectPay();
-        }else{
+        } else {
 
-        changePage(fragmentPaocha);
+            changePage(fragmentPaocha);
             changePage(fragmentMine);
             selectRun();
         }
@@ -182,7 +183,8 @@ MainApp  mainappAll=null;
 
     }
 
-boolean firstSelect=false;
+    boolean firstSelect = false;
+
     @Click(R.id.tab_luyin)
     void onTabRun() {
         selectRun();
@@ -223,9 +225,9 @@ boolean firstSelect=false;
 
     private void selectRun() {
 
-long endtime=System.currentTimeMillis();
+        long endtime = System.currentTimeMillis();
 
-        current=0;
+        current = 0;
         resetImg();
         resetTab(currentTab);
         selectTab(tab_luyin);
@@ -234,20 +236,21 @@ long endtime=System.currentTimeMillis();
         tab_luyin_img.setVisibility(View.GONE);
         tab_luyin_img_c.setVisibility(View.VISIBLE);
         tab_luyin_text.setTextColor(getResources().getColor(R.color.white));
-long starttime=mainappAll.starttime;
-        if(endtime-starttime>2000) {
+
+
+
             Intent intent = new Intent(HomeTabFragment.MYACTION_UPDATE_HOME);
             Log.i("Broadcast Change home", "change home fragment");
 
             sendBroadcast(intent);
-        }
+
 
     }
 
     private void selectPay() {
 
 
-        current=1;
+        current = 1;
         String unionid = configPref.userDeviceMac().get();
 
         if (unionid != null && !unionid.equals("")) {
@@ -260,19 +263,19 @@ long starttime=mainappAll.starttime;
             tab_paocha_img_c.setVisibility(View.VISIBLE);
             tab_paocha_text.setTextColor(getResources().getColor(R.color.white));
 
-            MainApp mainApp=(MainApp)getApplicationContext();
-         if(mainApp.boolchoosePaocha) {
-long endtime=System.currentTimeMillis();
+            MainApp mainApp = (MainApp) getApplicationContext();
+            if (mainApp.boolchoosePaocha) {
+                long endtime = System.currentTimeMillis();
 
-             long starttime=mainappAll.starttime;
-             if(endtime-starttime>2000) {
+                long starttime = mainappAll.starttime;
+                if (endtime - starttime >8000) {
 
-                 Intent intent = new Intent(HotFragment.MYACTION_UPDATE);
-                 Log.i("Broadcast Change Hot", "change hot fragment");
+                    Intent intent = new Intent(HotFragment.MYACTION_UPDATE);
+                    Log.i("Broadcast Change Hot", "change hot fragment");
 
-                 sendBroadcast(intent);
-             }
-         }
+                    sendBroadcast(intent);
+                }
+            }
         } else {//弹出选择对话框
 
             perssion_func();
@@ -303,7 +306,7 @@ long endtime=System.currentTimeMillis();
     }
 
     public void selectMine() {
-        current=2;
+        current = 2;
         String unionid = configPref.userDeviceMac().get();
 
         if (unionid != null && !unionid.equals("")) {
@@ -315,10 +318,10 @@ long endtime=System.currentTimeMillis();
             tab_mine_img_c.setVisibility(View.VISIBLE);
             tab_mine_text.setTextColor(getResources().getColor(R.color.white));
 
-            long endtime=System.currentTimeMillis();
+            long endtime = System.currentTimeMillis();
 
-            long starttime=mainappAll.starttime;
-            if(endtime-starttime>2000) {
+            long starttime = mainappAll.starttime;
+            if (endtime - starttime > 2000) {
                 Intent intent = new Intent(MineTabFragment.MYACTION_UPDATE_Mine);
                 Log.i("Broadcast Change MINE", "change MINE fragment");
 
@@ -332,7 +335,7 @@ long endtime=System.currentTimeMillis();
 
     }
 
-    public static Integer current=0;
+    public static Integer current = 0;
 
     private void changePage(Fragment fragment) {
 
@@ -363,22 +366,23 @@ long endtime=System.currentTimeMillis();
 //        Util.eventUnregister(this);
 //        unregisterReceiver(timeTickReceiver);
     }
-//    long starttime=0;
+
+    //    long starttime=0;
     @Override
     protected void onResume() {
         super.onResume();
         String FromActivity = getIntent().getStringExtra("FromActivity");
 
-        if(TextUtils.isEmpty(FromActivity)) {
+        if (TextUtils.isEmpty(FromActivity)) {
 
             getSumMsg();
         }
 
-        if(current==1){
-            long endtime=System.currentTimeMillis();
+        if (current == 1) {
+            long endtime = System.currentTimeMillis();
 
-            long starttime=mainappAll.starttime;
-            if(endtime-starttime>6000) {
+            long starttime = mainappAll.starttime;
+            if (endtime - starttime > 6000) {
                 Intent intent = new Intent(HotFragment.MYACTION_UPDATE);
                 Log.i("Broadcast Change Hot", "change hot fragment");
                 intent.putExtra("updateteaid", "1");
@@ -460,8 +464,8 @@ long endtime=System.currentTimeMillis();
             UnreadSumJson baseJson = new Gson().fromJson(resp, UnreadSumJson.class);
             if ((baseJson.rcode + "").equals(Constant.RES_SUCCESS)) {
 
-                Log.d("未读消息总共", baseJson.obj+"条");
-                if(!TextUtils.isEmpty(baseJson.obj)) {
+                Log.d("未读消息总共", baseJson.obj + "条");
+                if (!TextUtils.isEmpty(baseJson.obj)) {
                     Integer unreadnum = Integer.valueOf(baseJson.obj);
                     configPref.sedentaryInterval().put(unreadnum);
 
@@ -469,7 +473,7 @@ long endtime=System.currentTimeMillis();
                         mine_msg_line.setVisibility(View.VISIBLE);
 
                         mine_msg_id.setText(baseJson.obj);
-                    }else{
+                    } else {
                         mine_msg_line.setVisibility(View.GONE);
 
                     }
@@ -478,11 +482,6 @@ long endtime=System.currentTimeMillis();
 
         }
     }
-
-
-
-
-
 
 
 //

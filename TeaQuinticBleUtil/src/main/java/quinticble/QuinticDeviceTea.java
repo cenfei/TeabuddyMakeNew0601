@@ -15,7 +15,7 @@ public interface QuinticDeviceTea {
      * @return MAC地址
      */
     String getAddress();
-
+   void  setConnectionNull();
     BluetoothDevice getBluetoothDeviceTea();
 
     /**
