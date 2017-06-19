@@ -758,7 +758,12 @@ public class HotFragment extends Fragment {
     boolean mustUpdate = false;
 
     public void connectFindDevice() {
+        if (!MyStringUtils.isopenBluetooth(getActivity())) {
+            connectSendCodeFailUi("");
 
+
+            return;
+        }
         MainApp mainappAll=(MainApp)getActivity().getApplicationContext();
         long endtime=System.currentTimeMillis();
 
@@ -770,18 +775,7 @@ public class HotFragment extends Fragment {
 
 
 
-        if (!MyStringUtils.isopenBluetooth(getActivity())) {
-            connectSendCodeFailUi("");
 
-//            if (showcontnect) {
-//                connectSendCodeFailUi("");
-//            } else {
-//                connectUi();
-//                bluetooth_rel.setVisibility(View.VISIBLE);
-//
-//            }
-            return;
-        }
 
         blindDeviceId = configPref.userDeviceMac().get();
         blindDeviceId = MyStringUtils.macStringToUpper(blindDeviceId);

@@ -1,6 +1,7 @@
 package com.taomake.teabuddy.component;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
@@ -55,31 +56,31 @@ public class Apply_Record_Popwindow {
     private Integer chooseType = 1;//1代表刷刷钱包
     PopupWindow window;
     CallBackPayWindow callBackPayWindow;
-    TextView pop_process_record_id;
-    final Handler writehandler = new Handler();
-
-    int process = 1;
-    Runnable runnable = new Runnable() {
-        @Override
-        public void run() {
-            // TODO Auto-generated method stub
-            //要做的事情
-            if (process <= 6) {
-
-                pop_process_record_id.setText((6 - process + ""));
-
-                writehandler.postDelayed(this, 1000);
-                process = process + 1;
-            } else {
-                callBackPayWindow.handleCallBackPayWindowFromStop("src");
-
-
-                writehandler.removeCallbacks(runnable);
-                closePopupWindow(context);
-
-            }
-        }
-    };
+//    TextView pop_process_record_id;
+//    final Handler writehandler = new Handler();
+//
+//    int process = 1;
+//    Runnable runnable = new Runnable() {
+//        @Override
+//        public void run() {
+//            // TODO Auto-generated method stub
+//            //要做的事情
+//            if (process <= 6) {
+//
+//                pop_process_record_id.setText((6 - process + ""));
+//
+//                writehandler.postDelayed(this, 1000);
+//                process = process + 1;
+//            } else {
+//                callBackPayWindow.handleCallBackPayWindowFromStop("src");
+//
+//
+//                writehandler.removeCallbacks(runnable);
+//                closePopupWindow(context);
+//
+//            }
+//        }
+//    };
 
 
     String unionid;
@@ -137,6 +138,7 @@ public class Apply_Record_Popwindow {
 
     TextView connect_msg_id, connect_stop_record_id, apply_download_begin, apply_download_cancel, apply_download_comment;
 
+    private Dialog dialog;
     /**
      * @param view
      */
@@ -178,41 +180,54 @@ public class Apply_Record_Popwindow {
 
         apply_download_comment = (TextView) view.findViewById(R.id.apply_download_comment);
 
+        dialog = new Dialog(context, R.style.myprocessstyle);
 
+//        writehandler.post(runnable);
+
+// 加载popuwindow 菊花
+        dialog.setContentView(view);
+
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setCancelable(false);
+        try {
+            dialog.show();
+        } catch (Exception e) {
+
+        }
 //        window = new PopupWindow(view,
 //                WindowManager.LayoutParams.WRAP_CONTENT,
 //                WindowManager.LayoutParams.WRAP_CONTENT);
-        window = new PopupWindow(view,
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT, true);
-
-        view.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
-        int popupWidth = view.getMeasuredWidth();    //  获取测量后的宽度
-        int popupHeight = view.getMeasuredHeight();  //获取测量后的高度
-        int[] location = new int[2];
-
-
-        // 设置popWindow弹出窗体可点击，这句话必须添加，并且是true
-//        window.setFocusable(true);
-
-
-        // 实例化一个ColorDrawable颜色为半透明
-        ColorDrawable dw = new ColorDrawable(0x00000000);
-//        window.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.rounded_choose));
-//        window.setBackgroundDrawable( dw);
-
-
-        // 在底部显示
-        if (Util.checkDeviceHasNavigationBar(context)) {
-            window.showAtLocation(relView,
-                    Gravity.CENTER, 0, 0);
-//            setBackgroundAlpha(activity, 0.5f);
-        } else {
-            window.showAtLocation(relView,
-                    Gravity.CENTER, 0, 0);
-//            backgroundAlpha(0.5f, activity);
-
-        }
+//        window = new PopupWindow(view,
+//                ViewGroup.LayoutParams.MATCH_PARENT,
+//                ViewGroup.LayoutParams.MATCH_PARENT, true);
+//
+//        view.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+//        int popupWidth = view.getMeasuredWidth();    //  获取测量后的宽度
+//        int popupHeight = view.getMeasuredHeight();  //获取测量后的高度
+//        int[] location = new int[2];
+//
+//
+//        // 设置popWindow弹出窗体可点击，这句话必须添加，并且是true
+////        window.setFocusable(true);
+//
+//
+//        // 实例化一个ColorDrawable颜色为半透明
+//        ColorDrawable dw = new ColorDrawable(0x00000000);
+////        window.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.rounded_choose));
+////        window.setBackgroundDrawable( dw);
+//
+//
+//        // 在底部显示
+//        if (Util.checkDeviceHasNavigationBar(context)) {
+//            window.showAtLocation(relView,
+//                    Gravity.CENTER, 0, 0);
+////            setBackgroundAlpha(activity, 0.5f);
+//        } else {
+//            window.showAtLocation(relView,
+//                    Gravity.CENTER, 0, 0);
+////            backgroundAlpha(0.5f, activity);
+//
+//        }
 
 
     }
@@ -225,16 +240,19 @@ public class Apply_Record_Popwindow {
         if(callBackPayWindow!=null)
         callBackPayWindow.handleCallBackPayWindowFromStart("");
 
-        WindowManager.LayoutParams params = activity.getWindow().getAttributes();
-        params.alpha = 1f;
-        activity.getWindow().setAttributes(params);
+        if(dialog!=null)
+            dialog.dismiss();
 
-        if (window != null) {
-            window.dismiss();
-            window = null;
-            System.out.println("popWindow消失 ...");
-
-        }
+//        WindowManager.LayoutParams params = activity.getWindow().getAttributes();
+//        params.alpha = 1f;
+//        activity.getWindow().setAttributes(params);
+//
+//        if (window != null) {
+//            window.dismiss();
+//            window = null;
+//            System.out.println("popWindow消失 ...");
+//
+//        }
     }
 
     public interface CallBackPayWindow {
