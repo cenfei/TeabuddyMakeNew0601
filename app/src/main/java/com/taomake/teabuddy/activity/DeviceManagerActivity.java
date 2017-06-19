@@ -1,12 +1,17 @@
 package com.taomake.teabuddy.activity;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -22,6 +27,7 @@ import com.taomake.teabuddy.prefs.ConfigPref_;
 import com.taomake.teabuddy.util.Constant;
 import com.taomake.teabuddy.util.ImageLoaderUtil;
 import com.taomake.teabuddy.util.Util;
+import com.taomake.teabuddy.wxapi.WXEntryActivity;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
@@ -54,12 +60,57 @@ public class DeviceManagerActivity extends BaseActivity {
     @Click(R.id.mg_unbind_id)
     void onmg_unbind_id() {
 
+        checkCameraPersimion();
+
+    }
+
+
+    int MY_PERMISSIONS_REQUEST_CALL_PHONE2=2002;
+
+    public void checkCameraPersimion(){
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED)
+        {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.CAMERA},
+                    MY_PERMISSIONS_REQUEST_CALL_PHONE2);
+            //权限还没有授予，需要在这里写申请权限的代码
+        }else {
+            //权限已经被授予，在这里直接写要执行的相应方法即可
+            toSencodQrcode();
+        }
+
+    }
+
+    public void toSencodQrcode(){
         Intent intent = new Intent();
         intent.setClass(DeviceManagerActivity.this, SecondQrCodeAddDevice_.class);
 
         startActivity(intent);
-
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults)
+    {
+
+
+
+
+        if (requestCode == MY_PERMISSIONS_REQUEST_CALL_PHONE2)
+        {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
+            {
+                toSencodQrcode();
+            } else
+            {
+                // Permission Denied
+                Toast.makeText(DeviceManagerActivity.this, "Permission Denied", Toast.LENGTH_SHORT).show();
+            }
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
 
     @Click(R.id.left_title_line)
     void onLeftTitleLine() {
@@ -72,12 +123,9 @@ public class DeviceManagerActivity extends BaseActivity {
 
     @Click(R.id.right_title_line)
     void onright_title_line() {
-        Intent intent = new Intent();
-        intent.setClass(DeviceManagerActivity.this, SecondQrCodeAddDevice_.class);
 
-        startActivity(intent);
 //        finish();
-
+        checkCameraPersimion();
     }
 
     @Click(R.id.update_line_id)
