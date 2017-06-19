@@ -76,7 +76,18 @@ class QuinticDeviceTeaImpl implements QuinticDeviceTea {
      * 设备类型
      */
     private Long deviceType;
-    private BleConnection connection;
+    public BleConnection connection;
+
+    public  void setConnectionNull(){
+        try{
+        if(connection!=null) {
+            connection.disconnect();
+            connection = null;
+        }}
+        catch (Exception e){
+            Log.d("setConnectionNull",""+e.getMessage());
+        }
+    }
 
     /**
      * 初始化设备
@@ -120,6 +131,9 @@ class QuinticDeviceTeaImpl implements QuinticDeviceTea {
     @Override
     public void reconnect(final QuinticCallbackTea<Void> callback) {
         try {
+
+
+
             final BleConnection connection = getConnection();
             connection.connectDevice(device.getAddress(), new BleStateChangeCallback() {
                 @Override

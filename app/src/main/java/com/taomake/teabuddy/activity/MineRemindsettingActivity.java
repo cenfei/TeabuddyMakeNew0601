@@ -271,7 +271,7 @@ public class MineRemindsettingActivity extends BaseActivity {
 
 
         String trimResult = getIntent().getStringExtra("trimResult");
-        if (TextUtils.isEmpty(trimResult)) {
+        if (!TextUtils.isEmpty(trimResult)) {
             initdata(trimResult);
         } else {
             connecterror();

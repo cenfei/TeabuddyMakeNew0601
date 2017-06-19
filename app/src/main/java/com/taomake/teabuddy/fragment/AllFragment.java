@@ -55,9 +55,24 @@ public class AllFragment extends Fragment {
     ConfigPref_ configPref;
     @ViewById(R.id.shutdown_line)
     LinearLayout shutdown_line;
+
     @Click(R.id.shutdown_line)
     void onshutdown_line() {
         if (!MyStringUtils.isopenBluetooth(getActivity())) return;
+
+
+        MainApp mainappAll = (MainApp) getActivity().getApplicationContext();
+
+        long endtime = System.currentTimeMillis();
+
+        long starttime = mainappAll.starttime;
+
+
+        if (endtime - starttime < 1000) {
+            Util.Toast(getActivity(),"正在同步",null);
+
+            return;
+        }
 
         new One_Permission_Popwindow().showPopwindow(getActivity(), shutdown_line, "确认关闭茶密电源？插电即可重新开机", "确认", "取消", new One_Permission_Popwindow.CallBackPayWindow() {
             @Override
@@ -141,6 +156,25 @@ public class AllFragment extends Fragment {
                                 long arg3// The row id of the item that was clicked
         ) {
             if (!MyStringUtils.isopenBluetooth(getActivity())) return;
+            if (!MyStringUtils.isNotNullAndEmpty(QuinticBleAPISdkBase.resultDevice)) {
+
+                Util.Toast(getActivity(), "请先连接茶密", null);
+                return;
+            }
+
+            MainApp mainappAll = (MainApp) getActivity().getApplicationContext();
+
+            long endtime = System.currentTimeMillis();
+
+            long starttime = mainappAll.starttime;
+
+
+            if (endtime - starttime < 500) {
+                Util.Toast(getActivity(), "正在泡茶请稍等", null);
+
+                return;
+            }
+
 
             // 显示所选Item的ItemText
             blindDeviceId = configPref.userDeviceMac().get();
@@ -149,7 +183,7 @@ public class AllFragment extends Fragment {
             switch (postion) {
 
                 case 0://泡茶音乐
-                    if(!MyStringUtils.isopenBluetooth(getActivity())) return;
+                    if (!MyStringUtils.isopenBluetooth(getActivity())) return;
 
                     new Record_Setting_Popwindow().showPopwindow(getActivity(), arg1, blindDeviceId, new Record_Setting_Popwindow.CallBackPayWindow() {
 
@@ -161,7 +195,7 @@ public class AllFragment extends Fragment {
 
                     break;
                 case 1://音量
-                    if(!MyStringUtils.isopenBluetooth(getActivity())) return;
+                    if (!MyStringUtils.isopenBluetooth(getActivity())) return;
 
                     new Volume_Popwindow().showPopwindow(getActivity(), arg1, blindDeviceId, new Volume_Popwindow.CallBackPayWindow() {
                         @Override
@@ -172,27 +206,27 @@ public class AllFragment extends Fragment {
 
                     break;
                 case 2://灯光
-String code=null;
-                    if(light_value==0){
-                        code="EB02";
-                        lookLightStatus(getActivity(), code,false);
+                    String code = null;
+                    if (light_value == 0) {
+                        code = "EB02";
+                        lookLightStatus(getActivity(), code, false);
 
-                    }else{
-                        code="EB03";
-                        final String codef=code;
-new One_Permission_Popwindow().showPopwindow(getActivity(), shutdown_line, "主人，您确定\n要关闭灯光吗？", "确认", "取消", new One_Permission_Popwindow.CallBackPayWindow() {
-    @Override
-    public void handleCallBackChangeUser() {//确定
+                    } else {
+                        code = "EB03";
+                        final String codef = code;
+                        new One_Permission_Popwindow().showPopwindow(getActivity(), shutdown_line, "你确定要关闭灯光吗？", "确认", "取消", new One_Permission_Popwindow.CallBackPayWindow() {
+                            @Override
+                            public void handleCallBackChangeUser() {//确定
 
-        lookLightStatus(getActivity(), codef,false);
+                                lookLightStatus(getActivity(), codef, false);
 
-    }
+                            }
 
-    @Override
-    public void handleCallBackBindDevice() {
+                            @Override
+                            public void handleCallBackBindDevice() {
 
-    }
-});
+                            }
+                        });
 
                     }
 
@@ -223,9 +257,18 @@ new One_Permission_Popwindow().showPopwindow(getActivity(), shutdown_line, "主�
             blindDeviceId = MyStringUtils.macStringToUpper(blindDeviceId);
             Log.e("blindDeviceId:", blindDeviceId);
 
+            MainApp mainApp = (MainApp) getActivity().getApplicationContext();
+            long starttime = mainApp.starttime;
+            long endtime = System.currentTimeMillis();
+            if (endtime - starttime > 60000) {
+                connectFindDevice(getActivity());
+            } else {
+                if (mainApp.boofirstFragmentAll) {
 
-            connectFindDevice(getActivity());
+                    connectFindDevice(getActivity());
+                }
 
+            }
             Log.d("AllFragment", "当前可见");
 
         }
@@ -243,7 +286,7 @@ new One_Permission_Popwindow().showPopwindow(getActivity(), shutdown_line, "主�
     FoxProgressbarInterface foxProgressbarInterface;
 
     public void connectFindDevice(final Context context) {
-        if(!MyStringUtils.isopenBluetooth(getActivity())) return;
+        if (!MyStringUtils.isopenBluetooth(getActivity())) return;
 
 //        foxProgressbarInterface=new FoxProgressbarInterface();
 //        foxProgressbarInterface.startProgressBar(getActivity(),"茶密初始化");
@@ -251,77 +294,70 @@ new One_Permission_Popwindow().showPopwindow(getActivity(), shutdown_line, "主�
         if (MyStringUtils.isNotNullAndEmpty(QuinticBleAPISdkBase.resultDevice)) {
             resultDeviceAll = QuinticBleAPISdkBase.resultDevice;
             // ************处理动作
-            MainApp mainApp=(MainApp)getActivity().getApplicationContext();
-            long starttime=mainApp.starttime;
-            long endtime=System.currentTimeMillis();
-            if(endtime-starttime>6000) {
+
                 getLightStatus(context, false);
-            }
         } else {
-        QuinticDeviceFactoryTea quinticDeviceFactory = QuinticBleAPISdkBase
-                .getInstanceFactory(context);
+            QuinticDeviceFactoryTea quinticDeviceFactory = QuinticBleAPISdkBase
+                    .getInstanceFactory(context);
 
-        quinticDeviceFactory.findDevice(blindDeviceId,
-                new QuinticCallbackTea<QuinticDeviceTea>() {
+            quinticDeviceFactory.findDevice(blindDeviceId,
+                    new QuinticCallbackTea<QuinticDeviceTea>() {
 
-                    @Override
-                    public void onComplete(final QuinticDeviceTea resultDevice) {
-                        super.onComplete(resultDevice);
-                        new Handler(context.getMainLooper())
-                                .post(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        resultDeviceAll = resultDevice;
-                                        QuinticBleAPISdkBase.resultDevice = resultDeviceAll;
-                                        // ************处理动作
-                                        MainApp mainApp=(MainApp)getActivity().getApplicationContext();
-                                        long starttime=mainApp.starttime;
-                                        long endtime=System.currentTimeMillis();
-                                        if(endtime-starttime>6000) {
-                                            getLightStatus(context, false);
-                                        }
-                                    }
-                                });
-                    }
+                        @Override
+                        public void onComplete(final QuinticDeviceTea resultDevice) {
+                            super.onComplete(resultDevice);
+                            new Handler(context.getMainLooper())
+                                    .post(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            resultDeviceAll = resultDevice;
+                                            QuinticBleAPISdkBase.resultDevice = resultDeviceAll;
+                                            // ************处理动作
 
-                    @Override
-                    public void onError(final QuinticException ex) {
-                        new Handler(context.getMainLooper())
-                                .post(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        if (countError < 1) {
-                                            Log.d("connectFindDevice ex",
-                                                    ex.getCode()
-                                                            + ""
-                                                            + ex.getMessage());
-                                            connectFindDevice(context);
-                                            countError++;
-                                        } else {
+                                                getLightStatus(context, false);
+                                            }
+
+                                    });
+                        }
+
+                        @Override
+                        public void onError(final QuinticException ex) {
+                            new Handler(context.getMainLooper())
+                                    .post(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            if (countError < 1) {
+                                                Log.d("connectFindDevice ex",
+                                                        ex.getCode()
+                                                                + ""
+                                                                + ex.getMessage());
+                                                connectFindDevice(context);
+                                                countError++;
+                                            } else {
 //                                            unconnectUi();
-                                            // *****************连接失败
+                                                // *****************连接失败
 //                                                Util.Toast(context,
 //                                                        "");
+                                            }
                                         }
-                                    }
-                                });
-                    }
-                });
+                                    });
+                        }
+                    });
         }
     }
 
 
     public void connectSendCodeFailUi(String msg) {
-        MainApp mainApp=(MainApp)getActivity().getApplicationContext();
-        mainApp.starttime=System.currentTimeMillis();
+        MainApp mainApp = (MainApp) getActivity().getApplicationContext();
+        mainApp.starttime = System.currentTimeMillis();
         if (foxProgressbarInterface != null)
             foxProgressbarInterface.stopProgressBar();
 
     }
 
     public void connectSendCodeSuccesslUi_Light(int value) {
-        MainApp mainApp=(MainApp)getActivity().getApplicationContext();
-        mainApp.starttime=System.currentTimeMillis();
+        MainApp mainApp = (MainApp) getActivity().getApplicationContext();
+        mainApp.starttime = System.currentTimeMillis();
         if (foxProgressbarInterface != null)
             foxProgressbarInterface.stopProgressBar();
 
@@ -342,12 +378,16 @@ new One_Permission_Popwindow().showPopwindow(getActivity(), shutdown_line, "主�
     int light_value = 0;//0是off 1on
     int second_value = 0;
 
-    public void lookLightStatus(final Context context,final String code, final boolean boolplay) {
-        if(!MyStringUtils.isopenBluetooth(getActivity())) return;
+    public void lookLightStatus(final Context context, final String code, final boolean boolplay) {
+        if (!MyStringUtils.isopenBluetooth(getActivity())) return;
 
         if (resultDeviceAll == null) return;
-       // String code = "EB02";
+        // String code = "EB02";
         final String msg = "设置指示灯失败";
+        MainApp mainappAll = (MainApp) getActivity().getApplicationContext();
+
+        mainappAll.starttime = System.currentTimeMillis();
+
         resultDeviceAll.sendCommonCode(code, new QuinticCallbackTea<String>() {
             @Override
             public void onError(QuinticException ex) {
@@ -374,6 +414,9 @@ new One_Permission_Popwindow().showPopwindow(getActivity(), shutdown_line, "主�
 
 
                                     getLightStatus(context, false);
+                                    MainApp mainappAll = (MainApp) getActivity().getApplicationContext();
+
+                                    mainappAll.starttime = System.currentTimeMillis();
 
 
                                 } else {
@@ -391,11 +434,15 @@ new One_Permission_Popwindow().showPopwindow(getActivity(), shutdown_line, "主�
 
     public void getLightStatus(final Context context, final boolean boolplay) {
 
-        if(!MyStringUtils.isopenBluetooth(getActivity())) return;
+        if (!MyStringUtils.isopenBluetooth(getActivity())) return;
 
         if (resultDeviceAll == null) return;
         String code = "EA02";
         final String msg = "查询指示灯失败";
+        MainApp mainappAll = (MainApp) getActivity().getApplicationContext();
+
+        mainappAll.starttime = System.currentTimeMillis();
+
         resultDeviceAll.sendCommonCode(code, new QuinticCallbackTea<String>() {
             @Override
             public void onError(QuinticException ex) {
@@ -445,14 +492,19 @@ new One_Permission_Popwindow().showPopwindow(getActivity(), shutdown_line, "主�
     }
 
     FoxProgressbarInterface foxProgressbarInterface05;
+
     public void setCubMusic(final Context context) {
 //        foxProgressbarInterface05 = new FoxProgressbarInterface();
 //
 //        foxProgressbarInterface05.startProgressBar(context, "蓝牙读取中...");
-        if(!MyStringUtils.isopenBluetooth(getActivity())) return;
+        if (!MyStringUtils.isopenBluetooth(getActivity())) return;
 
 
         if (resultDeviceAll == null) return;
+        MainApp mainappAll = (MainApp) getActivity().getApplicationContext();
+
+        mainappAll.starttime = System.currentTimeMillis();
+
         String code = "EB0501";
         final String msg = "呼叫茶杯失败";
         process = 1;
@@ -487,11 +539,13 @@ new One_Permission_Popwindow().showPopwindow(getActivity(), shutdown_line, "主�
 //BACK ea 09 01 00 00 00 00 00 01 e2 63 00
                                 String trimResult = result.replace(" ", "");
                                 if (trimResult.contains("ea0501")) {
-                                    MainApp mainApp=(MainApp)getActivity().getApplicationContext();
-                                    mainApp.starttime=System.currentTimeMillis();
+                                    MainApp mainApp = (MainApp) getActivity().getApplicationContext();
+                                    mainApp.starttime = System.currentTimeMillis();
                                     if (foxProgressbarInterface != null)
                                         foxProgressbarInterface.stopProgressBar();
+                                    MainApp mainappAll = (MainApp) getActivity().getApplicationContext();
 
+                                    mainappAll.starttime = System.currentTimeMillis();
 
 
                                 } else {
@@ -551,7 +605,7 @@ new One_Permission_Popwindow().showPopwindow(getActivity(), shutdown_line, "主�
 
         //跳转到 我的页面
 
-        Util.Toast(getActivity(), "主人，茶密\n已关机成功",null);
+        Util.Toast(getActivity(), "茶密已关机成功", null);
         MainActivity mainActivity = (MainActivity) getActivity();
         mainActivity.selectMine();
 
@@ -560,12 +614,14 @@ new One_Permission_Popwindow().showPopwindow(getActivity(), shutdown_line, "主�
     int shutDownCount = 0;
 
     public void shutDownCub(final Context context) {
-        if(!MyStringUtils.isopenBluetooth(getActivity())) return;
+        if (!MyStringUtils.isopenBluetooth(getActivity())) return;
 
         if (resultDeviceAll == null) return;
         String code = "EB0B";
         final String msg = "关机失败";
+        MainApp mainappAll = (MainApp) getActivity().getApplicationContext();
 
+        mainappAll.starttime = System.currentTimeMillis();
 
         resultDeviceAll.sendCommonCode(code, new QuinticCallbackTea<String>() {
             @Override
@@ -597,6 +653,9 @@ new One_Permission_Popwindow().showPopwindow(getActivity(), shutdown_line, "主�
 //BACK ea 09 01 00 00 00 00 00 01 e2 63 00
                                 String trimResult = result.replace(" ", "");
                                 if (trimResult.contains("eb01")) {
+                                    MainApp mainappAll = (MainApp) getActivity().getApplicationContext();
+
+                                    mainappAll.starttime = System.currentTimeMillis();
 
                                     connectSendCodeSuccesslUiShutDown();
 //                                    QuinticDeviceFactoryTea quinticDeviceFactory = QuinticBleAPISdkBase

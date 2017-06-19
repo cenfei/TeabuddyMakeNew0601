@@ -126,7 +126,7 @@ public class Apply_Record_Popwindow {
             case 2:
                 //这个时候需要去连接蓝牙  发送eb19
 
-//               setVoiceInit();
+               setVoiceInit();
                 apply_ready_line.setVisibility(View.VISIBLE);
                 break;
             default:
@@ -478,7 +478,7 @@ public class Apply_Record_Popwindow {
                         .post(new Runnable() {
                             @Override
                             public void run() {
-                                connectSendCodeFailUi("电量查询失败");
+                                connectSendCodeFailUi("语音清空失败");
                             }
                         });
             }
@@ -487,7 +487,7 @@ public class Apply_Record_Popwindow {
             public void onComplete(final String result) {
                 super.onComplete(result);
                 if (result == null) {
-                    connectSendCodeFailUi("电量查询失败");
+                    connectSendCodeFailUi("语音清空失败");
 
                     return;
                 }
@@ -498,9 +498,9 @@ public class Apply_Record_Popwindow {
 //BACK 0A 04 01 53result
                                 String trimResult = result.replace(" ", "");
                                 if (trimResult.contains("eb19")) {
-                                    Log.d("当前电量", "录音初始化eb19成功");
+                                    Log.d("语音清空", "录音初始化eb19成功");
                                 } else {
-                                    connectSendCodeFailUi("电量查询失败");
+                                    connectSendCodeFailUi("语音清空失败");
                                 }
 
                             }

@@ -65,6 +65,7 @@ public class QuinticDeviceFactoryTea {
      * @param device 设备
      * @return quintic设备
      */
+    QuinticDeviceTea quinticDevice0;
     private QuinticDeviceTea createDeviceByVersion(BluetoothDevice device, BleConnection bleConnection) {
         QuinticDeviceTea quinticDevice;
 //        if (version == 112 || version == 113 || version == 114 || version == 115 || version == 116 || version == 117) {
@@ -79,6 +80,7 @@ public class QuinticDeviceFactoryTea {
 
         Log.d("QuinticDeviceTeaImpl","QuinticDeviceTeaImpl");
         quinticDevice = new QuinticDeviceTeaImpl(bleConnection, this.context, device);
+        quinticDevice0=quinticDevice;
         Log.d("QueueSupportTea","QueueSupportTea");
 
         quinticDevice = new QuinticDeviceWithQueueSupportTea(quinticDevice);
@@ -89,6 +91,10 @@ public class QuinticDeviceFactoryTea {
     }
     public BluetoothGatt bluetoothGatt;
 
+    public void setConnectionNull(){
+        deviceMap.clear();
+        quinticDevice0.setConnectionNull();
+    }
     public BleConnection conn=null;
 
     private void leConnect(final String deviceAddress, final QuinticCallbackTea<QuinticDeviceTea> callback) {

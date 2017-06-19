@@ -1,9 +1,5 @@
 package com.taomake.teabuddy.activity;
 
-import android.content.ActivityNotFoundException;
-import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -21,6 +17,7 @@ import com.taomake.teabuddy.network.RowMessageHandler;
 import com.taomake.teabuddy.object.AppVersionJson;
 import com.taomake.teabuddy.prefs.ConfigPref_;
 import com.taomake.teabuddy.util.Constant;
+import com.taomake.teabuddy.util.MyStringUtils;
 import com.taomake.teabuddy.util.Util;
 
 import org.androidannotations.annotations.AfterViews;
@@ -79,22 +76,12 @@ public class MineAppsettingActivity extends BaseActivity {
 
 if(boolUpdate) {
 
-    goToMarket(MineAppsettingActivity.this,this.getPackageName());
+    MyStringUtils.goToMarket(MineAppsettingActivity.this,this.getPackageName());
 }
 
     }
 
-    /**
-     * 去市场下载页面
-     */
-    public void goToMarket(Context context, String packageName) {
-        Uri uri = Uri.parse("market://details?id=" + packageName);
-        Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
-        try {
-            context.startActivity(goToMarket);
-        } catch (ActivityNotFoundException e) {
-        }
-    }
+
     @Click(R.id.backidea_rel_id)
     void onbackidea_rel_id() {//意见反馈
 

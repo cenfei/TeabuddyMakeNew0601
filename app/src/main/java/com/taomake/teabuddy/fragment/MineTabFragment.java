@@ -23,10 +23,8 @@ import com.makeramen.RoundedImageView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taomake.teabuddy.R;
-import com.taomake.teabuddy.activity.MainActivity;
 import com.taomake.teabuddy.activity.MineAppsettingActivity_;
 import com.taomake.teabuddy.activity.MineMessageListActivity_;
-import com.taomake.teabuddy.activity.MineRemindsettingActivity;
 import com.taomake.teabuddy.activity.MineRemindsettingActivity_;
 import com.taomake.teabuddy.activity.MineSortListActivity_;
 import com.taomake.teabuddy.activity.WelcomeActivity_;
@@ -112,6 +110,8 @@ public class MineTabFragment extends Fragment implements SwipeRefreshLayout.OnRe
         if (!MyStringUtils.isNotNullAndEmpty(QuinticBleAPISdkBase.resultDevice)) {
             Util.Toast(getActivity(), "主人请先链接茶密", null);
         } else {
+            resultDeviceAll = QuinticBleAPISdkBase.resultDevice;
+
             foxProgressbarInterfaceHot = new FoxProgressbarInterfaceHot();
 
             foxProgressbarInterfaceHot.startProgressBar(getActivity(), "加载中..", 15, new FoxProgressbarInterfaceHot.FoxHotCallback() {
@@ -120,13 +120,13 @@ public class MineTabFragment extends Fragment implements SwipeRefreshLayout.OnRe
                     connecterror();
                 }
             });
-            MainApp mainappAll=(MainApp)getActivity().getApplicationContext();
-            long endtime=System.currentTimeMillis();
+            MainApp mainappAll = (MainApp) getActivity().getApplicationContext();
+            long endtime = System.currentTimeMillis();
 
-            long starttime=mainappAll.starttime;
-            if(endtime-starttime>2000) {
+            long starttime = mainappAll.starttime;
+            if (endtime - starttime > 2000) {
                 getSettingInfo();
-            }else{
+            } else {
 
 
                 new Handler().postDelayed(new Runnable() {
@@ -134,7 +134,7 @@ public class MineTabFragment extends Fragment implements SwipeRefreshLayout.OnRe
                     public void run() {
                         getSettingInfo();
                     }
-                },endtime-starttime);
+                }, 2000);
 
             }
 
@@ -184,7 +184,26 @@ public class MineTabFragment extends Fragment implements SwipeRefreshLayout.OnRe
             if (MYACTION_UPDATE_Mine.equals(intent.getAction())) {
                 Log.i("onReceive", "change receiverMine...");
 
-                changeui();
+                MainApp mainappAll = (MainApp) getActivity().getApplicationContext();
+
+                long endtime = System.currentTimeMillis();
+
+                long starttime = mainappAll.starttime;
+
+
+                if (endtime - starttime > 2000) {
+                    changeui();
+                } else {
+                    if (mainappAll.boofirstFragmentMine) {
+                        changeui();
+                    } else {
+                        getMinePersonInfoFunc();
+
+                    }
+
+                }
+
+
             }
         }
     };
@@ -298,9 +317,7 @@ public class MineTabFragment extends Fragment implements SwipeRefreshLayout.OnRe
     public void onResume() {
 
         super.onResume();
-        if (MainActivity.current == 2) {
 
-        }
 
     }
 
@@ -308,13 +325,13 @@ public class MineTabFragment extends Fragment implements SwipeRefreshLayout.OnRe
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-        if (!isVisibleToUser) {
-//            Log.d("HotFragment", "不可见");
-
-        } else {
-            changeui();
-
-        }
+//       if (!isVisibleToUser) {
+////            Log.d("HotFragment", "不可见");
+//
+//        } else {
+//             changeui();
+//
+//        }
     }
 
     @AfterViews
@@ -343,8 +360,8 @@ public class MineTabFragment extends Fragment implements SwipeRefreshLayout.OnRe
     FoxProgressbarInterface foxProgressbarInterface;
 
     public void getMinePersonInfoFunc() {
-        foxProgressbarInterface = new FoxProgressbarInterface();
-        foxProgressbarInterface.startProgressBar(getActivity(), "加载中...");
+//        foxProgressbarInterface = new FoxProgressbarInterface();
+//        foxProgressbarInterface.startProgressBar(getActivity(), "加载中...");
 //        czid="2533";//测试这个有数据
         ProtocolUtil.getMinePersonInfo(getActivity(), new GetMinePersonInfoFuncHandler(), configPref.userUnion().get());//devno 空表示所有
 
@@ -361,7 +378,7 @@ public class MineTabFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
 
     public void getMinePersonInfoFuncHandler(String resp) {
-        foxProgressbarInterface.stopProgressBar();
+//        foxProgressbarInterface.stopProgressBar();
         if (resp != null && !resp.equals("")) {
             MinePersonInfoJson teaDetailJsonGloabl = new Gson().fromJson(resp, MinePersonInfoJson.class);
             if ((teaDetailJsonGloabl.rcode + "").equals(Constant.RES_SUCCESS)) {
@@ -413,7 +430,8 @@ public class MineTabFragment extends Fragment implements SwipeRefreshLayout.OnRe
             getMinePersonInfoFunc();
             return;
         }
-
+        MainApp mainappAll = (MainApp) getActivity().getApplicationContext();
+        mainappAll.starttime = System.currentTimeMillis();
         if (MyStringUtils.isNotNullAndEmpty(QuinticBleAPISdkBase.resultDevice)) {
             foxProgressbarInterface = new FoxProgressbarInterface();
 
@@ -497,7 +515,8 @@ public class MineTabFragment extends Fragment implements SwipeRefreshLayout.OnRe
         if (resultDeviceAll == null) return;
         String code = "EA07";
         final String failMsg = "历史LOG查询失败";
-
+        MainApp mainappAll = (MainApp) getActivity().getApplicationContext();
+        mainappAll.starttime = System.currentTimeMillis();
         resultDeviceAll.sendCommonCode(code, new QuinticCallbackTea<String>() {
             @Override
             public void onError(QuinticException ex) {
@@ -528,7 +547,7 @@ public class MineTabFragment extends Fragment implements SwipeRefreshLayout.OnRe
                                 MainApp mainappAll = (MainApp) getActivity().getApplicationContext();
 
                                 mainappAll.starttime = System.currentTimeMillis();
-
+                                mainappAll.boofirstFragmentMine = false;
                                 String trimResult = result.replace(" ", "");
 
                                 if (trimResult.contains("ea07")) {
@@ -571,8 +590,8 @@ public class MineTabFragment extends Fragment implements SwipeRefreshLayout.OnRe
         if (resultDeviceAll == null) return;
         String code = "EA14";
 
-
-
+        MainApp mainappAll = (MainApp) getActivity().getApplicationContext();
+        mainappAll.starttime = System.currentTimeMillis();
         resultDeviceAll.sendCommonCode(code, new QuinticCallbackTea<String>() {
             @Override
             public void onError(QuinticException ex) {
@@ -610,7 +629,8 @@ public class MineTabFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
                                     intent.putExtra("trimResult", trimResult);
                                     getActivity().startActivity(intent);
-
+                                    MainApp mainappAll = (MainApp) getActivity().getApplicationContext();
+                                    mainappAll.starttime = System.currentTimeMillis();
 
                                 } else {
                                     connecterror();

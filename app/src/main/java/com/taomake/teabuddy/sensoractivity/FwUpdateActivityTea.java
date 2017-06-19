@@ -79,6 +79,7 @@ import com.example.ti.util.Conversion;
 import com.taomake.teabuddy.base.MainApp;
 import com.taomake.teabuddy.object.DeviceVersionObj;
 import com.taomake.teabuddy.util.Constant;
+import com.taomake.teabuddy.util.Util;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -191,7 +192,15 @@ public class FwUpdateActivityTea extends Activity {
         mConnControlService = mDeviceActivityTea.getConnControlService();
 
         // Characteristics list
+
+
         mCharListOad = mOadService.getCharacteristics();
+        if(mConnControlService==null){
+            Util.Toast(FwUpdateActivityTea.this,"该款设备无法升级，请使用IOS升级",null);
+
+            return;
+        }
+
         mCharListCc = mConnControlService.getCharacteristics();
 
         mServiceOk = mCharListOad.size() == 2 && mCharListCc.size() >= 3;

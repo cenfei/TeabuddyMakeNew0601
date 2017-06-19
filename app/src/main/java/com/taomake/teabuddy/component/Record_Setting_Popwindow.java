@@ -15,6 +15,7 @@ import android.widget.PopupWindow;
 
 import com.taomake.teabuddy.R;
 import com.taomake.teabuddy.adapter.MyGridSettingRecordAdapter;
+import com.taomake.teabuddy.base.MainApp;
 import com.taomake.teabuddy.object.DbRecordInfoObj;
 import com.taomake.teabuddy.util.MyStringUtils;
 import com.taomake.teabuddy.util.Util;
@@ -309,7 +310,9 @@ private List<DbRecordInfoObj> dbRecordInfoObjList=new ArrayList<DbRecordInfoObj>
     public void connectSendCodeSuccesslUi(){
 if(foxProgressbarInterface!=null)
         foxProgressbarInterface.stopProgressBar();
+        MainApp mainappAll = (MainApp) context.getApplicationContext();
 
+        mainappAll.starttime = System.currentTimeMillis();
     }
     int first_value=0;
     int second_value=0;
