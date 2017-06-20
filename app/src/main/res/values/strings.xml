@@ -22,6 +22,8 @@
     <string name="logining">程序在后台执行, 请查看日志！</string>
     <string name="setting_su">设置成功</string>
 
+    <string name="bt_not_supported">bt_not_supported</string>
+
     <!-- JPUSH-->
 
     <string name="app_name">茶密录音机</string>

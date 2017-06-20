@@ -4,6 +4,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
@@ -13,6 +14,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.taomake.teabuddy.R;
 import com.taomake.teabuddy.base.MainApp;
 import com.taomake.teabuddy.component.FoxProgressbarInterface;
@@ -21,6 +23,7 @@ import com.taomake.teabuddy.network.RowMessageHandler;
 import com.taomake.teabuddy.object.DeviceVersionObj;
 import com.taomake.teabuddy.prefs.ConfigPref_;
 import com.taomake.teabuddy.sensoractivity.DeviceActivityTea;
+import com.taomake.teabuddy.util.Constant;
 import com.taomake.teabuddy.util.MyStringUtils;
 
 import org.androidannotations.annotations.AfterViews;
@@ -29,6 +32,14 @@ import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
 import org.androidannotations.annotations.sharedpreferences.Pref;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -501,10 +512,18 @@ String  updatetext=MyStringUtils.decodeUnicode(deviceVersionObj.content);
 //                                                intent.putExtra("MAC_DEVICE", blindDeviceId);
 //                                                startActivity(intent);
 //                                                finish();
+
+                                                    DeviceVersionObj deviceVersionObj=new Gson().fromJson(configPref.deviceUpdateInfo().get(), DeviceVersionObj.class);
+//
+//
+
                                     foxProgressbarInterface = new FoxProgressbarInterface();
 
                                     foxProgressbarInterface.startProgressBar(DeviceUpdateTwoActivity.this, "OAD数据读取中...");
-                                    writehandler.post(runnable);
+                                    downloadBin(deviceVersionObj.url, Constant.path_bin_name);
+
+
+//                                    writehandler.post(runnable);
 //                                    BluetoothAdapter mBluetoothAdapter = BluetoothAdapter
 //                                            .getDefaultAdapter();
 //                                    if (mBluetoothAdapter == null) {
@@ -565,6 +584,107 @@ String  updatetext=MyStringUtils.decodeUnicode(deviceVersionObj.content);
     }
 
 
+
+    public void downloadBin(final String urlStr, final String fileName) {
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+//                String fileName = "2.mp3";
+                OutputStream output = null;
+                String pathName = null;
+                try {
+                /*
+                 * 通过URL取得HttpURLConnection
+                 * 要网络连接成功，需在AndroidMainfest.xml中进行权限配置
+                 * <uses-permission android:name="android.permission.INTERNET" />
+                 */
+                    URL url = new URL(urlStr);
+                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                    //取得inputStream，并将流中的信息写入SDCard
+
+                /*
+                 * 写前准备
+                 * 1.在AndroidMainfest.xml中进行权限配置
+                 * <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+                 * 取得写入SDCard的权限
+                 * 2.取得SDCard的路径： Environment.getExternalStorageDirectory()
+                 * 3.检查要保存的文件上是否已经存在
+                 * 4.不存在，新建文件夹，新建文件
+                 * 5.将input流中的信息写入SDCard
+                 * 6.关闭流
+                 */
+                    String path= Constant.path;
+                    String SDCard = Environment.getExternalStorageDirectory() + "";
+                    pathName = SDCard + "/" + path + "/" + fileName;//文件存储路径
+
+                    File file = new File(pathName);
+                    InputStream input = conn.getInputStream();
+                    if (file.exists()) {
+                        System.out.println("exits");
+//                        file.delete();
+//                        return;
+                    } else {
+                        String dir = SDCard + "/" + path;
+                        new File(dir).mkdir();//新建文件夹
+                        file.createNewFile();//新建文件
+
+                    }
+
+                    output = new FileOutputStream(file);
+                    byte[] voice_bytes = new byte[1024];
+                    int len1 = -1;
+                    while ((len1 = input.read(voice_bytes)) != -1) {
+                        output.write(voice_bytes, 0, len1);
+                        output.flush();
+
+                    }
+
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } finally {
+                    try {
+                        output.close();
+                        System.out.println("success");
+                    } catch (IOException e) {
+                        System.out.println("fail");
+                        e.printStackTrace();
+                    }
+                }
+
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        foxProgressbarInterface.stopProgressBar();
+                        Intent intent = new Intent(DeviceUpdateTwoActivity.this, DeviceActivityTea.class);
+                        intent.putExtra("deviceVersionObj", configPref.deviceUpdateInfo().get());
+
+                        String version = getIntent().getStringExtra("upversion");
+                        intent.putExtra("upversion", version);
+
+                        intent.putExtra("MAC_DEVICE", blindDeviceId);
+                        startActivity(intent);
+                        finish();
+                    }
+                });
+
+//                Message msg = myHandler.obtainMessage();
+//
+//                Bundle bundle = new Bundle();
+//                bundle.putString("pathname", pathName);
+//                msg.setData(bundle);
+//                myHandler.sendMessage(msg);
+
+            }
+
+        }).start();
+        // String urlStr="http://172.17.54.91:8080/download/1.mp3";
+
+
+    }
 
 
 }

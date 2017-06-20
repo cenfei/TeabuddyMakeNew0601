@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    android:background="#58afab"
+    android:orientation="vertical"
+
+
+    >
+    <include layout="@layout/sensorheader" />
+    <LinearLayout
+        android:id="@+id/title_line_id"
+        android:layout_width="wrap_content"
+        android:layout_height="59dp"
+        android:layout_marginTop="87dp"
+        android:layout_marginLeft="30dp"
+        android:orientation="horizontal"
+        >
+
+        <ImageView
+            android:layout_width="38dp"
+            android:layout_height="59dp"
+            android:src="@drawable/dv_update_small"
+            />
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:gravity="left"
+            >
+            <TextView
+
+                android:id="@+id/tea_os_version"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_alignParentTop="true"
+                android:textAlignment="center"
+                android:textColor="#ffffff"
+                android:textSize="18sp" />
+
+            <TextView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="MADISON ART DESIGN"
+                android:gravity="center"
+
+                android:textAlignment="center"
+                android:textColor="#ffffff"
+                android:textSize="12sp"
+                android:layout_above="@+id/text_db_size"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
+            <TextView
+
+                android:id="@+id/text_db_size"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2.2"
+                android:layout_alignParentBottom="true"
+                android:layout_marginTop="3dp"
+                android:gravity="center"
+                android:textAlignment="center"
+                android:textColor="#ffffff"
+                android:textSize="12sp" />
+
+        </RelativeLayout>
+
+
+
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/view_line_id"
+        android:layout_below="@+id/title_line_id"
+        android:layout_width="match_parent"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginRight="30dp"
+        android:layout_height="1dp"
+        android:background="#ffffff"
+        />
+
+
+    <LinearLayout
+        android:layout_below="@+id/view_line_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="30dp"
+        android:layout_marginLeft="30dp"
+        android:orientation="vertical"
+
+        android:id="@+id/linearLayout">
+        <LinearLayout
+            android:id="@+id/comment_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="28dp"
+
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="-  "
+                android:gravity="left"
+
+                android:textColor="#88ffffff"
+                android:textSize="12sp"
+                />
+
+            <TextView
+                android:id="@+id/comment_content_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+
+                android:textColor="#88ffffff"
+                android:textSize="12sp"
+                />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="28dp"
+
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="-  "
+                android:gravity="left"
+
+                android:textColor="#88ffffff"
+                android:textSize="12sp"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="此版本修复了在杯子遇到验证码问题"
+                android:gravity="left"
+
+                android:textColor="#88ffffff"
+                android:textSize="12sp"
+                />
+        </LinearLayout>
+        <LinearLayout
+            android:visibility="gone"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="28dp"
+
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="-  "
+                android:gravity="left"
+
+                android:textColor="#88ffffff"
+                android:textSize="12sp"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="此版本修复了在杯子遇到验证码修复该问题"
+                android:gravity="left"
+
+                android:textColor="#88ffffff"
+                android:textSize="12sp"
+                />
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+
+    <TextView
+
+        android:id="@+id/one_text_line"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="安装"
+        android:gravity="center"
+        android:textAlignment="center"
+        android:textColor="#ffffff"
+        android:textSize="15sp"
+        android:layout_below="@+id/linearLayout"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="61dp" />
+</RelativeLayout>

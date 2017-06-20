@@ -287,12 +287,6 @@
             android:configChanges="keyboard|screenSize|orientation|layoutDirection"/>
 
         <activity
-            android:name="com.taomake.teabuddy.sensoractivity.DeviceMainActivitySensor"
-            android:screenOrientation="portrait"
-
-            android:configChanges="keyboard|screenSize|orientation|layoutDirection"/>
-
-        <activity
             android:name=".sensoractivity.FwUpdateActivityTea"
             android:screenOrientation="portrait"
 
@@ -424,7 +418,7 @@
 
 
         <service
-            android:name="com.example.ti.ble.common.BluetoothLeService"
+            android:name="com.taomake.teabuddy.sensoractivity.BluetoothLeService"
             android:enabled="true" />
         <service android:name="org.eclipse.paho.android.service.MqttService"
             android:enabled="true" />
