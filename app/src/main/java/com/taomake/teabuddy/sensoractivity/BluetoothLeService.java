@@ -14,6 +14,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -191,16 +192,16 @@ public class BluetoothLeService extends Service {
 
     private boolean checkGatt() {
         if (mBtAdapter == null) {
-            // Log.w(TAG, "BluetoothAdapter not initialized");
+            Log.w(TAG, "BluetoothAdapter not initialized");
             return false;
         }
         if (mBluetoothGatt == null) {
-            // Log.w(TAG, "BluetoothGatt not initialized");
+             Log.w(TAG, "BluetoothGatt not initialized");
             return false;
         }
 
         if (mBusy) {
-            // Log.w(TAG, "LeService busy");
+            Log.w(TAG, "LeService busy");
             return false;
         }
         return true;

@@ -24,8 +24,10 @@ import android.widget.Toast;
 
 import com.taomake.teabuddy.R;
 import com.taomake.teabuddy.base.MainApp;
+import com.taomake.teabuddy.component.FoxProgressbarInterfaceHot;
 import com.taomake.teabuddy.object.DeviceVersionObj;
 import com.taomake.teabuddy.util.Constant;
+import com.taomake.teabuddy.util.Util;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -121,6 +123,7 @@ public class FwUpdateActivityTea extends Activity {
             mCharConnReq = mCharListCc.get(1);
         }
     }
+
     ProgressBar mProgressBar;
     TextView mProgressInfo;
 
@@ -129,6 +132,7 @@ public class FwUpdateActivityTea extends Activity {
 
     RelativeLayout update_process_success_rel;
     RelativeLayout update_process_rel;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         Log.d(TAG, "onCreate");
@@ -143,7 +147,7 @@ public class FwUpdateActivityTea extends Activity {
         tea_os_version.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startProgramming();
+//                startProgramming();
             }
         });
 
@@ -166,20 +170,23 @@ public class FwUpdateActivityTea extends Activity {
 //                } catch (Exception e) {
 //
 //                }
+                if (mProgramming) {
+                    Util.Toast(FwUpdateActivityTea.this, "正在升级进制退出", null);
+                } else {
+                    setResult(RESULT_OK);
 
-                setResult(RESULT_OK);
-
-                finish();
+                    finish();
+                }
             }
         });
         MainApp mainApp = (MainApp) getApplicationContext();
 
-        DeviceVersionObj deviceVersionObj=mainApp.deviceVersionObj;
-        String  version =deviceVersionObj.ver;
-        if(!TextUtils.isEmpty(version)) {
-            tea_os_version.setText("Cha OS " +version);
+        DeviceVersionObj deviceVersionObj = mainApp.deviceVersionObj;
+        String version = deviceVersionObj.ver;
+        if (!TextUtils.isEmpty(version)) {
+            tea_os_version.setText("Cha OS " + version);
 
-        }else{
+        } else {
             tea_os_version.setText("Cha OS 1.0");
 
         }
@@ -234,9 +241,11 @@ public class FwUpdateActivityTea extends Activity {
     public void onBackPressed() {
         Log.d(TAG, "onBackPressed");
         if (mProgramming) {
-            Toast.makeText(this, "正在升级进制退出", Toast.LENGTH_LONG).show();
-        } else
+            Util.Toast(FwUpdateActivityTea.this, "正在升级进制退出", null);
+        } else {
+            setResult(RESULT_OK);
             super.onBackPressed();
+        }
     }
 
     boolean firsttime = true;
@@ -245,14 +254,6 @@ public class FwUpdateActivityTea extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-//        if (mServiceOk) {
-//            registerReceiver(mGattUpdateReceiver, mIntentFilter);
-//
-//            getTargetImageInfo();
-//            setConnectionParameters();
-//        } else {
-//            Toast.makeText(this, "OAD service initialisation failed", Toast.LENGTH_LONG).show();
-//        }
 
 
         if (firsttime) {
@@ -306,10 +307,10 @@ public class FwUpdateActivityTea extends Activity {
                     mTargImgHdr.imgType = ((mTargImgHdr.ver & 1) == 1) ? 'B' : 'A';
                     mTargImgHdr.len = Conversion.buildUint16(value[3], value[2]);
                     displayImageInfo(null, mTargImgHdr);
-//                    if (firstStart) {
-//                        startProgramming();
-//                        firstStart = false;
-//                    }
+                    if (firstStart) {
+                        startProgramming();
+                        firstStart = false;
+                    }
 
 
                 }
@@ -444,8 +445,9 @@ public class FwUpdateActivityTea extends Activity {
 
     /**
      * 加载更新bin文件
+     *
      * @param filepath 更新的image文件路径
-     * @param isAsset 是从asset目录加载还是从手机目录选择
+     * @param isAsset  是从asset目录加载还是从手机目录选择
      * @return 返回true 表示加载成功，否则加载失败
      */
     private boolean loadFile(String filepath, boolean isAsset) {
@@ -478,27 +480,23 @@ public class FwUpdateActivityTea extends Activity {
         mFileImgHdr.len = Conversion.buildUint16(mFileBuffer[7], mFileBuffer[6]);
 
 
+        int result = 0;
+        if (mFileImgHdr.len < 0) {
+            byte hi_l = mFileBuffer[7];
+            byte lo_l = mFileBuffer[6];
+            String hi_hi_str = Conversion.toHex(hi_l);
+            int h1 = Integer.parseInt(hi_hi_str, 16);
 
-        int result=0;
-        if(mFileImgHdr.len<0){
-            byte hi_l=mFileBuffer[7];
-            byte  lo_l=mFileBuffer[6];
-            String hi_hi_str=   Conversion.toHex(hi_l);
-            int h1=Integer.parseInt(hi_hi_str, 16);
+            result = h1 * 16 * 16;
 
-            result=h1*16*16;
+            String lo_hi_str = Conversion.toHex(lo_l);
+            int h2 = Integer.parseInt(lo_hi_str, 16);
 
-            String lo_hi_str=   Conversion.toHex(lo_l);
-            int h2=Integer.parseInt(lo_hi_str, 16);
-
-            result=result+h2;
-
-
-
+            result = result + h2;
 
 
         }
-        mFileImgHdr.len=result;
+        mFileImgHdr.len = result;
         mFileImgHdr.imgType = ((mFileImgHdr.ver & 1) == 1) ? 'B' : 'A';
         System.arraycopy(mFileBuffer, 8, mFileImgHdr.uid, 0, 4);
         displayImageInfo(null, mFileImgHdr);
@@ -525,7 +523,8 @@ public class FwUpdateActivityTea extends Activity {
 
 
     /**
-     *显示bin文件版本
+     * 显示bin文件版本
+     *
      * @param v
      * @param h
      */
@@ -555,16 +554,19 @@ public class FwUpdateActivityTea extends Activity {
         timeEstimate = ((float) (mFileImgHdr.len * 4) / (float) mProgInfo.iBytes) * sec;
 
         int othertime = (int) ((timeEstimate - sec) / 60);
-        if (othertime > 40) {
-            txt = "马上开始升级";
-        } else {
-            if(othertime==0){
-                int othertimes = (int) ((timeEstimate - sec) %60);
-                txt = "还需约" + othertimes + "秒";
-            }else {
-                txt = "还需约" + othertime + "分钟";
-            }
-        }
+        int othertimes = (int) ((timeEstimate - sec) % 60);
+
+
+        int othertimefox= (int) (timeEstimate - sec);
+        txt = "还需时间约" + othertimefox + "秒" ;
+
+//        if (othertime > 40) {
+//            txt = "马上开始升级";
+//        } else {
+//
+//            txt = "还需时间约" + othertime + ":" + othertimes;
+//
+//        }
         mProgressInfo.setText(txt);
     }
 
@@ -585,6 +587,7 @@ public class FwUpdateActivityTea extends Activity {
 
     /**
      * 给ble发送数据
+     *
      * @param c 需要操作的Characteristic
      * @param v 写入的数据
      * @return 操作是否成功
@@ -599,7 +602,8 @@ public class FwUpdateActivityTea extends Activity {
 
     /**
      * 启用notify接收数据
-     * @param c 需要操作的Characteristic
+     *
+     * @param c      需要操作的Characteristic
      * @param enable true启用false停用
      * @return
      */
@@ -657,28 +661,41 @@ public class FwUpdateActivityTea extends Activity {
                 if (mProgInfo.iBlocks == mProgInfo.nBlocks) {
 
 
-                    try {
-                        Thread.sleep(60000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+//                    try {
+//                        Thread.sleep(6000);
+//                    } catch (InterruptedException e) {
+//                        e.printStackTrace();
+//                    }
                     runOnUiThread(new Runnable() {
                         public void run() {
-                            mProgramming = false;
-                            update_process_sucess_text.setVisibility(View.VISIBLE);
-                            update_process_rel.setVisibility(View.GONE);
-                            update_process_success_rel.setVisibility(View.VISIBLE);
-                            MainApp mainApp = (MainApp) getApplicationContext();
-                            mainApp.boolupdateSuccess = 2;
 
-                            Log.d("closedisconnect", "closedisconnect");
-                            if (mLeService != null) {
-                                mLeService.closedisconnect();
+
+                            FoxProgressbarInterfaceHot foxProgressbarInterfaceHot=new FoxProgressbarInterfaceHot();
+                            foxProgressbarInterfaceHot.startProgressBar(FwUpdateActivityTea.this, "重启中", 6, new FoxProgressbarInterfaceHot.FoxHotCallback() {
+                                @Override
+                                public void foxhotCallback() {
+                                    mProgramming = false;
+                                    update_process_sucess_text.setVisibility(View.VISIBLE);
+                                    update_process_rel.setVisibility(View.GONE);
+                                    update_process_success_rel.setVisibility(View.VISIBLE);
+                                    MainApp mainApp = (MainApp) getApplicationContext();
+                                    mainApp.boolupdateSuccess = 2;
+
+                                    Log.d("closedisconnect", "closedisconnect");
+                                    if (mLeService != null) {
+                                        mLeService.closedisconnect();
 //                                mLeService.closedisconnect();
-                            }
-                            QuinticBleAPISdkBase.resultDevice = null;
+                                    }
+                                    QuinticBleAPISdkBase.resultDevice = null;
 
-                            closeBle();
+                                    closeBle();
+                                }
+                            });
+
+
+
+
+
                         }
                     });
                 }
@@ -720,6 +737,7 @@ public class FwUpdateActivityTea extends Activity {
 
 
     }
+
     /**
      * 发送数据线程
      */

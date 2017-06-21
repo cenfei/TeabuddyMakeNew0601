@@ -26,10 +26,12 @@ import android.widget.Toast;
 
 import com.taomake.teabuddy.R;
 import com.taomake.teabuddy.base.MainApp;
+import com.taomake.teabuddy.component.FoxProgressbarInterface;
 import com.taomake.teabuddy.component.One_Permission_Popwindow;
 import com.taomake.teabuddy.object.DeviceVersionObj;
 import com.taomake.teabuddy.util.Constant;
 import com.taomake.teabuddy.util.MyStringUtils;
+import com.taomake.teabuddy.util.Util;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -56,7 +58,7 @@ public class DeviceActivityTea extends Activity {
     private BluetoothLeService mBluetoothLeService = null;  //自定义的BluetoothLeService 句柄
     private boolean mBleSupported = true; //是否支持蓝牙4.0
     private boolean mScanning = false; //是否正在扫描
-//    private static BluetoothManager mBluetoothManager; //蓝牙设备管理器
+    //    private static BluetoothManager mBluetoothManager; //蓝牙设备管理器
     public BluetoothAdapter mBtAdapter = null; //蓝牙适配器
 
     private int PACKAGE_SIZE = 16;
@@ -74,6 +76,7 @@ public class DeviceActivityTea extends Activity {
 
     }
 
+    FoxProgressbarInterface foxProgressbarInterface;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -83,7 +86,6 @@ public class DeviceActivityTea extends Activity {
         setContentView(R.layout.sensor_device_update_two);
 
 
-
         TextView tea_os_version = (TextView) findViewById(R.id.tea_os_version);
         TextView text_db_size = (TextView) findViewById(R.id.text_db_size);
 
@@ -91,15 +93,15 @@ public class DeviceActivityTea extends Activity {
 
         MainApp mainApp = (MainApp) getApplicationContext();
 
-        DeviceVersionObj deviceVersionObj=mainApp.deviceVersionObj;
-        String  sysdownloadsize=deviceVersionObj.downloadsize;
-        String  version =deviceVersionObj.ver;
-        String  updatetext= MyStringUtils.decodeUnicode(deviceVersionObj.content);
-        if(!TextUtils.isEmpty(version)) {
-            tea_os_version.setText("Cha OS " +version);
+        DeviceVersionObj deviceVersionObj = mainApp.deviceVersionObj;
+        String sysdownloadsize = deviceVersionObj.downloadsize;
+        String version = deviceVersionObj.ver;
+        String updatetext = MyStringUtils.decodeUnicode(deviceVersionObj.content);
+        if (!TextUtils.isEmpty(version)) {
+            tea_os_version.setText("Cha OS " + version);
             text_db_size.setText(sysdownloadsize);
             comment_content_id.setText(updatetext);
-        }else{
+        } else {
             tea_os_version.setText("Cha OS 1.0");
             text_db_size.setText("0kb");
             comment_content_id.setText("传统修复");
@@ -120,15 +122,10 @@ public class DeviceActivityTea extends Activity {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-        }else {
+        } else {
             startBluetoothLeService();
             // BLE
         }
-
-
-
-
-
 
 
 //        setContentView(com.taomake.teabuddy.layout.);
@@ -206,9 +203,7 @@ public class DeviceActivityTea extends Activity {
     }
 
 
-
-
-//    private BroadcastReceiver mReceiver = new BroadcastReceiver() {
+    //    private BroadcastReceiver mReceiver = new BroadcastReceiver() {
 //        @Override
 //        public void onReceive(Context context, Intent intent) {
 //            final String action = intent.getAction();
@@ -271,13 +266,6 @@ public class DeviceActivityTea extends Activity {
 //    }
 
 
-
-
-
-
-
-
-
     private void sendData(byte[] data) {
 
         int length = data.length;
@@ -313,11 +301,9 @@ public class DeviceActivityTea extends Activity {
         }
     }
 
-    public  void arrayCopy(byte[] src,byte[] des,int start,int length)
-    {
-        for(int i = start;i<start+length;i++)
-        {
-            des[i-start] = src[i];
+    public void arrayCopy(byte[] src, byte[] des, int start, int length) {
+        for (int i = start; i < start + length; i++) {
+            des[i - start] = src[i];
         }
     }
 
@@ -343,7 +329,7 @@ public class DeviceActivityTea extends Activity {
         byte[] data = new byte[len / 2];
         for (int i = 0; i < len; i += 2) {
             data[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4)
-                    + Character.digit(s.charAt(i+1), 16));
+                    + Character.digit(s.charAt(i + 1), 16));
         }
         return data;
     }
@@ -371,7 +357,7 @@ public class DeviceActivityTea extends Activity {
      */
     private boolean writeDataWithResponse(byte[] data) {
         if (mBluetoothLeService != null) {
-          return  mBluetoothLeService.writeDataWithResponse(data);
+            return mBluetoothLeService.writeDataWithResponse(data);
         }
         return false;
     }
@@ -392,9 +378,11 @@ public class DeviceActivityTea extends Activity {
             mIsReceiving = true;
         }
     }
+
     String deviceVersionObjStr;
+
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
-    public void  initDevice(){
+    public void initDevice() {
         Intent intent = getIntent();
 
 //        mBtLeService = BluetoothLeService.getInstance();
@@ -403,14 +391,13 @@ public class DeviceActivityTea extends Activity {
 
 //        String deviceName = "88:4A:EA:83:A5:62";
 
-        String deviceName=getIntent().getStringExtra("MAC_DEVICE");
+        String deviceName = getIntent().getStringExtra("MAC_DEVICE");
 
-        deviceVersionObjStr=   intent.getStringExtra("deviceVersionObj");
+        deviceVersionObjStr = intent.getStringExtra("deviceVersionObj");
         mBluetoothDevice = mBluetoothLeService.mBtAdapter.getRemoteDevice(deviceName);
 
         int connState = mBluetoothManager.getConnectionState(mBluetoothDevice,
                 BluetoothGatt.GATT);
-
 
 
         switch (connState) {
@@ -419,7 +406,7 @@ public class DeviceActivityTea extends Activity {
 
                 break;
             case BluetoothGatt.STATE_DISCONNECTED:
-                boolean   ok = mBluetoothLeService.connect(mBluetoothDevice.getAddress());
+                boolean ok = mBluetoothLeService.connect(mBluetoothDevice.getAddress());
                 if (!ok) {
                     setError("Connect failed");
                 }
@@ -430,7 +417,6 @@ public class DeviceActivityTea extends Activity {
                 setError("Device busy (connecting/disconnecting)");
                 break;
         }
-
 
 
 //        mServiceList = new ArrayList<BluetoothGattService>();
@@ -467,8 +453,6 @@ public class DeviceActivityTea extends Activity {
 //        new com.example.ti.ble.common.GattInfo(xpp);
 
 
-
-
 //        if (!mIsReceiving) {
 //            registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
 //            mIsReceiving = true;
@@ -480,7 +464,7 @@ public class DeviceActivityTea extends Activity {
 //        }
 //        this.mBtLeService.abortTimedDisconnect();
 
-        one_text_line=(TextView)   findViewById(R.id.one_text_line);
+        one_text_line = (TextView) findViewById(R.id.one_text_line);
 
         one_text_line.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -491,7 +475,7 @@ public class DeviceActivityTea extends Activity {
 
             }
         });
-        LinearLayout left_title_line=(LinearLayout)   findViewById(R.id.left_title_line);
+        LinearLayout left_title_line = (LinearLayout) findViewById(R.id.left_title_line);
 
         left_title_line.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -508,6 +492,9 @@ public class DeviceActivityTea extends Activity {
     TextView one_text_line;
 
     private void startBluetoothLeService() {
+        foxProgressbarInterface = new FoxProgressbarInterface();
+        foxProgressbarInterface.startProgressBar(this, "初始化OAD...");
+
         boolean f;
 
         Intent bindIntent = new Intent(this, BluetoothLeService.class);
@@ -519,7 +506,6 @@ public class DeviceActivityTea extends Activity {
             finish();
         }
     }
-
 
 
     private final ServiceConnection mServiceConnection = new ServiceConnection() {
@@ -606,7 +592,7 @@ public class DeviceActivityTea extends Activity {
                     /*if (name!=null && name.contains("FPTe") ||name.contains("GK") || device
                             .getAddress().equals("7C:EC:79:EF:BA:09")) {*/
 
-                    if(!m_isConnect) {
+                    if (!m_isConnect) {
                         scanLeDevice(false);
                         mBluetoothDevice = device;
                         m_isConnect = !m_isConnect;
@@ -675,11 +661,16 @@ public class DeviceActivityTea extends Activity {
         }
     }
 
-    @Override
-    public void startActivityForResult(Intent intent, int requestCode) {
-        super.startActivityForResult(intent, requestCode);
 
-        finish();
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        Log.d("onActivityResult", " onActivityResult " + requestCode + " " + resultCode);
+        if (requestCode == FWUPDATE_ACT_REQ && resultCode == RESULT_OK) {
+            Log.d("onActivityResult", " finish " );
+
+            finish();
+        }
 
     }
 
@@ -699,12 +690,8 @@ public class DeviceActivityTea extends Activity {
      * @param txt
      */
     private void setStatus(String txt) {
-        Toast.makeText(this, txt, Toast.LENGTH_SHORT).show();
-    }
-
-
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+//        Toast.makeText(this, txt, Toast.LENGTH_SHORT).show();
+        Util.Toast(this,txt,null);
     }
 
 
@@ -720,7 +707,12 @@ public class DeviceActivityTea extends Activity {
 
             if (BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
                 if (status == BluetoothGatt.GATT_SUCCESS) {
-                    setStatus("Service discovery complete");
+                    if (foxProgressbarInterface != null)
+                        foxProgressbarInterface.stopProgressBar();
+                    setStatus("初始化成功");
+
+
+
                 } else {
                     Toast.makeText(getApplication(), "Service discovery failed",
                             Toast.LENGTH_LONG).show();
@@ -781,7 +773,7 @@ public class DeviceActivityTea extends Activity {
 //                        mFwButton.setEnabled(true);
                     }
                 });
-            } else if(BluetoothLeService.ACTION_DATA_LOG.equals(action)) {
+            } else if (BluetoothLeService.ACTION_DATA_LOG.equals(action)) {
 
 
                 runOnUiThread(new Runnable() {
@@ -845,7 +837,6 @@ public class DeviceActivityTea extends Activity {
     }
 
 
-
 //下载bin
 
     public void downloadBin(final String urlStr, final String fileName) {
@@ -877,7 +868,7 @@ public class DeviceActivityTea extends Activity {
                  * 5.将input流中的信息写入SDCard
                  * 6.关闭流
                  */
-                    String path=Constant.path;
+                    String path = Constant.path;
                     String SDCard = Environment.getExternalStorageDirectory() + "";
                     pathName = SDCard + "/" + path + "/" + fileName;//文件存储路径
 
@@ -961,9 +952,6 @@ public class DeviceActivityTea extends Activity {
         });
 
     }
-
-
-
 
 
 }

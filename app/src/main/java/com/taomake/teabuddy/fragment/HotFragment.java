@@ -1033,7 +1033,7 @@ public class HotFragment extends Fragment {
                                             checkDeviceUpdateToServer();
 
 //                                            try {
-//                                                Thread.sleep(3000);
+//                                                Thread.sleep(6000);
 //                                            } catch (InterruptedException e) {
 //                                                e.printStackTrace();
 //                                            }

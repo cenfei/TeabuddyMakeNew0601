@@ -29,13 +29,17 @@ public class URecorder implements IVoiceManager {
         //设置音源为Micphone
         mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
         //设置封装格式
+        mRecorder.setAudioSamplingRate(22050);//取频
+
+        mRecorder.setAudioChannels(2);//通道
+        mRecorder.setAudioEncodingBitRate(16);//kbps
+
         mRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
         mRecorder.setOutputFile(path);
         //设置编码格式
         mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
-
         try {
-            Log.e(TAG, "mRecorder prepare() "+path);
+            Log.e(TAG, "mRecorder prepare() " + path);
 
             mRecorder.prepare();
         } catch (IOException e) {
@@ -75,7 +79,7 @@ public class URecorder implements IVoiceManager {
             mRecorder.release();
             mRecorder = null;
         }
-            return false;
+        return false;
 
     }
 }
