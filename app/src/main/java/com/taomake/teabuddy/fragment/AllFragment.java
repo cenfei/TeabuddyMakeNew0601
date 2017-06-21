@@ -68,8 +68,8 @@ public class AllFragment extends Fragment {
         long starttime = mainappAll.starttime;
 
 
-        if (endtime - starttime < 1000) {
-            Util.Toast(getActivity(),"正在同步",null);
+        if (endtime - starttime < 200) {
+            Util.Toast(getActivity(),"操作频繁",null);
 
             return;
         }
@@ -169,8 +169,8 @@ public class AllFragment extends Fragment {
             long starttime = mainappAll.starttime;
 
 
-            if (endtime - starttime < 500) {
-                Util.Toast(getActivity(), "正在泡茶请稍等", null);
+            if (endtime - starttime < 100) {
+                Util.Toast(getActivity(), "操作频繁", null);
 
                 return;
             }
@@ -672,8 +672,11 @@ public class AllFragment extends Fragment {
 //                                    quinticDeviceFactory.abort();
 
                                     if (QuinticBleAPISdkBase.getInstanceFactory(getActivity()).conn != null) {
+                                        QuinticBleAPISdkBase.getInstanceFactory(getActivity()).deviceMap.clear();
                                         QuinticBleAPISdkBase.getInstanceFactory(getActivity()).conn.disconnect();
                                     }
+
+
 //                                    QuinticBleAPISdkBase.resultDevice=null;
                                 } else {
 

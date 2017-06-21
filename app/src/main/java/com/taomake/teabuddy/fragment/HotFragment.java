@@ -218,7 +218,7 @@ public class HotFragment extends Fragment {
 
 
     String MYACTION = "com.pushtest.broadcast";
-
+boolean boolShowLoadingFromTry=false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -380,6 +380,8 @@ public class HotFragment extends Fragment {
         tea_tryagainconnect_comment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                downupcount=1;
+                boolShowLoadingFromTry=true;
                 connectUi();
                 connectFindDevice();
 
@@ -433,7 +435,23 @@ public class HotFragment extends Fragment {
 
 
     public void connectSuccessUi() {
+
+
+
+
+
         MainApp mainappAll = (MainApp) getActivity().getApplicationContext();
+
+//        if(mainappAll.boolDownup&&downupcount==0){
+//            connectSendCodeFailUi("");
+//            mainappAll.boolDownup=true;
+//            downupcount=1;
+//
+//            return;
+//        }
+
+
+
 
         mainappAll.starttime = System.currentTimeMillis();
 
@@ -972,7 +990,7 @@ public class HotFragment extends Fragment {
     }
 
     //*********************加载条***************
-
+int downupcount=0;
 
     public void connectFindDevice() {
         if (!MyStringUtils.isopenBluetooth(getActivity())) {
@@ -1006,6 +1024,12 @@ public class HotFragment extends Fragment {
 //            Log.e("QuinticBleAPISdkBaseresultDevice", "not null");
             if (mainappAll.boolDownup) {
                 startLoading();
+            }else{
+                if(boolShowLoadingFromTry){
+                    startLoading();
+                    boolShowLoadingFromTry=false;
+                }
+
             }
 
 
@@ -1015,6 +1039,8 @@ public class HotFragment extends Fragment {
         } else {
 //            Log.e("QuinticBleAPISdkBaseresultDevice", " null");
             startLoading();
+            QuinticBleAPISdkBase.getInstanceFactory(getActivity()).deviceMap.clear();//每次重连都会重新获取连接
+
             final Context context = getActivity();
             QuinticDeviceFactoryTea quinticDeviceFactory = QuinticBleAPISdkBase
                     .getInstanceFactory(context);
@@ -1491,6 +1517,18 @@ public class HotFragment extends Fragment {
             if (MYACTION_UPDATE.equals(intent.getAction())) {
 
                 String updateteaid = intent.getStringExtra("updateteaid");
+
+                String updateVoice = intent.getStringExtra("updateVoice");
+
+                if(!TextUtils.isEmpty(updateVoice)&&updateVoice.equals("1")){
+
+                    unconnectUi();
+
+                    return;
+                }
+
+
+
 
                 Log.i("onReceive", "change hot...");
                 if (!TextUtils.isEmpty(updateteaid)) {

@@ -18,40 +18,47 @@ class QuinticDeviceWithQueueSupportTea implements QuinticDeviceTea {
 
     public QuinticDeviceWithQueueSupportTea(QuinticDeviceTea device) {
         this.device = device;
-        this.autoReconnectTimeout = new Timeout(5000, new Timeout.TimerEvent() {
-            @Override
-            public void onTimeout() {
-                isTimeoutBusy = true;
-                reconnect(new QuinticCallbackTea<Void>() {
-                    @Override
-                    public void onComplete(Void result) {
-                        super.onComplete(result);
-                        Log.d("SupportTea", "onComplete");
+        if(autoReconnectTimeout!=null){
+            isTimeoutBusy = true;
+            this.autoReconnectTimeout.restart();
+        }
+        else {
 
-                        isTimeoutBusy = false;
-                        autoReconnectTimeout.restart();
-                    }
+            this.autoReconnectTimeout = new Timeout(5000, new Timeout.TimerEvent() {
+                @Override
+                public void onTimeout() {
+                    isTimeoutBusy = true;
+                    reconnect(new QuinticCallbackTea<Void>() {
+                        @Override
+                        public void onComplete(Void result) {
+                            super.onComplete(result);
+                            Log.d("SupportTea", "onComplete");
 
-                    @Override
-                    public void oadUpdate(Void result) {
-                        Log.d("SupportTea", "oadUpdate");
+                            isTimeoutBusy = false;
+                            autoReconnectTimeout.restart();
+                        }
 
-                        disconnect();
-                        super.oadUpdate(result);
-                    }
+                        @Override
+                        public void oadUpdate(Void result) {
+                            Log.d("SupportTea", "oadUpdate");
 
-                    @Override
-                    public void onError(QuinticException ex) {
-                        super.onError(ex);
-                        Log.d("SupportTea", "onError");
+                            disconnect();
+                            super.oadUpdate(result);
+                        }
 
-                        isTimeoutBusy = false;
-                        autoReconnectTimeout.restart();
-                    }
-                });
-            }
-        });
-        this.autoReconnectTimeout.start();
+                        @Override
+                        public void onError(QuinticException ex) {
+                            super.onError(ex);
+                            Log.d("SupportTea", "onError");
+
+                            isTimeoutBusy = false;
+                            autoReconnectTimeout.restart();
+                        }
+                    });
+                }
+            });
+            this.autoReconnectTimeout.start();
+        }
     }
 
     @Override

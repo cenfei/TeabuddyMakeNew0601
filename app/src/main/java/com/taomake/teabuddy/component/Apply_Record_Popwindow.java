@@ -4,14 +4,11 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Environment;
 import android.os.Handler;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
@@ -21,6 +18,7 @@ import com.google.gson.Gson;
 import com.taomake.teabuddy.R;
 import com.taomake.teabuddy.adapter.AdapterBeginRecordListView;
 import com.taomake.teabuddy.fragment.HomeTabFragment;
+import com.taomake.teabuddy.fragment.HotFragment;
 import com.taomake.teabuddy.network.ProtocolUtil;
 import com.taomake.teabuddy.network.RowMessageHandler;
 import com.taomake.teabuddy.object.UpdateNineRecordsJson;
@@ -450,6 +448,12 @@ public class Apply_Record_Popwindow {
 
                                     context.sendBroadcast(intent);
 
+
+                                    Intent intentHOT = new Intent(HotFragment.MYACTION_UPDATE);
+                                    Log.i("Broadcast Change home", "change home fragment");
+                                    intentHOT.putExtra("updateVoice", "1");
+
+                                    context.sendBroadcast(intentHOT);
 
                                     closePopupWindow(context);
                                 } else {

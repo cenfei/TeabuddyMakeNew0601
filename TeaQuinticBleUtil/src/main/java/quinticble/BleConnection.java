@@ -121,6 +121,8 @@ public class BleConnection {
                         gatt.disconnect();
                     }
                 } else {
+
+
                     try {
                         if (gatt != null) {
                             gatt.close();

@@ -132,6 +132,8 @@ public class QuinticDeviceFactoryTea {
                 public void onError(BleException ex) {
                     super.onError(ex);
                     Log.d("onConnected", "onError");
+//                    deviceMap.clear();
+                    Log.d("onConnected fox", "onError clear");
 
                     callback.onError(new QuinticException(ex));
                 }
@@ -155,6 +157,8 @@ public class QuinticDeviceFactoryTea {
                 @Override
                 public void onDisconnected() {
                     Log.d("onNotify", "onDisconnected");
+//deviceMap.clear();
+                    Log.d("onDisconnected fox", "onDisconnected clear");
 
                     super.onDisconnected();
                     callback.onError(new QuinticException(QuinticException.DEVICE_DISCONNECTED, "连接异常断开"));

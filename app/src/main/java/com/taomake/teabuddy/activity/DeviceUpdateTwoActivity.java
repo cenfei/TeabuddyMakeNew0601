@@ -520,10 +520,11 @@ String  updatetext=MyStringUtils.decodeUnicode(deviceVersionObj.content);
                                     foxProgressbarInterface = new FoxProgressbarInterface();
 
                                     foxProgressbarInterface.startProgressBar(DeviceUpdateTwoActivity.this, "OAD数据读取中...");
+                                    writehandler.post(runnable);
+
                                     downloadBin(deviceVersionObj.url, Constant.path_bin_name);
 
 
-//                                    writehandler.post(runnable);
 //                                    BluetoothAdapter mBluetoothAdapter = BluetoothAdapter
 //                                            .getDefaultAdapter();
 //                                    if (mBluetoothAdapter == null) {
@@ -658,16 +659,16 @@ String  updatetext=MyStringUtils.decodeUnicode(deviceVersionObj.content);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        foxProgressbarInterface.stopProgressBar();
-                        Intent intent = new Intent(DeviceUpdateTwoActivity.this, DeviceActivityTea.class);
-                        intent.putExtra("deviceVersionObj", configPref.deviceUpdateInfo().get());
-
-                        String version = getIntent().getStringExtra("upversion");
-                        intent.putExtra("upversion", version);
-
-                        intent.putExtra("MAC_DEVICE", blindDeviceId);
-                        startActivity(intent);
-                        finish();
+//                        foxProgressbarInterface.stopProgressBar();
+//                        Intent intent = new Intent(DeviceUpdateTwoActivity.this, DeviceActivityTea.class);
+//                        intent.putExtra("deviceVersionObj", configPref.deviceUpdateInfo().get());
+//
+//                        String version = getIntent().getStringExtra("upversion");
+//                        intent.putExtra("upversion", version);
+//
+//                        intent.putExtra("MAC_DEVICE", blindDeviceId);
+//                        startActivity(intent);
+//                        finish();
                     }
                 });
 
