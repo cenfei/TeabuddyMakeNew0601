@@ -81,10 +81,10 @@ public class QuinticDeviceFactoryTea {
         Log.d("QuinticDeviceTeaImpl","QuinticDeviceTeaImpl");
         quinticDevice = new QuinticDeviceTeaImpl(bleConnection, this.context, device);
         quinticDevice0=quinticDevice;
-        Log.d("QueueSupportTea","QueueSupportTea");
+        Log.e("QueueSupportTea","QueueSupportTea");
 
         quinticDevice = new QuinticDeviceWithQueueSupportTea(quinticDevice);
-        Log.d("QueueSupportTea","QueueSupportTea end");
+        Log.e("QueueSupportTea","QueueSupportTea end");
 
         deviceMap.put(quinticDevice.getAddress(), quinticDevice);
         return quinticDevice;

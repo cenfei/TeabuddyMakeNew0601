@@ -112,6 +112,7 @@ public class BleConnection {
             public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
                 super.onConnectionStateChange(gatt, status, newState);
                 BleConnection.this.gatt = gatt;
+
                 Log.d("gatt", status + "," + newState + gatt.getServices());
                 if (BluetoothGatt.GATT_SUCCESS == status && newState == BluetoothProfile.STATE_CONNECTED) {
                     connectTimeout.restart(10000);

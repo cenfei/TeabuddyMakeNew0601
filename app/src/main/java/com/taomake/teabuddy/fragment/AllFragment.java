@@ -233,7 +233,9 @@ public class AllFragment extends Fragment {
 
                     break;
                 case 3://找我
-                    setCubMusic(getActivity());
+                    if(boolLookme) {
+                        setCubMusic(getActivity());
+                    }
                     break;
                 default:
                     break;
@@ -493,6 +495,7 @@ public class AllFragment extends Fragment {
 
     FoxProgressbarInterface foxProgressbarInterface05;
 
+    boolean boolLookme=true;
     public void setCubMusic(final Context context) {
 //        foxProgressbarInterface05 = new FoxProgressbarInterface();
 //
@@ -570,12 +573,14 @@ public class AllFragment extends Fragment {
             //要做的事情
             if (process <= 2) {
 
-
+                boolLookme=false;
                 writehandler.postDelayed(this, 1000);
                 process = process + 1;
             } else {
 //if(foxProgressbarInterface05!=null)
 //{foxProgressbarInterface05.stopProgressBar();}
+                boolLookme=true;
+
                 funcControlGridAdapter.setSeclectionLook(3, true);
 
 
@@ -594,17 +599,21 @@ public class AllFragment extends Fragment {
         if (foxProgressbarInterface != null)
             foxProgressbarInterface.stopProgressBar();
         shutDownCount++;
-//        if (shutDownCount < 3) {
-//            shutDownCub(getActivity());
-//        }
+        if (shutDownCount < 3) {
+            shutDownCub(getActivity());
+        }else{
+            MainApp mainappAll = (MainApp) getActivity().getApplicationContext();
+            mainappAll.boolDownup=true;
+        }
     }
 
     public void connectSendCodeSuccesslUiShutDown() {
         if (foxProgressbarInterface != null)
             foxProgressbarInterface.stopProgressBar();
-
+        shutDownCount = 0;
         //跳转到 我的页面
-
+        MainApp mainappAll = (MainApp) getActivity().getApplicationContext();
+        mainappAll.boolDownup=true;
         Util.Toast(getActivity(), "茶密已关机成功", null);
         MainActivity mainActivity = (MainActivity) getActivity();
         mainActivity.selectMine();

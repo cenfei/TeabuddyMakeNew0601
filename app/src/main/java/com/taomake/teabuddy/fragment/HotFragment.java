@@ -87,7 +87,7 @@ public class HotFragment extends Fragment {
     @ViewById(R.id.bluetooth_rel)
     RelativeLayout bluetooth_rel;
 
-    @ViewById(R.id.tea_status_id)
+//    @ViewById(R.id.tea_status_id)
     TextView tea_status_id;
 
 
@@ -173,7 +173,7 @@ public class HotFragment extends Fragment {
                     batteryLevelValue = QuinticCommon.unsignedByteToInt(data[3]);
                     Log.d("当前电量", batteryLevelValue + "");
 
-                    if(showcontnect) {
+                    if (showcontnect) {
                         connectSuccessUi();
                     }
                 } else if (trimResult.contains("ec0a01")) {
@@ -194,7 +194,7 @@ public class HotFragment extends Fragment {
                     Log.d("当前teaingTimeValue", teaingTimeValue + "");
                     Log.d("当前teaingIsNull", teaingIsNull + "");
 
-                    if(showcontnect) {
+                    if (showcontnect) {
                         connectSuccessUi();
                     }
 
@@ -358,6 +358,8 @@ public class HotFragment extends Fragment {
 
         cicrle_line_id = (LinearLayout) view.findViewById(R.id.cicrle_line_id);
 
+        tea_status_id = (TextView) view.findViewById(R.id.tea_status_id);
+
         LinearLayout right_title = (LinearLayout) view.findViewById(R.id.right_title_line);
         right_title.setVisibility(View.GONE);
         LinearLayout left_title_line = (LinearLayout) view.findViewById(R.id.left_title_line);
@@ -501,6 +503,13 @@ public class HotFragment extends Fragment {
             tea_status_id.setText("");
         }
 
+
+
+        if (!TextUtils.isEmpty(teaname)) {
+            tea_name_line.setVisibility(View.VISIBLE);
+            tea_name_id.setText(teaname);
+            tea_name_id_back.setVisibility(View.VISIBLE);
+        }
 
     }
 
@@ -935,11 +944,15 @@ public class HotFragment extends Fragment {
         tea_cub_dynamicwave.setVisibility(View.GONE);
         //tea_bat_img_id.setImageDrawable(getResources().getDrawable(R.drawable.bat_0));
 
-        if (TextUtils.isEmpty(teaname)) {
+//        if (TextUtils.isEmpty(teaname)) {
             tea_name_line.setVisibility(View.VISIBLE);
             tea_name_id.setText("正在同步");
             tea_name_id_back.setVisibility(View.GONE);
-        }
+//        }
+        tea_sum_cub_text_id.setTextColor(getResources().getColor(R.color.white_alpha60));
+        tea_sum_cub_text_id.setText("0");
+        tea_sum_cub_text_id.setTextSize(110);
+        tea_status_id.setText("");
         tea_bat_img_id.setAlpha(0.6f);
         update_device_id.setAlpha(0.6f);
     }
@@ -966,22 +979,16 @@ public class HotFragment extends Fragment {
             connectSendCodeFailUi("");
 
 
-
             return;
         }
-        MainApp mainappAll=(MainApp)getActivity().getApplicationContext();
-        long endtime=System.currentTimeMillis();
+        MainApp mainappAll = (MainApp) getActivity().getApplicationContext();
+        long endtime = System.currentTimeMillis();
 
         long starttime = mainappAll.starttime;
         if (endtime - starttime < 2000) {
             return;
 
         }
-
-
-
-
-
 
 
         blindDeviceId = configPref.userDeviceMac().get();
@@ -997,6 +1004,10 @@ public class HotFragment extends Fragment {
         if (MyStringUtils.isNotNullAndEmpty(QuinticBleAPISdkBase.resultDevice)) {
 
 //            Log.e("QuinticBleAPISdkBaseresultDevice", "not null");
+            if (mainappAll.boolDownup) {
+                startLoading();
+            }
+
 
             resultDeviceAll = QuinticBleAPISdkBase.resultDevice;
             // ************处理动作
@@ -1057,6 +1068,8 @@ public class HotFragment extends Fragment {
                                         @Override
                                         public void run() {
 //                                            closeProgress();
+                                            MainApp mainappAll = (MainApp) getActivity().getApplicationContext();
+                                            mainappAll.boolDownup = false;
                                             resultDeviceAll = resultDevice;
                                             QuinticBleAPISdkBase.resultDevice = resultDeviceAll;
                                             // ************处理动作
@@ -1119,6 +1132,8 @@ public class HotFragment extends Fragment {
                             @Override
                             public void run() {
 //BACK 0A 04 01 53result
+                                MainApp mainappAll = (MainApp) getActivity().getApplicationContext();
+                                mainappAll.boolDownup = false;
                                 String trimResult = result.replace(" ", "");
                                 if (trimResult.contains("ea0501")) {
                                     byte[] data = QuinticCommon.stringToBytes(trimResult);
@@ -1130,8 +1145,8 @@ public class HotFragment extends Fragment {
                                     getTeaInfoByUnionid(czid + "");
 
                                     getbatteryLevel(false);
-                                    MainApp mainappAll = (MainApp) getActivity().getApplicationContext();
-                                    mainappAll.starttime = System.currentTimeMillis();
+                                    MainApp mainappAll0 = (MainApp) getActivity().getApplicationContext();
+                                    mainappAll0.starttime = System.currentTimeMillis();
 
                                 } else {
                                     connectSendCodeFailUi("茶种id查询失败");
@@ -1481,7 +1496,7 @@ public class HotFragment extends Fragment {
                 if (!TextUtils.isEmpty(updateteaid)) {
                     if (ChooseTeaActivity.chooseTeaValue != null) {
                         tea_name_id.setText(ChooseTeaActivity.chooseTeaValue);
-
+                        tea_status_id.setText("");//清空上一杯缓存
 
                     }
                 } else {
