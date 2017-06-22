@@ -1,13 +1,12 @@
 package com.taomake.teabuddy.component;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.media.MediaPlayer;
 import android.os.Environment;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.GridView;
@@ -103,13 +102,27 @@ public class Record_Play_Popwindow {
     /**
      * @param view
      */
+    Dialog dialog;
     public void initUi(final Activity activity, View view, View relView) {
 
 
-        window = new PopupWindow(view,
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT, true);
+//        window = new PopupWindow(view,
+//                ViewGroup.LayoutParams.MATCH_PARENT,
+//                ViewGroup.LayoutParams.MATCH_PARENT, true);
+        dialog = new Dialog(context, R.style.myprocessstyle);
 
+//        writehandler.post(runnable);
+
+// 加载popuwindow 菊花
+        dialog.setContentView(view);
+
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setCancelable(false);
+        try {
+            dialog.show();
+        } catch (Exception e) {
+
+        }
 
         // 设置popWindow弹出窗体可点击，这句话必须添加，并且是true
 //        window.setFocusable(false);
@@ -134,27 +147,27 @@ public class Record_Play_Popwindow {
 //                0);
 
         // 在底部显示
-        if (Util.checkDeviceHasNavigationBar(context)) {
-            window.showAtLocation(relView,
-                    Gravity.CENTER, 0, 0);
-//            setBackgroundAlpha(activity, 0.5f);
-        } else {
-            window.showAtLocation(relView,
-                    Gravity.CENTER, 0, 0);
-//            backgroundAlpha(0.5f, activity);
-
-        }
-
-
-        //popWindow消失监听方法
-        window.setOnDismissListener(new PopupWindow.OnDismissListener() {
-
-            @Override
-            public void onDismiss() {
-                System.out.println("popWindow消失");
-                closePopupWindow(activity);
-            }
-        });
+//        if (Util.checkDeviceHasNavigationBar(context)) {
+//            window.showAtLocation(relView,
+//                    Gravity.CENTER, 0, 0);
+////            setBackgroundAlpha(activity, 0.5f);
+//        } else {
+//            window.showAtLocation(relView,
+//                    Gravity.CENTER, 0, 0);
+////            backgroundAlpha(0.5f, activity);
+//
+//        }
+//
+//
+//        //popWindow消失监听方法
+//        window.setOnDismissListener(new PopupWindow.OnDismissListener() {
+//
+//            @Override
+//            public void onDismiss() {
+//                System.out.println("popWindow消失");
+//                closePopupWindow(activity);
+//            }
+//        });
     }
     /***
      * 获取PopupWindow实例
@@ -173,16 +186,24 @@ public class Record_Play_Popwindow {
      * 关闭窗口
      */
     public void closePopupWindow(Activity activity) {
-        WindowManager.LayoutParams params = activity.getWindow().getAttributes();
-        params.alpha = 1f;
-        activity.getWindow().setAttributes(params);
+//        WindowManager.LayoutParams params = activity.getWindow().getAttributes();
+//        params.alpha = 1f;
+//        activity.getWindow().setAttributes(params);
+//
+//        if (window != null) {
+//            window.dismiss();
+//            window = null;
+//            System.out.println("popWindow消失 ...");
+//
+//        }
 
-        if (window != null) {
-            window.dismiss();
-            window = null;
-            System.out.println("popWindow消失 ...");
-
+        if(songArrayList!=null)
+        songArrayList.clear();
+        songIndex = 0;
+        if(dialog!=null){
+            dialog.dismiss();
         }
+
     }
 
     public interface CallBackPayWindow {
@@ -236,10 +257,10 @@ public class Record_Play_Popwindow {
 
     }
 
-    //    FoxProgressbarInterface foxProgressbarInterface;
+        FoxProgressbarInterface foxProgressbarInterface;
     public void getUpdateBcNineRecords(String voicefileindex, String unionid) {
-//        foxProgressbarInterface = new FoxProgressbarInterface();
-//        foxProgressbarInterface.startProgressBar(context, "加载中...");
+        foxProgressbarInterface = new FoxProgressbarInterface();
+        foxProgressbarInterface.startProgressBar(context, "加载中...");
         title_play_id.setText("正在获取录音数据");
         content_play_id.setText("请稍等...");
         ProtocolUtil.getUpdateRecordList(context, new GetBcNineRecordsHandler(), unionid, voicefileindex);//devno 空表示所有
@@ -260,7 +281,8 @@ public class Record_Play_Popwindow {
 
     boolean boolConntect=true;
     public void getBcNineRecordsHandler(String resp) {
-//        foxProgressbarInterface.stopProgressBar();
+        if(foxProgressbarInterface!=null)
+        foxProgressbarInterface.stopProgressBar();
         if(!boolConntect) return;
 
         boolConntect=false;
@@ -447,8 +469,7 @@ public class Record_Play_Popwindow {
             songIndex = songIndex + 1;
             songplay();
         } else {
-            songArrayList.clear();
-            songIndex = 0;
+
             closePopupWindow(context);
 
         }

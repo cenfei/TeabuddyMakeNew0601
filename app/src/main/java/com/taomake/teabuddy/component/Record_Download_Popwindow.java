@@ -112,7 +112,7 @@ private List<DbRecordInfoObj> dbRecordInfoObjList=new ArrayList<DbRecordInfoObj>
         // 设置popWindow弹出窗体可点击，这句话必须添加，并且是true
         window.setFocusable(true);
 
-
+//        window.setOutsideTouchable(false);
         // 实例化一个ColorDrawable颜色为半透明
         ColorDrawable dw = new ColorDrawable(0x00000000);
 //        window.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.rounded_choose));

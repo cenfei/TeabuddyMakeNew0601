@@ -496,8 +496,8 @@ public void convertCodeMap3(final List<byte[]> code, final QuinticCallbackTea<St
         //先发送 EB 0C 00 00   00     A4     34     03
 
 
-        Log.e("mapcode0",QuinticCommon.unsignedBytesToHexString(mapcode0,0,1000));
-        Log.e("mapcode0",QuinticCommon.unsignedBytesToHexString(mapcode0,1000,mapcode0.length-1000));
+//        Log.e("mapcode0",QuinticCommon.unsignedBytesToHexString(mapcode0,0,1000));
+//        Log.e("mapcode0",QuinticCommon.unsignedBytesToHexString(mapcode0,1000,mapcode0.length-1000));
 
         int packageCount = mapcode0.length / 64;
 
@@ -526,7 +526,7 @@ public void convertCodeMap3(final List<byte[]> code, final QuinticCallbackTea<St
         for(int m=0;m<mapcode0.length;m++){
             mapcode[m]=mapcode0[m];
         }
-        Log.e("mapcode",QuinticCommon.unsignedBytesToHexString(mapcode,0,mapcode.length));
+//        Log.e("mapcode",QuinticCommon.unsignedBytesToHexString(mapcode,0,mapcode.length));
 
 
 

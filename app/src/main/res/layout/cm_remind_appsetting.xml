@@ -20,11 +20,14 @@
         android:orientation="vertical"
         android:id="@+id/unclick_line"
         >
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="200dp"
+    android:layout_marginLeft="80dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:layout_marginLeft="80dp"
         android:background="@color/white_alpha000"
 
         android:layout_marginRight="100dp"
@@ -40,6 +43,14 @@
             android:layout_height="200dp"
             />
         <com.taomake.teabuddy.wheelview.WheelView
+            android:id="@+id/wheel_view_wv3"
+
+            android:background="@color/white"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="200dp"
+            />
+        <com.taomake.teabuddy.wheelview.WheelView
             android:id="@+id/wheel_view_wv2"
 
             android:background="@color/white"
@@ -48,18 +59,11 @@
             android:layout_height="200dp"
             />
 
-        <com.taomake.teabuddy.wheelview.WheelView
-            android:id="@+id/wheel_view_wv3"
 
-            android:background="@color/white"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="200dp"
-            />
 
 
     </LinearLayout>
-
+</RelativeLayout>
 
     <LinearLayout
         android:layout_marginTop="30dp"

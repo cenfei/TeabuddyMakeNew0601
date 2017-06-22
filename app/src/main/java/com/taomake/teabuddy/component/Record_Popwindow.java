@@ -12,7 +12,6 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.taomake.teabuddy.R;
-import com.taomake.teabuddy.util.Util;
 
 /**
  * Created by foxcen on 16/4/14.
@@ -108,10 +107,16 @@ public class Record_Popwindow {
         int popupHeight = view.getMeasuredHeight();  //获取测量后的高度
         int[] location = new int[2];
 
-
+        window.setOutsideTouchable(false);
         // 设置popWindow弹出窗体可点击，这句话必须添加，并且是true
         window.setFocusable(true);
-
+//        window.setOnKeyListener(new View.OnKeyListener() {
+//            @Override
+//            public boolean onKey(View v, int keyCode, KeyEvent event) {
+//                //do something...
+//                return true;
+//            }
+//        });
 
         // 实例化一个ColorDrawable颜色为半透明
         ColorDrawable dw = new ColorDrawable(0x00000000);

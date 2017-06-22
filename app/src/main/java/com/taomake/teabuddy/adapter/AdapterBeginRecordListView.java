@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.media.MediaPlayer;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +14,8 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.lamemp3.MP3Recorder;
+import com.example.lamemp3.utils.RecorderAndPlayUtilFox;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taomake.teabuddy.R;
@@ -20,7 +24,6 @@ import com.taomake.teabuddy.component.Record_Download_Popwindow;
 import com.taomake.teabuddy.component.Record_Popwindow;
 import com.taomake.teabuddy.object.RecordInfoObj;
 import com.taomake.teabuddy.util.ImageLoaderUtil;
-import com.taomake.teabuddy.util.URecorder;
 import com.taomake.teabuddy.util.Util;
 
 import java.io.File;
@@ -70,8 +73,63 @@ String unionid=null;
             voiceDbchooseMap.put(i, 0);
 
         }
-
+        recorderAndPlayUtilFox=new RecorderAndPlayUtilFox();
+        final 	Context mContext=context;
+        recorderAndPlayUtilFox.getRecorder().setHandle(new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                switch (msg.what) {
+                    case MP3Recorder.MSG_REC_STARTED:
+                        // 开始录音
+                        break;
+                    case MP3Recorder.MSG_REC_STOPPED:
+                        // 停止录音
+//						if (mIsSendVoice) {// 是否发送录音
+//							mIsSendVoice = false;
+//							audioRecordFinishListener.onFinish(mSecond, mRecorderUtil.getRecorderPath());
+//						}
+//						mSecond = 0;
+                        break;
+                    case MP3Recorder.MSG_ERROR_GET_MIN_BUFFERSIZE:
+                        initRecording();
+                        Util.Toast(mContext, "采样率手机不支持", null);
+                        break;
+                    case MP3Recorder.MSG_ERROR_CREATE_FILE:
+                        initRecording();
+                        Util.Toast(mContext, "创建音频文件出错", null);
+                        break;
+                    case MP3Recorder.MSG_ERROR_REC_START:
+                        initRecording();
+                        Util.Toast(mContext, "初始化录音器出错", null);
+                        break;
+                    case MP3Recorder.MSG_ERROR_AUDIO_RECORD:
+                        initRecording();
+                        Util.Toast(mContext, "录音的时候出错", null);
+                        break;
+                    case MP3Recorder.MSG_ERROR_AUDIO_ENCODE:
+                        initRecording();
+                        Util.Toast(mContext, "编码出错", null);
+                        break;
+                    case MP3Recorder.MSG_ERROR_WRITE_FILE:
+                        initRecording();
+                        Util.Toast(mContext, "文件写入出错", null);
+                        break;
+                    case MP3Recorder.MSG_ERROR_CLOSE_FILE:
+                        initRecording();
+                        Util.Toast(mContext, "文件流关闭出错",  null);
+                        break;
+                }
+            }
+        });
     }
+public void initRecording(){
+
+    recorderAndPlayUtilFox.stopRecording();
+
+}
+
+
+    RecorderAndPlayUtilFox recorderAndPlayUtilFox=null;
 
     public void addList(List<RecordInfoObj> addList) {
         if (mPersonal == null || mPersonal.size() == 0) {
@@ -182,14 +240,14 @@ String unionid=null;
                 voiceMap.put("voice"+(position+3),"2");
                     viewholder.img_record_id.setImageDrawable(context.getResources().getDrawable(R.drawable.cm_bg_record_c));
                     viewholder.img_download_id.setImageDrawable(context.getResources().getDrawable(R.drawable.cm_bg_db));
-                    final URecorder recorder = new URecorder(pathR);
+//                    final URecorder recorder = new URecorder(pathR);
                     new Record_Popwindow().showPopwindow(context, img, new Record_Popwindow.CallBackPayWindow() {
                         @Override
                         public void handleCallBackPayWindowFromStop(String recorddir) {
 
 
-                            recorder.stop();
-
+//                            recorder.stop();
+                            recorderAndPlayUtilFox.stopRecording();
                         }
 
                         @Override
@@ -197,8 +255,8 @@ String unionid=null;
 //                            String pathR = Environment.getExternalStorageDirectory() + "/" + path + "/" + luyinArrays[position];
 //                            URecorder recorder = new URecorder(pathR);
 
-                            recorder.start();
-
+//                            recorder.start();
+                            recorderAndPlayUtilFox.startRecording(path,recordName);
                         }
                     });
 

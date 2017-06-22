@@ -341,21 +341,25 @@ public class BleConnection {
                     connectTimeout.restart(600000);
                     needMoreTimeout = true;
                 }else{
-                    needMoreTimeout = false;
+                        needMoreTimeout = false;
+                    connectTimeout.restart(150000);
 
                 }
-                if (trimResult.contains("eb0c0b")) {
-                    connectTimeout.restart(600000);
-                    needMoreTimeout = false;
-                }
+//                if (trimResult.contains("eb0c0b")) {
+//                    connectTimeout.restart(600000);
+//                    needMoreTimeout = false;
+//                }
 
                 if (characteristic.getValue() != null && !(characteristic.getValue().length == 2 && QuinticCommon.matchData(characteristic.getValue(), new byte[]{0, 0}))) {
-                    if (needMoreTimeout) {
-                        connectTimeout.restart(600000);
-                    } else {
-                        connectTimeout.restart(15000);
+//                    if (needMoreTimeout) {
+//                        connectTimeout.restart(600000);
+//                    } else {
+//                        connectTimeout.restart(15000);
+//
+//                    }
 
-                    }
+                    connectTimeout.restart(600000);
+
                     Log.i("----- keep notify -----", "notify");
                     bleStateChangeCallback.onNotify(characteristic.getValue());
 
