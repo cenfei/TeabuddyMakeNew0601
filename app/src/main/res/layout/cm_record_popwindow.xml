@@ -3,8 +3,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="121dp"
     android:layout_height="118dp"
-    android:background="#00000000"
-    android:fitsSystemWindows="true"
+    android:background="@color/white_alpha000"
     android:orientation="vertical"
     >
 

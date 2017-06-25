@@ -50,6 +50,8 @@ public long starttime=0;
 
     public DeviceVersionObj deviceVersionObj;
 
+    public boolean boolApplyRecord=false;
+
 
     public int changeDefaultVoice=0; //默认是0 第一次则需要立马获取蓝牙信息
     public boolean  boofirstFragmentMine=true;

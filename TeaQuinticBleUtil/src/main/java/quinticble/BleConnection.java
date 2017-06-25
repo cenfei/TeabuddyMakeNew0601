@@ -291,10 +291,15 @@ public class BleConnection {
 
                     String trimResult = writedata.replace(" ", "");
 
+                    if(trimResult.length()>=8){
+                    String  trimResultHead=trimResult.substring(0, 8);
 
-                    if (trimResult.contains("eb0cffff")) {
+                    if (trimResultHead.contains("eb0cffff")) {
                         connectTimeout.restart(600000);
                     } else {
+                        connectTimeout.restart(15000);
+
+                    }}else{
                         connectTimeout.restart(15000);
 
                     }
@@ -308,12 +313,18 @@ public class BleConnection {
                         bleStateChangeCallback.onWrite(characteristic.getValue());
 //                    }
 
+
                     if (trimResult.equals("eb0501")) {
                         bleStateChangeCallback.onNotify(characteristic.getValue());
 
 
                     }
                     if (trimResult.equals("eb19")) {
+                        bleStateChangeCallback.onNotify(characteristic.getValue());
+
+
+                    }
+                    if (trimResult.equals("eb0f")) {
                         bleStateChangeCallback.onNotify(characteristic.getValue());
 
 
@@ -337,14 +348,23 @@ public class BleConnection {
                 }
                 String trimResult = notifydata.replace(" ", "");
 
-                if (trimResult.contains("eb0c00")) {
-                    connectTimeout.restart(600000);
-                    needMoreTimeout = true;
-                }else{
+                if(trimResult.length()>=6) {
+                    String trimResultHead = trimResult.substring(0, 6);
+
+                    if (trimResultHead.contains("eb0c00")) {
+                        connectTimeout.restart(600000);
+                        needMoreTimeout = true;
+                    } else {
                         needMoreTimeout = false;
+                        connectTimeout.restart(150000);
+
+                    }
+                }else{
                     connectTimeout.restart(150000);
 
                 }
+
+
 //                if (trimResult.contains("eb0c0b")) {
 //                    connectTimeout.restart(600000);
 //                    needMoreTimeout = false;
@@ -358,12 +378,13 @@ public class BleConnection {
 //
 //                    }
 
-                    connectTimeout.restart(600000);
 
                     Log.i("----- keep notify -----", "notify");
                     bleStateChangeCallback.onNotify(characteristic.getValue());
+                    String  trimResultHead1=trimResult.substring(0,2);
 
-                    if (notifydata.contains("ec")) {
+                    if (trimResultHead1.contains("ec")) {
+                        connectTimeout.restart(600000);
 
                         Intent intent = new Intent("com.pushtest.broadcast");
                         Log.i("Broadcast Send", notifydata);
@@ -372,6 +393,9 @@ public class BleConnection {
 
                         final Context context1 = context;
                         context1.sendBroadcast(intent);
+                    }else{
+                        connectTimeout.restart(15000);
+
                     }
                 }
             }

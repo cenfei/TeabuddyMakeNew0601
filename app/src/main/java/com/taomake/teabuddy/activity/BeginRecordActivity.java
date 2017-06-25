@@ -417,6 +417,12 @@ public class BeginRecordActivity extends BaseActivity {
 
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Log.d("onBackPressed","begin onBackPressed");
+    }
+
     //**********获取筛选的后的list***************/
     FoxProgressbarInterface foxProgressbarInterface;
 
@@ -531,6 +537,7 @@ public class BeginRecordActivity extends BaseActivity {
 
         String voiceTypeJson = new Gson().toJson(adapterHomeDesignListView.voiceMap);
 
+        Log.d("voiceTypeJson","voiceTypeJson:"+voiceTypeJson);
         ProtocolUtil.addBcRecordList(this, new UpdateBcNineRecordsHandler(), unionid
                 , cbr_nickname_idValue, avarByte, fileList, voiceTypeJson);//devno 空表示所有
 

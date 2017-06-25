@@ -106,6 +106,12 @@ public class HotFragment extends Fragment {
     void ontea_main_dl_mg() {
         if (isLoading) return;
 
+        if(!boolCheckBattery) {
+
+            Util.Toast(getActivity(),"后台正在同步",null);
+            return;
+        }
+
         getbatteryLevel(true);
 
     }
@@ -382,6 +388,9 @@ boolean boolShowLoadingFromTry=false;
             public void onClick(View v) {
                 downupcount=1;
                 boolShowLoadingFromTry=true;
+
+
+
                 connectUi();
                 connectFindDevice();
 
@@ -439,7 +448,6 @@ boolean boolShowLoadingFromTry=false;
 
 
 
-
         MainApp mainappAll = (MainApp) getActivity().getApplicationContext();
 
 //        if(mainappAll.boolDownup&&downupcount==0){
@@ -451,6 +459,7 @@ boolean boolShowLoadingFromTry=false;
 //        }
 
 
+        boolCheckBattery=true;
 
 
         mainappAll.starttime = System.currentTimeMillis();
@@ -991,7 +1000,7 @@ boolean boolShowLoadingFromTry=false;
 
     //*********************加载条***************
 int downupcount=0;
-
+boolean  boolCheckBattery=true;
     public void connectFindDevice() {
         if (!MyStringUtils.isopenBluetooth(getActivity())) {
             connectSendCodeFailUi("");
@@ -1018,7 +1027,7 @@ int downupcount=0;
         Log.e("blindDeviceId:", blindDeviceId);
 //            getTeaInfoByUnionid();
 
-
+        boolCheckBattery=false;
         if (MyStringUtils.isNotNullAndEmpty(QuinticBleAPISdkBase.resultDevice)) {
 
 //            Log.e("QuinticBleAPISdkBaseresultDevice", "not null");
@@ -1039,6 +1048,17 @@ int downupcount=0;
         } else {
 //            Log.e("QuinticBleAPISdkBaseresultDevice", " null");
             startLoading();
+            if (QuinticBleAPISdkBase.getInstanceFactory(getActivity()).conn != null) {
+
+//                                        QuinticBleAPISdkBase.getInstanceFactory(DeviceUpdateTwoActivity.this).deviceMap.clear();
+//
+                QuinticBleAPISdkBase.getInstanceFactory(getActivity()).abort();
+
+//                                        QuinticBleAPISdkBase.getInstanceFactory(DeviceUpdateTwoActivity.this).conn.disconnect();
+
+            }
+
+
             QuinticBleAPISdkBase.getInstanceFactory(getActivity()).deviceMap.clear();//每次重连都会重新获取连接
 
             final Context context = getActivity();

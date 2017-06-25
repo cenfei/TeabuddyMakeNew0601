@@ -489,11 +489,11 @@ String  updatetext=MyStringUtils.decodeUnicode(deviceVersionObj.content);
                                     mainApp.boolupdateSuccess=1;
                                     if (QuinticBleAPISdkBase.getInstanceFactory(DeviceUpdateTwoActivity.this).conn != null) {
 
-                                        QuinticBleAPISdkBase.getInstanceFactory(DeviceUpdateTwoActivity.this).deviceMap.clear();
-
+//                                        QuinticBleAPISdkBase.getInstanceFactory(DeviceUpdateTwoActivity.this).deviceMap.clear();
+//
                                         QuinticBleAPISdkBase.getInstanceFactory(DeviceUpdateTwoActivity.this).abort();
 
-                                        QuinticBleAPISdkBase.getInstanceFactory(DeviceUpdateTwoActivity.this).conn.disconnect();
+//                                        QuinticBleAPISdkBase.getInstanceFactory(DeviceUpdateTwoActivity.this).conn.disconnect();
 
                                     }
 //                                    QuinticBleAPISdkBase.getInstanceFactory(DeviceUpdateTwoActivity.this).conn.disconnect();

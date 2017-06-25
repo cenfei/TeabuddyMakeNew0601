@@ -71,7 +71,7 @@ String unionid=null;
 
         for(int i=0;i<9;i++){
             voiceDbchooseMap.put(i, 0);
-
+            voiceMap.put("voice"+(i+3),"1");
         }
         recorderAndPlayUtilFox=new RecorderAndPlayUtilFox();
         final 	Context mContext=context;
@@ -197,7 +197,7 @@ public void initRecording(){
         //下载每个mp3文件
         String mp3DbUrl = personalRanking.voicefile_url;
         final String recordName = luyinArrays[position] + ".mp3";
-        voiceMap.put("voice"+(position+3),"1");
+//        voiceMap.put("voice"+(position+3),"1");
 
 //       if(position==8){
 //           downloadMp3(mp3DbUrl, recordName);

@@ -1,12 +1,11 @@
 package com.taomake.teabuddy.component;
 
 import android.app.Activity;
-import android.content.Context;
-import android.graphics.drawable.ColorDrawable;
+import android.app.Dialog;
 import android.os.Handler;
-import android.view.Gravity;
-import android.view.LayoutInflater;
+import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -53,13 +52,14 @@ public class Record_Popwindow {
     /**
      * 显示popupWindow
      */
+
     public void showPopwindow(final Activity activity, View relView,CallBackPayWindow callBackPayWindow) {
         // 利用layoutInflater获得View
         this.callBackPayWindow=callBackPayWindow;
         context = activity;
-        LayoutInflater inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view = inflater.inflate(R.layout.cm_record_popwindow, null);
-        initUi(activity, view, relView);
+//        LayoutInflater inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//        View view = inflater.inflate(R.layout.cm_record_popwindow, null);
+        initUi(activity, null, relView);
     }
 
     public void initColor() {
@@ -77,114 +77,120 @@ public class Record_Popwindow {
     /**
      * @param view
      */
+    Dialog dialog;
     public void initUi(final Activity activity, View view, View relView) {
 
-          pop_process_record_id = (TextView) view.findViewById(R.id.pop_process_record_id);
-
-        TextView  pop_stop_record_id = (TextView) view.findViewById(R.id.pop_stop_record_id);
-        callBackPayWindow.handleCallBackPayWindowFromStart("src");
-
-        writehandler.post(runnable);
-        pop_stop_record_id.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                callBackPayWindow.handleCallBackPayWindowFromStop("src");
-                writehandler.removeCallbacks(runnable);
-                closePopupWindow(activity);
-
-            }
-        });
-
+//        pop_process_record_id = (TextView) view.findViewById(R.id.pop_process_record_id);
 //
-
-        window = new PopupWindow(view,
-                WindowManager.LayoutParams.WRAP_CONTENT,
-                WindowManager.LayoutParams.WRAP_CONTENT);
-
-
-        view.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
-        int popupWidth = view.getMeasuredWidth();    //  获取测量后的宽度
-        int popupHeight = view.getMeasuredHeight();  //获取测量后的高度
-        int[] location = new int[2];
-
-        window.setOutsideTouchable(false);
-        // 设置popWindow弹出窗体可点击，这句话必须添加，并且是true
-        window.setFocusable(true);
-//        window.setOnKeyListener(new View.OnKeyListener() {
+//        TextView pop_stop_record_id = (TextView) view.findViewById(R.id.pop_stop_record_id);
+//        callBackPayWindow.handleCallBackPayWindowFromStart("src");
+//
+//        writehandler.post(runnable);
+//        pop_stop_record_id.setOnClickListener(new View.OnClickListener() {
 //            @Override
-//            public boolean onKey(View v, int keyCode, KeyEvent event) {
-//                //do something...
-//                return true;
-//            }
-//        });
-
-        // 实例化一个ColorDrawable颜色为半透明
-        ColorDrawable dw = new ColorDrawable(0x00000000);
-//        window.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.rounded_choose));
-//        window.setBackgroundDrawable( dw);
-
-
-        // 设置popWindow的显示和消失动画
-     //   window.setAnimationStyle(R.style.mypopwindow_anim_style);
-        backgroundAlpha(0.5f, activity);
-
-        relView.getLocationOnScreen(location);
-//        window.setAnimationStyle(R.style.mypopwindow_anim_style);  //设置动画
-//这里就可自定义在上方和下方了 ，这种方式是为了确定在某个位置，某个控件的左边，右边，上边，下边都可以
-        window.showAtLocation(relView, Gravity.NO_GRAVITY, (location[0] +relView.getWidth() / 2) - popupWidth / 2, location[1] - popupHeight+10);
-//        window.showAsDropDown(relView, 0,
-//                0);
-
-        // 在底部显示
-//        if(Util.checkDeviceHasNavigationBar(context)){
-//            window.showAtLocation(relView,
-//                    Gravity.BOTTOM, 0, 150);
-//            setBackgroundAlpha(activity,0.6f);
-//        }else{
-//            window.showAtLocation(relView,
-//                    Gravity.BOTTOM, 0, 20);
-//            backgroundAlpha(0.6f, activity);
-//
-//        }
-
-
-        //popWindow消失监听方法
-//        window.setOnDismissListener(new PopupWindow.OnDismissListener() {
-//
-//            @Override
-//            public void onDismiss() {
-//                System.out.println("popWindow消失");
+//            public void onClick(View view) {
+//                callBackPayWindow.handleCallBackPayWindowFromStop("src");
+//                writehandler.removeCallbacks(runnable);
 //                closePopupWindow(activity);
+//
 //            }
 //        });
-    }
-    /***
-     * 获取PopupWindow实例
-     */
-//    private void getPopupWindow() {
+
+//        view.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+//        int popupWidth = view.getMeasuredWidth();    //  获取测量后的宽度
+//        int popupHeight = view.getMeasuredHeight();  //获取测量后的高度
+        int[] location = new int[2];
+        relView.getLocationOnScreen(location);
+
+//        dialog = new Dialog(context, R.style.myprocessstyle);
 //
-//        if (null != window) {
-//            closePopupWindow();
-//            return;
-//        } else {
-//            initPopuptWindow();
+////        writehandler.post(runnable);
+//
+//// 加载popuwindow 菊花
+//        dialog.setContentView(view);
+//
+//        dialog.setCanceledOnTouchOutside(false);
+//        dialog.setCancelable(false);
+//        try {
+//            dialog.show();
+//        } catch (Exception e) {
+//
 //        }
-//    }
+//        AlertDialog dialog =new AlertDialog.Builder(context).create();
+       SelectDialog dialog=new SelectDialog(context,R.style.myprocessstyle,callBackPayWindow);
+
+//        dialog.setView(view);
+        Log.e("location", "x:" + location[0] + "y:" + location[1]);
+
+        WindowManager wm = context.getWindowManager();
+
+        int width = wm.getDefaultDisplay().getWidth();
+        int height = wm.getDefaultDisplay().getHeight();
+                Window win = dialog.getWindow();
+        WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
+        Log.e("width", "width:" +width + "height:" + height);
+
+        layoutParams.x = location[0]-width/2+relView.getWidth()/2;//设置x坐标
+        layoutParams.y =location[1]-height/2-relView.getHeight()*2+10;//设置y坐标
+        win.setAttributes(layoutParams);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setCancelable(false);
+        dialog.show();
+
+//        window = new PopupWindow(view,
+//                WindowManager.LayoutParams.WRAP_CONTENT,
+//                WindowManager.LayoutParams.WRAP_CONTENT);
+//
+//
+//
+//
+//        window.setOutsideTouchable(true);
+//        // 设置popWindow弹出窗体可点击，这句话必须添加，并且是true
+//        window.setFocusable(true);
+//
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//
+//            try {
+//                Method method = PopupWindow.class.getDeclaredMethod("setTouchModal", boolean.class);
+//
+//                method.setAccessible(true);
+//                method.invoke(window, false);
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//
+//        }
+//        // 实例化一个ColorDrawable颜色为半透明
+//        ColorDrawable dw = new ColorDrawable(0x00000000);
+////        window.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.rounded_choose));
+////        window.setBackgroundDrawable( dw);
+//
+//
+//        // 设置popWindow的显示和消失动画
+//        //   window.setAnimationStyle(R.style.mypopwindow_anim_style);
+//        backgroundAlpha(0.5f, activity);
+//
+//        relView.getLocationOnScreen(location);
+////        window.setAnimationStyle(R.style.mypopwindow_anim_style);  //设置动画
+////这里就可自定义在上方和下方了 ，这种方式是为了确定在某个位置，某个控件的左边，右边，上边，下边都可以
+//        window.showAtLocation(relView, Gravity.NO_GRAVITY, (location[0] + relView.getWidth() / 2) - popupWidth / 2, location[1] - popupHeight + 10);
+    }
 
     /**
      * 关闭窗口
      */
     public void closePopupWindow(Activity activity) {
-        WindowManager.LayoutParams params = activity.getWindow().getAttributes();
-        params.alpha = 1f;
-        activity.getWindow().setAttributes(params);
-
-        if (window != null) {
-            window.dismiss();
-            window = null;
-            System.out.println("popWindow消失 ...");
-
-        }
+//        WindowManager.LayoutParams params = activity.getWindow().getAttributes();
+//        params.alpha = 1f;
+//        activity.getWindow().setAttributes(params);
+//
+//        if (window != null) {
+//            window.dismiss();
+//            window = null;
+//            System.out.println("popWindow消失 ...");
+//
+//        }
+        if(dialog!=null) dialog.dismiss();
     }
 
     public interface CallBackPayWindow {

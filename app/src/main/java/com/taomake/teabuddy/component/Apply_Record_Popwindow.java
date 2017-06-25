@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.taomake.teabuddy.R;
 import com.taomake.teabuddy.adapter.AdapterBeginRecordListView;
+import com.taomake.teabuddy.base.MainApp;
 import com.taomake.teabuddy.fragment.HomeTabFragment;
 import com.taomake.teabuddy.fragment.HotFragment;
 import com.taomake.teabuddy.network.ProtocolUtil;
@@ -389,11 +390,16 @@ public class Apply_Record_Popwindow {
     List<byte[]> codeList = new ArrayList<byte[]>();
 
     public void connectSendCodeFailUi(String msg){
-
+        MainApp mainApp=(MainApp)context.getApplicationContext();
+        mainApp.boolApplyRecord=false;
         Util.Toast(context,"下载语音到设备失败",null);
         closePopupWindow(context);
     }
     public void sendMp3ToDevice() {
+MainApp mainApp=(MainApp)context.getApplicationContext();
+        mainApp.boolApplyRecord=true;
+
+
         resultDeviceAll.sendListMp3Code(codeList, new QuinticCallbackTea<String>() {
             @Override
             public void onError(QuinticException ex) {
@@ -440,7 +446,18 @@ public class Apply_Record_Popwindow {
                                 if (trimResult.contains("EB1701")) {
 //
                                     Util.Toast(context, "应用成功",null);
+                                    MainApp mainApp=(MainApp)context.getApplicationContext();
+                                    mainApp.boolApplyRecord=false;
 
+                                    if (QuinticBleAPISdkBase.getInstanceFactory(context).conn != null) {
+
+//                                        QuinticBleAPISdkBase.getInstanceFactory(DeviceUpdateTwoActivity.this).deviceMap.clear();
+//
+                                        QuinticBleAPISdkBase.getInstanceFactory(context).abort();
+
+//                                        QuinticBleAPISdkBase.getInstanceFactory(DeviceUpdateTwoActivity.this).conn.disconnect();
+
+                                    }
                                     //需要设置
                                     Intent intent = new Intent(HomeTabFragment.MYACTION_UPDATE_HOME);
                                     Log.i("Broadcast Change home", "change home fragment");

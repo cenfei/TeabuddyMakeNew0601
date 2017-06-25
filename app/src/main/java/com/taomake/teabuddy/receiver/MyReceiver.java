@@ -10,6 +10,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.taomake.teabuddy.activity.WebViewActivity_;
+import com.taomake.teabuddy.base.MainApp;
 import com.taomake.teabuddy.util.MyStringUtils;
 
 import org.json.JSONException;
@@ -48,9 +49,7 @@ public class MyReceiver extends BroadcastReceiver {
 
 
 		}
-        if(!TextUtils.isEmpty(blindDeviceId)){
-			connectFindDevice();
-		}
+
 
 		Log.d(TAG, "[MyReceiver] onReceive - " + intent.getAction() + ", extras: " + printBundle(bundle));
 		
@@ -62,11 +61,17 @@ public class MyReceiver extends BroadcastReceiver {
         } else if (JPushInterface.ACTION_MESSAGE_RECEIVED.equals(intent.getAction())) {
         	Log.d(TAG, "[MyReceiver] 接收到推送下来的自定义消息: " + bundle.getString(JPushInterface.EXTRA_MESSAGE));
         	processCustomMessage(context, bundle);
+			if(!TextUtils.isEmpty(blindDeviceId)){
+				connectFindDevice();
+			}
         
         } else if (JPushInterface.ACTION_NOTIFICATION_RECEIVED.equals(intent.getAction())) {
             Log.d(TAG, "[MyReceiver] 接收到推送下来的通知");
             int notifactionId = bundle.getInt(JPushInterface.EXTRA_NOTIFICATION_ID);
             Log.d(TAG, "[MyReceiver] 接收到推送下来的通知的ID: " + notifactionId);
+			if(!TextUtils.isEmpty(blindDeviceId)){
+				connectFindDevice();
+			}
         	
         } else if (JPushInterface.ACTION_NOTIFICATION_OPENED.equals(intent.getAction())) {
             Log.d(TAG, "[MyReceiver] 用户点击打开了通知");
@@ -173,6 +178,14 @@ public class MyReceiver extends BroadcastReceiver {
 	private Integer countError = 0;
 
 	public void connectFindDevice() {
+
+		MainApp mainApp=(MainApp)contextm.getApplicationContext();
+		if(mainApp.boolApplyRecord||mainApp.boolupdateSuccess==1){
+			Log.e("MyReceiver","正在录音或者升级");
+			return;
+		}
+
+
 //        foxProgressbarInterface = new FoxProgressbarInterface();
 //
 //        foxProgressbarInterface.startProgressBar(getActivity(), "蓝牙读取中...");

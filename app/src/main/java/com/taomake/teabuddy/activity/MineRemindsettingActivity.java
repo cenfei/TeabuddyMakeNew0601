@@ -432,7 +432,7 @@ public class MineRemindsettingActivity extends BaseActivity {
         if (foxProgressbarInterface != null)
             foxProgressbarInterface.stopProgressBar();
         int afternoonbool = 0;
-        if (hourSetting > 12) {
+        if (hourSetting >=12) {
             afternoonbool = 1;
 
             initdataWheel3(hourSetting - 12);

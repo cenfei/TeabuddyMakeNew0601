@@ -423,6 +423,69 @@ public class HomeTabFragment extends Fragment {
                                     connectSendCodeSuccessUi();
 
                                 } else if (trimResult.contains("eb0c0000")) {//默认设置成功语音
+                                   //需要去确认 eb 0f
+
+
+                                    setVoiceInitPlay();
+
+                                } else {//不是默认 显示个性化
+//                                    boolInitVoice=false;
+//                                    connectSendCodeSuccessUi();
+                                    closeProgress();
+                                }
+
+                            }
+                        });
+
+            }
+        });
+
+    }
+
+
+
+
+
+    public void setVoiceInitPlay() {
+
+
+        if (!MyStringUtils.isopenBluetooth(getActivity())) return;
+
+        if (resultDeviceAll == null) return;
+        MainApp mainappAll = (MainApp) getActivity().getApplicationContext();
+        mainappAll.starttime=System.currentTimeMillis();
+               String code = "EB0F";
+
+        resultDeviceAll.sendCommonCode(code, new QuinticCallbackTea<String>() {
+            @Override
+            public void onError(QuinticException ex) {
+                super.onError(ex);
+                new Handler(getActivity().getMainLooper())
+                        .post(new Runnable() {
+                            @Override
+                            public void run() {
+                                connectSendCodeFailUi("语音确认设置失败");
+                            }
+                        });
+            }
+
+            @Override
+            public void onComplete(final String result) {
+                super.onComplete(result);
+                if (result == null) {
+                    connectSendCodeFailUi("语音确认设置失败");
+
+                    return;
+                }
+                new Handler(getActivity().getMainLooper())
+                        .post(new Runnable() {
+                            @Override
+                            public void run() {
+//BACK 0A 04 01 53result
+                                String trimResult = result.replace(" ", "");
+                                if (trimResult.contains("eb0f")) {//个性化设置成功语音
+
+
                                     boolInitVoice = true;
                                     connectSendCodeSuccessUi();
 
