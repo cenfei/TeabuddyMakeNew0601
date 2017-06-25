@@ -68,6 +68,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -490,7 +491,7 @@ public class BeginRecordActivity extends BaseActivity {
 
 
                 }
-
+                Collections.sort(designRoomInfos);
 
                 if (designRoomInfos.size() <= 0 && pageNum == 1) {
                     pullToRefreshListView.setVisibility(View.GONE);

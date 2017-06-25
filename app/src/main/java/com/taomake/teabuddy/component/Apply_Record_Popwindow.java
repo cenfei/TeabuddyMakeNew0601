@@ -36,6 +36,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -571,6 +572,9 @@ MainApp mainApp=(MainApp)context.getApplicationContext();
 
 
             recordInfoObjGloabl = teaDetailJsonGloabl.rows;
+
+            Collections.sort(recordInfoObjGloabl);
+
             for (UpdateRecordInfoObj updateRecordInfoObj : recordInfoObjGloabl) {
 
                 Integer id = Integer.valueOf(updateRecordInfoObj.voicefile_no);

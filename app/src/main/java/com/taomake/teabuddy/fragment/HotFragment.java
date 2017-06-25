@@ -1052,6 +1052,7 @@ boolean  boolCheckBattery=true;
 
 //                                        QuinticBleAPISdkBase.getInstanceFactory(DeviceUpdateTwoActivity.this).deviceMap.clear();
 //
+                Log.e("HOT","getInstanceFactory abort");
                 QuinticBleAPISdkBase.getInstanceFactory(getActivity()).abort();
 
 //                                        QuinticBleAPISdkBase.getInstanceFactory(DeviceUpdateTwoActivity.this).conn.disconnect();
