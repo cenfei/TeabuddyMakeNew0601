@@ -37,7 +37,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -582,7 +584,7 @@ MainApp mainApp=(MainApp)context.getApplicationContext();
 //
 //                content_play_id.setText(AdapterBeginRecordListView.luyinArrays[id - 3]);
                 apply_download_comment.setText("正在下载录音:" + AdapterBeginRecordListView.luyinArrays[id - 3]);
-                downloadMp3(updateRecordInfoObj.voicefile_url, AdapterBeginRecordListView.luyinArrays[id - 3] + ".mp3");
+                downloadMp3(updateRecordInfoObj.voicefile_url, AdapterBeginRecordListView.luyinArrays[id - 3] + ".mp3",id-3);
 
 
             }
@@ -592,6 +594,13 @@ MainApp mainApp=(MainApp)context.getApplicationContext();
             try {
                 fixedThreadPool.awaitTermination(10, TimeUnit.SECONDS);
                 apply_download_comment.setText("准备烧录到茶密");
+
+                for(int i=0;i<9;i++){
+
+                    codeList.add(sortMap.get(i));
+                }
+
+
 
                 //开始连接蓝牙----下载到设备
                 sendMp3ToDevice();
@@ -606,12 +615,12 @@ MainApp mainApp=(MainApp)context.getApplicationContext();
         }
     }
 
-
-    ExecutorService fixedThreadPool = Executors.newFixedThreadPool(3);
+public Map<Integer,byte[]>  sortMap=new HashMap<Integer,byte[]>();
+    ExecutorService fixedThreadPool = Executors.newFixedThreadPool(1);
     public static String path = "teabuddy_record_file";
     public static String Voice_Path = Environment.getExternalStorageDirectory() + "/" + path + "/";
 
-    public void downloadMp3(final String urlStr, final String fileName) {
+    public void downloadMp3(final String urlStr, final String fileName,final int num) {
 
         fixedThreadPool.execute(new Runnable() {
             @Override
@@ -678,8 +687,8 @@ MainApp mainApp=(MainApp)context.getApplicationContext();
                         e.printStackTrace();
                     }
                 }
-                codeList.add(MyStringUtils.getBytes(pathName));
-
+//                codeList.add(MyStringUtils.getBytes(pathName));
+                sortMap.put(num,MyStringUtils.getBytes(pathName));
 
 //                Message msg = myHandler.obtainMessage();
 //
