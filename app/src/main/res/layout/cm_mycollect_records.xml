@@ -12,23 +12,32 @@
     >
     <include layout="@layout/sensormine_frg_header" />
 
-    <GridView
-        android:id="@+id/gridview"
-        android:layout_width="match_parent"
 
+
+
+    <com.handmark.pulltorefresh.library.PullToRefreshGridView
+        xmlns:ptr="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/gridview"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
         android:layout_marginTop="36dp"
         android:layout_marginBottom="36dp"
 
-        android:layout_height="match_parent"
         android:horizontalSpacing="0.0dip"
-        android:listSelector="@null"
+        android:listSelector="@color/white_alpha000"
         android:numColumns="3"
         android:scrollbars="none"
         android:stretchMode="columnWidth"
-        android:verticalSpacing="51dp" />
+        android:verticalSpacing="51dp"
 
-
-
+        android:fadingEdge="none"
+        android:fastScrollEnabled="false"
+        android:footerDividersEnabled="false"
+        android:headerDividersEnabled="false"
+        android:smoothScrollbar="true"
+        ptr:ptrDrawable="@drawable/refresh_icon"
+        ptr:ptrHeaderTextColor="@color/font_titie2"
+        ptr:ptrMode="both" />
 
 
 </LinearLayout>

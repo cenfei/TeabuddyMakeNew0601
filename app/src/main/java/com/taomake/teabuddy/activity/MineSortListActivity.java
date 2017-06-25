@@ -14,7 +14,6 @@ import com.google.gson.Gson;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.taomake.teabuddy.R;
-import com.taomake.teabuddy.adapter.AdapterBeginRecordListView;
 import com.taomake.teabuddy.adapter.AdapterMineSortListView;
 import com.taomake.teabuddy.component.FoxProgressbarInterface;
 import com.taomake.teabuddy.network.ProtocolUtil;
@@ -155,11 +154,11 @@ public class MineSortListActivity extends BaseActivity {
         pullToRefreshListView.getLoadingLayoutProxy(true, false)
                 .setLastUpdatedLabel("加载更多");
         pullToRefreshListView.getLoadingLayoutProxy(true, false)
-                .setPullLabel("茶密刷起来");
+                .setPullLabel("松手刷新");
         pullToRefreshListView.getLoadingLayoutProxy(true, false)
-                .setRefreshingLabel("继续拉");
+                .setRefreshingLabel("新未来，新物种");
         pullToRefreshListView.getLoadingLayoutProxy(true, false)
-                .setReleaseLabel("放开以刷新");
+                .setReleaseLabel("继续拉动");
         pullToRefreshListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {

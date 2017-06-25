@@ -381,7 +381,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_marginTop="104dp"
+            android:layout_marginTop="99dp"
             android:layout_centerHorizontal="true"
             android:text="设备未连接"
             android:textColor="@color/white"
@@ -394,7 +394,7 @@
             android:layout_alignParentLeft="true"
             android:layout_below="@+id/pc_unconnect_title"
             android:text="1.重新打开手机蓝牙"
-            android:layout_marginTop="60dp"
+            android:layout_marginTop="50dp"
             android:layout_marginLeft="34dp"
             android:textColor="@color/white"
             android:textSize="15sp" />
@@ -419,7 +419,7 @@
             android:layout_alignParentLeft="true"
             android:layout_below="@+id/pc_unconnect_img_id"
             android:text="2.拿起茶密检查“b”灯是否亮"
-            android:layout_marginTop="55dp"
+            android:layout_marginTop="45dp"
             android:layout_marginLeft="34dp"
             android:textColor="@color/white"
             android:textSize="15sp" />

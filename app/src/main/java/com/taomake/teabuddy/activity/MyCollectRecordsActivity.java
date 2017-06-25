@@ -3,6 +3,7 @@ package com.taomake.teabuddy.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -15,6 +16,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshGridView;
 import com.taomake.teabuddy.R;
 import com.taomake.teabuddy.adapter.MyGridCreateRecordAdapter;
 import com.taomake.teabuddy.base.MainApp;
@@ -163,18 +166,59 @@ getMyCreateRecordListInfo();
 
 
     MyGridCreateRecordAdapter myGridCreateRecordAdapter;
-    GridView gridview;
+    PullToRefreshGridView gridview;
 
     void initdata() {
 
-        gridview = (GridView) findViewById(R.id.gridview);
+        gridview = (PullToRefreshGridView) findViewById(R.id.gridview);
 
 
 
         myGridCreateRecordAdapter = new MyGridCreateRecordAdapter(this, voiceGroupObjList,false);
         gridview.setAdapter(myGridCreateRecordAdapter);
         gridview.setOnItemClickListener(new ItemClickListener());
+        gridview.setAdapter(myGridCreateRecordAdapter);
+        gridview.setOnItemClickListener(new ItemClickListener());
+        gridview.setMode(PullToRefreshBase.Mode.PULL_FROM_START);// 设置底部下拉刷新模式
+        gridview.getLoadingLayoutProxy(true, false)
+                .setLastUpdatedLabel("加载更多");
+        gridview.getLoadingLayoutProxy(true, false)
+                .setPullLabel("继续拉动");
+        gridview.getLoadingLayoutProxy(true, false)
+                .setRefreshingLabel("新未来，新物种");
+        gridview.getLoadingLayoutProxy(true, false)
+                .setReleaseLabel("松手刷新");
+        gridview
+                .setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<GridView>() {
 
+                    @Override
+                    public void onPullDownToRefresh(
+                            PullToRefreshBase<GridView> refreshView) {
+                        Log.e("TAG", "onPullDownToRefresh"); // Do work to
+                        String label = DateUtils.formatDateTime(
+                                getApplicationContext(),
+                                System.currentTimeMillis(),
+                                DateUtils.FORMAT_SHOW_TIME
+                                        | DateUtils.FORMAT_SHOW_DATE
+                                        | DateUtils.FORMAT_ABBREV_ALL);
+
+                        // Update the LastUpdatedLabel
+                        refreshView.getLoadingLayoutProxy()
+                                .setLastUpdatedLabel(label);
+                        getDataFromServer();
+//                        new GetDataTask().execute();
+                    }
+
+                    @Override
+                    public void onPullUpToRefresh(
+                            PullToRefreshBase<GridView> refreshView) {
+                        Log.e("TAG", "onPullUpToRefresh"); // Do work to refresh
+                        // the list here.
+//                        new GetDataTask().execute();
+                        getDataFromServer();
+                    }
+                });
+        getDataFromServer();
 
     }
 
@@ -199,9 +243,10 @@ getMyCreateRecordListInfo();
 //        mWakeLock.acquire();
         pageNum = 1;
 
-        if(boolCanusePress) {
-            getDataFromServer();
-        }    }
+//        if(boolCanusePress) {
+//            getDataFromServer();
+//        }
+    }
 
 
 
@@ -240,6 +285,7 @@ getMyCreateRecordListInfo();
 
                 myGridCreateRecordAdapter.notifyDataSetChanged();
                 gridview.invalidate();
+                gridview.onRefreshComplete();
             }
 
         }
@@ -347,6 +393,7 @@ getMyCreateRecordListInfo();
 
                         myGridCreateRecordAdapter.notifyDataSetChanged();
                         gridview.invalidate();
+                        gridview.onRefreshComplete();
                     }
 
                     @Override
