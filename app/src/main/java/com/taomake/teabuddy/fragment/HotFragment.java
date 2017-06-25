@@ -1554,6 +1554,7 @@ boolean  boolCheckBattery=true;
                 Log.i("onReceive", "change hot...");
                 if (!TextUtils.isEmpty(updateteaid)) {
                     if (ChooseTeaActivity.chooseTeaValue != null) {
+                        teaname=ChooseTeaActivity.chooseTeaValue;
                         tea_name_id.setText(ChooseTeaActivity.chooseTeaValue);
                         tea_status_id.setText("");//清空上一杯缓存
 

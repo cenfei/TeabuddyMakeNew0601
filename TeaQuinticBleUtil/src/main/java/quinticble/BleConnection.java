@@ -471,7 +471,7 @@ public class BleConnection {
                         Log.d("connectDevice", "QuinticScanCallback---------");
 
                         try {
-                            if (Build.VERSION.SDK_INT <= 18 || true) {
+                            if (Build.VERSION.SDK_INT <= 18 ) {
                                 QuinticScanCallback cb = new QuinticScanCallback() {
                                     @Override
                                     public void onScan(QuinticScanResult scanResult) {
