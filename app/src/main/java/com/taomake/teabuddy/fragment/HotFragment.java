@@ -534,7 +534,14 @@ boolean boolShowLoadingFromTry=false;
 
         if (!TextUtils.isEmpty(teaname)) {
             tea_name_line.setVisibility(View.VISIBLE);
-            tea_name_id.setText(teaname);
+            if(teaname.length()>4){
+
+                tea_name_id.setText(teaname.substring(0,4)+"\n"+teaname.substring(4));
+
+            }else{
+                tea_name_id.setText(teaname);
+            }
+//            tea_name_id.setText(teaname);
             tea_name_id_back.setVisibility(View.VISIBLE);
         }
 
@@ -695,7 +702,13 @@ boolean boolShowLoadingFromTry=false;
                     teaname = MyStringUtils.decodeUnicode(teaname);
                     Log.i("teaname", teaname);
                     tea_name_line.setVisibility(View.VISIBLE);
-                    tea_name_id.setText(teaname);
+                    if(teaname.length()>4){
+
+                        tea_name_id.setText(teaname.substring(0,4)+"\n"+teaname.substring(4));
+
+                    }else{
+                        tea_name_id.setText(teaname);
+                    }
                     tea_name_id_back.setVisibility(View.VISIBLE);
 
                 }
@@ -1555,7 +1568,15 @@ boolean  boolCheckBattery=true;
                 if (!TextUtils.isEmpty(updateteaid)) {
                     if (ChooseTeaActivity.chooseTeaValue != null) {
                         teaname=ChooseTeaActivity.chooseTeaValue;
-                        tea_name_id.setText(ChooseTeaActivity.chooseTeaValue);
+//                        tea_name_id.setText(ChooseTeaActivity.chooseTeaValue);
+
+                        if(teaname.length()>4){
+
+                            tea_name_id.setText(teaname.substring(0,4)+"\n"+teaname.substring(4));
+
+                        }else{
+                            tea_name_id.setText(teaname);
+                        }
                         tea_status_id.setText("");//清空上一杯缓存
 
                     }

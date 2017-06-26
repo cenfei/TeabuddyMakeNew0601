@@ -139,11 +139,12 @@ public class SZ_PayPopwindow_MyRecordBottom {
 
 //        window.showAsDropDown(relView, 0,
 //                0);
+        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 
         // 在底部显示
         if(Util.checkDeviceHasNavigationBar(context)){
             window.showAtLocation(relView,
-                    Gravity.BOTTOM, 0, 130);
+                    Gravity.BOTTOM, 0, 0);
             setBackgroundAlpha(activity,0.6f);
         }else{
             window.showAtLocation(relView,
