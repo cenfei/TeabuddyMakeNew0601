@@ -8,7 +8,6 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/BleSensorTag" />
             <option value="$PROJECT_DIR$/TeaQuinticBleUtil" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/pulltorefresh" />

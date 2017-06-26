@@ -6,13 +6,17 @@ import android.util.AttributeSet;
 import android.view.KeyEvent;
 import android.widget.VideoView;
 
+import com.taomake.teabuddy.util.Util;
+
 /**
  * 视频播放,主要是因为手机的大小很多，不能保证原生的VideoView能实现全屏 Created by lgl on 16/2/18.
  */
 public class CustomVideoView extends VideoView {
 
+    Context contextm;
 	public CustomVideoView(Context context) {
 		super(context);
+        contextm=context;
 	}
 
 	public CustomVideoView(Context context, AttributeSet attrs) {
@@ -40,4 +44,12 @@ public class CustomVideoView extends VideoView {
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		return super.onKeyDown(keyCode, event);
 	}
+
+
+
+//    @Override
+//    public void setOnErrorListener(MediaPlayer.OnErrorListener l) {
+//        super.setOnErrorListener(l);
+//        Util.Toast(contextm,"VideoView Error"+l.,null);
+//    }
 }

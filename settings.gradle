@@ -1,3 +1,3 @@
 
-include ':app', ':pulltorefresh', ':TeaQuinticBleUtil', ':BleSensorTag'
+include ':app', ':pulltorefresh', ':TeaQuinticBleUtil'
 //, ':crossview'

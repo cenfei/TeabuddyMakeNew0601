@@ -56,6 +56,30 @@
         </LinearLayout>
     </RelativeLayout>
 
+
+    <RelativeLayout
+        android:id="@+id/login_rel_static_id"
+
+        android:layout_width="match_parent"
+android:background="@drawable/wel_icon_static"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/wx_login_id_static"
+            android:layout_width="match_parent"
+            android:layout_height="41dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="18dp"
+            android:layout_marginLeft="28dp"
+            android:layout_marginRight="28dp"
+            android:background="#66000000"
+            android:gravity="center"
+            android:text="微信授权登陆"
+            android:textColor="@color/white" />
+
+    </RelativeLayout>
+
     <RelativeLayout
         android:id="@+id/login_rel_id"
 

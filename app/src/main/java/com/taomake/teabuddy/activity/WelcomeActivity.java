@@ -12,10 +12,12 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -128,12 +130,19 @@ public class WelcomeActivity extends BaseActivity {
 
     }
 
+
+
+
     @Override
     protected void onResume() {
         super.onResume();
         if (foxProgressbarInterface != null) {
             foxProgressbarInterface.stopProgressBar();
         }
+        if(videoview!=null&&initVideoBool){
+            videoview.start();
+        }
+
 
     }
 
@@ -242,14 +251,16 @@ public class WelcomeActivity extends BaseActivity {
 
     }
 
+    int count=1;
 
     String WX_APP_ID = "wxeb1b89052d8f8794";
-
-
+     CustomVideoView videoview;
+    boolean initVideoBool=true;
+    TextView  wx_login_id_static=null;
     void initVideo() {
 
 
-        final CustomVideoView videoview = (CustomVideoView) findViewById(R.id.videoview);
+         videoview = (CustomVideoView) findViewById(R.id.videoview);
         //设置播放加载路径
         videoview.setVideoURI(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.main_video));
         //播放
@@ -262,15 +273,66 @@ public class WelcomeActivity extends BaseActivity {
             }
         });
 
+
+
+
+
+        videoview.setOnErrorListener(new MediaPlayer.OnErrorListener() {
+            @Override
+            public boolean onError(MediaPlayer mediaPlayer, int what, int extra) {
+                //加载失败
+                if(what==MediaPlayer.MEDIA_ERROR_SERVER_DIED){
+                    Log.v("videoview","Media Error,Server Died"+extra);
+                }else if(what==MediaPlayer.MEDIA_ERROR_UNKNOWN){
+                    Log.v("videoview","Media Error,Error Unknown "+extra);
+                }
+                initVideoBool=false;
+                //在这里做处理
+                RelativeLayout  login_rel_static_id = (RelativeLayout) findViewById(R.id.login_rel_static_id);
+                login_rel_static_id.setVisibility(View.VISIBLE);
+                login_rel_id.setVisibility(View.GONE);
+                wx_login_id_static = (TextView) findViewById(R.id.wx_login_id_static);
+
+                if(wx_login_id_static!=null){
+                    wx_login_id_static.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            dologin();
+                        }
+                    });
+                }
+
+                return true;
+            }
+        });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         SharedPreferences pref = getSharedPreferences("dataUNIION", MODE_PRIVATE);
         final String unionidPref = pref.getString("unionid", "");
 
         final String unionidConf = configPref.userUnion().get();
 
 
+
+
+
         findViewById(R.id.wx_login_id).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                dologin();
 //                if ((unionidConf != null && !unionidConf.equals("")) || (unionidPref != null && !unionidPref.equals(""))) {
 
 
@@ -296,25 +358,7 @@ public class WelcomeActivity extends BaseActivity {
 //                } else {
 
 
-                foxProgressbarInterface = new FoxProgressbarInterface();
-                foxProgressbarInterface.startProgressBar(WelcomeActivity.this, "微信跳转中...");
 
-                MainApp mainApp = (MainApp) getApplicationContext();
-                IWXAPI api = mainApp.api;
-
-                if (api == null) {
-                    api = WXAPIFactory.createWXAPI(WelcomeActivity.this, WX_APP_ID, false);
-                    api.registerApp(WX_APP_ID);
-                }
-                if (!api.isWXAppInstalled()) {
-                    //提醒用户没有按照微信
-                    Toast.makeText(WelcomeActivity.this, "没有安装微信,请先安装微信!", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                SendAuth.Req req = new SendAuth.Req();
-                req.scope = "snsapi_userinfo";
-                req.state = "wechat_sdk_demo_test";
-                api.sendReq(req);
 //                }
 
 //                Util.startActivity(LoginActivity.this,MainActivity_.class);
@@ -324,13 +368,46 @@ public class WelcomeActivity extends BaseActivity {
 
     }
 
+    public void  dologin(){
+        foxProgressbarInterface = new FoxProgressbarInterface();
+        foxProgressbarInterface.startProgressBar(WelcomeActivity.this, "微信跳转中...");
+
+        MainApp mainApp = (MainApp) getApplicationContext();
+        IWXAPI api = mainApp.api;
+
+        if (api == null) {
+            api = WXAPIFactory.createWXAPI(WelcomeActivity.this, WX_APP_ID, false);
+            api.registerApp(WX_APP_ID);
+        }
+        if (!api.isWXAppInstalled()) {
+            //提醒用户没有按照微信
+            Toast.makeText(WelcomeActivity.this, "没有安装微信,请先安装微信!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        SendAuth.Req req = new SendAuth.Req();
+        req.scope = "snsapi_userinfo";
+        req.state = "wechat_sdk_demo_test";
+        api.sendReq(req);
+    }
+
+
     @Override
     protected void onPause() {
         super.onPause();
 
-
+//        if(videoview!=null){
+//            videoview.pause();
+//        }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+//        if(videoview!=null){
+//            videoview.destroyDrawingCache();
+//
+//        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
