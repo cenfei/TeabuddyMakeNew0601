@@ -30,6 +30,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import quinticble.QuinticCommon;
+
 import static android.content.Context.WINDOW_SERVICE;
 
 
@@ -397,6 +399,39 @@ Util.Toast(context, "蓝牙关闭，请打开",null);
         return sdf.format(date);
 
     }
+
+
+    public static  String   getNowTimeBleCode(){
+        Calendar calendar=Calendar.getInstance();
+        int  year=  calendar.get(Calendar.YEAR)-2000;
+        int  month=  calendar.get(Calendar.MONTH)+1;
+        int  day=  calendar.get(Calendar.DAY_OF_MONTH);
+        int  hour=  calendar.get(Calendar.HOUR_OF_DAY);
+        int  mintue=  calendar.get(Calendar.MINUTE);
+
+        int  second=  calendar.get(Calendar.SECOND);
+
+        int  dayweek=  calendar.get(Calendar.DAY_OF_WEEK)-1;
+
+        StringBuffer sb=new StringBuffer();
+        sb.append("EB04");
+        sb.append(QuinticCommon.unsignedIntToHexString(second));
+        sb.append(QuinticCommon.unsignedIntToHexString(mintue));
+        sb.append(QuinticCommon.unsignedIntToHexString(hour));
+        sb.append(QuinticCommon.unsignedIntToHexString(dayweek));
+
+        sb.append(QuinticCommon.unsignedIntToHexString(day));
+        sb.append(QuinticCommon.unsignedIntToHexString(month));
+        sb.append(QuinticCommon.unsignedIntToHexString(year));
+
+
+        return sb.toString();
+
+
+
+    }
+
+
 
     /**
      * @功能说明：获取当前时间"yyyy-MM-dd"

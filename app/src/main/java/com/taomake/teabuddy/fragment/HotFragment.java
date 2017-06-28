@@ -1057,7 +1057,7 @@ boolean  boolCheckBattery=true;
 
             resultDeviceAll = QuinticBleAPISdkBase.resultDevice;
             // ************处理动作
-            getCzidBle();
+            setNowTimeBle();
         } else {
 //            Log.e("QuinticBleAPISdkBaseresultDevice", " null");
             startLoading();
@@ -1133,7 +1133,7 @@ boolean  boolCheckBattery=true;
                                             resultDeviceAll = resultDevice;
                                             QuinticBleAPISdkBase.resultDevice = resultDeviceAll;
                                             // ************处理动作
-                                            getCzidBle();
+                                            setNowTimeBle();
 
                                         }
                                     });
@@ -1150,7 +1150,6 @@ boolean  boolCheckBattery=true;
                                             closeProgress();
                                             unconnectUi();
 
-                                            // *****************连接失败
 
                                         }
                                     });
@@ -1158,6 +1157,88 @@ boolean  boolCheckBattery=true;
                     });
         }
     }
+
+
+    public void setNowTimeBle() {
+        if (resultDeviceAll == null) return;
+        String code = MyStringUtils.getNowTimeBleCode();
+        code=code.toUpperCase();
+        MainApp mainappAll = (MainApp) getActivity().getApplicationContext();
+        mainappAll.starttime = System.currentTimeMillis();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        resultDeviceAll.sendCommonCode(code, new QuinticCallbackTea<String>() {
+            @Override
+            public void onError(QuinticException ex) {
+                super.onError(ex);
+                new Handler(getActivity().getMainLooper())
+                        .post(new Runnable() {
+                            @Override
+                            public void run() {
+                                connectSendCodeFailUi("设置时间失败");
+                            }
+                        });
+            }
+
+            @Override
+            public void onComplete(final String result) {
+                super.onComplete(result);
+                if (result == null) {
+                    connectSendCodeFailUi("设置时间失败");
+
+                    return;
+                }
+                new Handler(getActivity().getMainLooper())
+                        .post(new Runnable() {
+                            @Override
+                            public void run() {
+//BACK 0A 04 01 53result
+                                MainApp mainappAll = (MainApp) getActivity().getApplicationContext();
+                                mainappAll.boolDownup = false;
+                                String trimResult = result.replace(" ", "");
+                                if (trimResult.contains("eb01")) {
+//                                    byte[] data = QuinticCommon.stringToBytes(trimResult);
+//                                    int czid = (QuinticCommon.unsignedByteToInt(data[3]) << 32) + (QuinticCommon.unsignedByteToInt(data[4]) << 24) +
+//                                            (QuinticCommon.unsignedByteToInt(data[5]) << 16) + (QuinticCommon.unsignedByteToInt(data[6]) << 8) +
+//                                            QuinticCommon.unsignedByteToInt(data[7]);
+//                                    Log.d("茶种id查询", batteryLevelValue + "");
+//
+//                                    getTeaInfoByUnionid(czid + "");
+//
+//                                    getbatteryLevel(false);
+                                    getCzidBle();
+                                    MainApp mainappAll0 = (MainApp) getActivity().getApplicationContext();
+                                    mainappAll0.starttime = System.currentTimeMillis();
+
+                                } else {
+                                    connectSendCodeFailUi("设置时间失败");
+                                }
+
+                            }
+                        });
+
+            }
+        });
+
+    }
+
+
 
 
     public void getCzidBle() {
