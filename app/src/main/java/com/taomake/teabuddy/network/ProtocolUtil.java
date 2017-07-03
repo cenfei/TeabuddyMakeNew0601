@@ -142,6 +142,7 @@ public class ProtocolUtil {
     ) {
         Map<String, Object> parmaMap = new HashMap<String, Object>();
         parmaMap.put("type", "getnotreadcount");
+        parmaMap.put("platform", "android");
 
         parmaMap.put("unionid", unionid);
 
