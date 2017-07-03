@@ -531,6 +531,8 @@ public class ProtocolUtil {
         parmaMap.put("type", "getmsg");
 
 //        parmaMap.put("step", "list");
+        parmaMap.put("platform", "android");
+
         parmaMap.put("unionid", unionid);
         parmaMap.put("page", start);
         parmaMap.put("pagequantity", limit);

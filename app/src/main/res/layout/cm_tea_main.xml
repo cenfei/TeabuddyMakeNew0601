@@ -393,7 +393,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_below="@+id/pc_unconnect_title"
-            android:text="1.重新打开手机蓝牙"
+            android:text="1.重新打开手机蓝牙,确保允许获取位置信息"
             android:layout_marginTop="50dp"
             android:layout_marginLeft="34dp"
             android:textColor="@color/white"

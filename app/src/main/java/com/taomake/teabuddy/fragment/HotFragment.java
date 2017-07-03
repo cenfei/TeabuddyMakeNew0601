@@ -87,7 +87,7 @@ public class HotFragment extends Fragment {
     @ViewById(R.id.bluetooth_rel)
     RelativeLayout bluetooth_rel;
 
-//    @ViewById(R.id.tea_status_id)
+    //    @ViewById(R.id.tea_status_id)
     TextView tea_status_id;
 
 
@@ -106,9 +106,9 @@ public class HotFragment extends Fragment {
     void ontea_main_dl_mg() {
         if (isLoading) return;
 
-        if(!boolCheckBattery) {
+        if (!boolCheckBattery) {
 
-            Util.Toast(getActivity(),"后台正在同步",null);
+            Util.Toast(getActivity(), "后台正在同步", null);
             return;
         }
 
@@ -123,7 +123,9 @@ public class HotFragment extends Fragment {
 
         Intent intent = new Intent(getActivity(), ChooseTeaActivity_.class);
 
-        intent.putExtra("Tea_Name", tea_name_id.getText().toString());
+        if (TextUtils.isEmpty(teaname)) teaname = "";
+
+        intent.putExtra("Tea_Name", teaname);
 
         startActivity(intent);
 
@@ -173,6 +175,15 @@ public class HotFragment extends Fragment {
                 byte[] data = QuinticCommon.stringToBytes(trimResult);
 
                 if (trimResult.contains("ec02")) {//不用解析直接调用接口上传
+                    Log.i("Broadcast receive", trimResult+"************************");
+
+                    MainApp mainappAll = (MainApp) getActivity().getApplicationContext();
+                    long endtime = System.currentTimeMillis();
+                    if (endtime - mainappAll.starttime > 1000) {
+                        Log.i("Broadcast receive", "getLogHistory************************");
+
+                        getLogHistory(true);
+                    }
 
 
                 } else if (trimResult.contains("ec0401")) {//电池电量 需要更新ui
@@ -209,11 +220,12 @@ public class HotFragment extends Fragment {
                     Log.d("是否在充电", isbatterying + "");
 
 
-                } else if (trimResult.contains("ec0f")) {//当前温度
+                } else if (trimResult.contains("ec0f")) {//当前温度---不需要上传到服务器
                     int nowTemperature = QuinticCommon.unsignedByteToInt(data[3]);
                     Log.d("当前温度", nowTemperature + "");
 
 
+                    return;
                 }
 
                 sendLogToServer(trimResult);
@@ -224,7 +236,7 @@ public class HotFragment extends Fragment {
 
 
     String MYACTION = "com.pushtest.broadcast";
-boolean boolShowLoadingFromTry=false;
+    boolean boolShowLoadingFromTry = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -386,9 +398,8 @@ boolean boolShowLoadingFromTry=false;
         tea_tryagainconnect_comment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                downupcount=1;
-                boolShowLoadingFromTry=true;
-
+                downupcount = 1;
+                boolShowLoadingFromTry = true;
 
 
                 connectUi();
@@ -446,8 +457,6 @@ boolean boolShowLoadingFromTry=false;
     public void connectSuccessUi() {
 
 
-
-
         MainApp mainappAll = (MainApp) getActivity().getApplicationContext();
 
 //        if(mainappAll.boolDownup&&downupcount==0){
@@ -459,7 +468,7 @@ boolean boolShowLoadingFromTry=false;
 //        }
 
 
-        boolCheckBattery=true;
+        boolCheckBattery = true;
 
 
         mainappAll.starttime = System.currentTimeMillis();
@@ -531,14 +540,13 @@ boolean boolShowLoadingFromTry=false;
         }
 
 
-
         if (!TextUtils.isEmpty(teaname)) {
             tea_name_line.setVisibility(View.VISIBLE);
-            if(teaname.length()>4){
+            if (teaname.length() > 4) {
 
-                tea_name_id.setText(teaname.substring(0,4)+"\n"+teaname.substring(4));
+                tea_name_id.setText(teaname.substring(0, 4) + "\n" + teaname.substring(4));
 
-            }else{
+            } else {
                 tea_name_id.setText(teaname);
             }
 //            tea_name_id.setText(teaname);
@@ -702,11 +710,11 @@ boolean boolShowLoadingFromTry=false;
                     teaname = MyStringUtils.decodeUnicode(teaname);
                     Log.i("teaname", teaname);
                     tea_name_line.setVisibility(View.VISIBLE);
-                    if(teaname.length()>4){
+                    if (teaname.length() > 4) {
 
-                        tea_name_id.setText(teaname.substring(0,4)+"\n"+teaname.substring(4));
+                        tea_name_id.setText(teaname.substring(0, 4) + "\n" + teaname.substring(4));
 
-                    }else{
+                    } else {
                         tea_name_id.setText(teaname);
                     }
                     tea_name_id_back.setVisibility(View.VISIBLE);
@@ -985,9 +993,9 @@ boolean boolShowLoadingFromTry=false;
         //tea_bat_img_id.setImageDrawable(getResources().getDrawable(R.drawable.bat_0));
 
 //        if (TextUtils.isEmpty(teaname)) {
-            tea_name_line.setVisibility(View.VISIBLE);
-            tea_name_id.setText("正在同步");
-            tea_name_id_back.setVisibility(View.GONE);
+        tea_name_line.setVisibility(View.VISIBLE);
+        tea_name_id.setText("正在同步");
+        tea_name_id_back.setVisibility(View.GONE);
 //        }
         tea_sum_cub_text_id.setTextColor(getResources().getColor(R.color.white_alpha60));
         tea_sum_cub_text_id.setText("0");
@@ -1012,8 +1020,9 @@ boolean boolShowLoadingFromTry=false;
     }
 
     //*********************加载条***************
-int downupcount=0;
-boolean  boolCheckBattery=true;
+    int downupcount = 0;
+    boolean boolCheckBattery = true;
+
     public void connectFindDevice() {
         if (!MyStringUtils.isopenBluetooth(getActivity())) {
             connectSendCodeFailUi("");
@@ -1040,16 +1049,16 @@ boolean  boolCheckBattery=true;
         Log.e("blindDeviceId:", blindDeviceId);
 //            getTeaInfoByUnionid();
 
-        boolCheckBattery=false;
+        boolCheckBattery = false;
         if (MyStringUtils.isNotNullAndEmpty(QuinticBleAPISdkBase.resultDevice)) {
 
 //            Log.e("QuinticBleAPISdkBaseresultDevice", "not null");
             if (mainappAll.boolDownup) {
                 startLoading();
-            }else{
-                if(boolShowLoadingFromTry){
+            } else {
+                if (boolShowLoadingFromTry) {
                     startLoading();
-                    boolShowLoadingFromTry=false;
+                    boolShowLoadingFromTry = false;
                 }
 
             }
@@ -1065,7 +1074,7 @@ boolean  boolCheckBattery=true;
 
 //                                        QuinticBleAPISdkBase.getInstanceFactory(DeviceUpdateTwoActivity.this).deviceMap.clear();
 //
-                Log.e("HOT","getInstanceFactory abort");
+                Log.e("HOT", "getInstanceFactory abort");
                 QuinticBleAPISdkBase.getInstanceFactory(getActivity()).abort();
 
 //                                        QuinticBleAPISdkBase.getInstanceFactory(DeviceUpdateTwoActivity.this).conn.disconnect();
@@ -1162,25 +1171,9 @@ boolean  boolCheckBattery=true;
     public void setNowTimeBle() {
         if (resultDeviceAll == null) return;
         String code = MyStringUtils.getNowTimeBleCode();
-        code=code.toUpperCase();
+        code = code.toUpperCase();
         MainApp mainappAll = (MainApp) getActivity().getApplicationContext();
         mainappAll.starttime = System.currentTimeMillis();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
         resultDeviceAll.sendCommonCode(code, new QuinticCallbackTea<String>() {
@@ -1237,8 +1230,6 @@ boolean  boolCheckBattery=true;
         });
 
     }
-
-
 
 
     public void getCzidBle() {
@@ -1475,7 +1466,7 @@ boolean  boolCheckBattery=true;
                                     if (deviceVersion == null) {
                                         getDeviceUpdate();
                                     } else {
-                                        getLogHistory();//同时获取log日志  2.并且向网络判断当前版本更新ui
+                                        getLogHistory(false);//同时获取log日志  2.并且向网络判断当前版本更新ui
 
                                     }
                                     MainApp mainappAll = (MainApp) getActivity().getApplicationContext();
@@ -1548,7 +1539,7 @@ boolean  boolCheckBattery=true;
                                     }
                                     configPref.userDeviceVersion().put(deviceVersion);
                                     checkDeviceUpdateToServer();
-                                    getLogHistory();//同时获取log日志  2.并且向网络判断当前版本更新ui
+                                    getLogHistory(false);//同时获取log日志  2.并且向网络判断当前版本更新ui
 
                                     MainApp mainappAll = (MainApp) getActivity().getApplicationContext();
                                     mainappAll.starttime = System.currentTimeMillis();
@@ -1567,7 +1558,7 @@ boolean  boolCheckBattery=true;
     }
 
 
-    public void getLogHistory() {
+    public void getLogHistory(final boolean boolBroadcast) {
         if (resultDeviceAll == null) return;
         String code = "EA07";
         final String failMsg = "历史LOG查询失败";
@@ -1603,15 +1594,18 @@ boolean  boolCheckBattery=true;
                                 String trimResult = result.replace(" ", "");
 
                                 if (trimResult.contains("ea07")) {
-                                    byte[] data = QuinticCommon.stringToBytes(trimResult);
-                                    int logValue = (QuinticCommon.unsignedByteToInt(data[3]) << 8) +
-                                            QuinticCommon.unsignedByteToInt(data[4]);
-                                    Log.d("是否空杯", teaingIsNull + "");
-                                    Log.d("log总数", logValue + "");
                                     MainApp mainappAll = (MainApp) getActivity().getApplicationContext();
                                     mainappAll.starttime = System.currentTimeMillis();
+                                    if (!boolBroadcast) {
+                                        byte[] data = QuinticCommon.stringToBytes(trimResult);
+                                        int logValue = (QuinticCommon.unsignedByteToInt(data[3]) << 8) +
+                                                QuinticCommon.unsignedByteToInt(data[4]);
+                                        Log.d("是否空杯", teaingIsNull + "");
+                                        Log.d("log总数", logValue + "");
 
-                                    connectSuccessUi();
+
+                                        connectSuccessUi();
+                                    }
                                 } else {
                                     connectSendCodeFailUi(failMsg);
                                 }
@@ -1635,7 +1629,7 @@ boolean  boolCheckBattery=true;
 
                 String updateVoice = intent.getStringExtra("updateVoice");
 
-                if(!TextUtils.isEmpty(updateVoice)&&updateVoice.equals("1")){
+                if (!TextUtils.isEmpty(updateVoice) && updateVoice.equals("1")) {
 
                     unconnectUi();
 
@@ -1643,19 +1637,17 @@ boolean  boolCheckBattery=true;
                 }
 
 
-
-
                 Log.i("onReceive", "change hot...");
                 if (!TextUtils.isEmpty(updateteaid)) {
                     if (ChooseTeaActivity.chooseTeaValue != null) {
-                        teaname=ChooseTeaActivity.chooseTeaValue;
+                        teaname = ChooseTeaActivity.chooseTeaValue;
 //                        tea_name_id.setText(ChooseTeaActivity.chooseTeaValue);
 
-                        if(teaname.length()>4){
+                        if (teaname.length() > 4) {
 
-                            tea_name_id.setText(teaname.substring(0,4)+"\n"+teaname.substring(4));
+                            tea_name_id.setText(teaname.substring(0, 4) + "\n" + teaname.substring(4));
 
-                        }else{
+                        } else {
                             tea_name_id.setText(teaname);
                         }
                         tea_status_id.setText("");//清空上一杯缓存

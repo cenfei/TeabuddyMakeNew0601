@@ -158,16 +158,7 @@ public class WelcomeActivity extends BaseActivity {
         }
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[]
-            grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == MY_PERMISSIONS_REQUEST_ACCESS_ALL) {
-            postStart();
-        }
 
-
-    }
 
 
 //    int RECORD_AUDIO_ID = 3004;
@@ -250,8 +241,17 @@ public class WelcomeActivity extends BaseActivity {
 
 
     }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[]
+            grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == MY_PERMISSIONS_REQUEST_ACCESS_ALL) {
+            postStart();
+        }
 
     int count=1;
+
+    }
 
     String WX_APP_ID = "wxeb1b89052d8f8794";
      CustomVideoView videoview;
