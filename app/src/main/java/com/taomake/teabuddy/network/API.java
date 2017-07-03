@@ -11,6 +11,7 @@ public interface API {
     /*********************************
      * URL变量
      *****************************************/
+    public String serverBase = "http://app.teabuddy.cn/";
 //    public String server = "http://testserver.teabuddy.cn/appadmin/server2.php";
     public String server = "http://app.teabuddy.cn/appadmin/server2.php";
 

@@ -38,6 +38,7 @@ import com.taomake.teabuddy.activity.SecondQrCode;
 import com.taomake.teabuddy.base.MainApp;
 import com.taomake.teabuddy.component.FoxProgressbarInterface;
 import com.taomake.teabuddy.component.FoxToastInterface;
+import com.taomake.teabuddy.network.API;
 import com.taomake.teabuddy.network.ProtocolUtil;
 import com.taomake.teabuddy.network.RowMessageHandler;
 import com.taomake.teabuddy.object.BindDeviceCodeJson;
@@ -299,6 +300,21 @@ public class WXEntryActivity extends AppCompatActivity implements IWXAPIEventHan
 	}
 
 	public void  newUser(){
+
+		if(TextUtils.isEmpty(headimgurl)){
+			headimgurl= API.serverBase+"css/img/defaulthead.jpg";
+		}
+
+		if(TextUtils.isEmpty(nickname)){
+			nickname= "默认";
+		}
+		if(TextUtils.isEmpty(city)){
+			city= "默认";
+		}
+		if(TextUtils.isEmpty(province)){
+			province= "默认";
+		}
+
 		imageLoader.loadImage(headimgurl, new ImageLoadingListener() {
 			@Override
 			public void onLoadingStarted(String imageUri, View view) {
@@ -307,7 +323,8 @@ public class WXEntryActivity extends AppCompatActivity implements IWXAPIEventHan
 
 			@Override
 			public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-
+				headimgurl= API.serverBase+"css/img/defaulthead.jpg";
+				newUser();
 			}
 
 			@Override
