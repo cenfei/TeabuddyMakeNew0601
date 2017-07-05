@@ -963,7 +963,7 @@ public class HotFragment extends Fragment {
 //QuinticBleAPISdkBase.getInstanceFactory(getActivity()).setConnectionNull();
 
 
-        new One_Permission_Popwindow().showPopwindow(getActivity(), tea_name_id, "当前程序异常无法连接设备请重启APP", "马上重启", "以后再说", new One_Permission_Popwindow.CallBackPayWindow() {
+        new One_Permission_Popwindow().showPopwindow(getActivity(), tea_name_id, "建议重启应用，以便连接", "去重启", "再等等", new One_Permission_Popwindow.CallBackPayWindow() {
             @Override
             public void handleCallBackChangeUser() {
                 System.exit(0);

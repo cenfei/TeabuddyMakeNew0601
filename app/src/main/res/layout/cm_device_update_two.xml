@@ -13,7 +13,7 @@
 <LinearLayout
     android:id="@+id/title_line_id"
     android:layout_width="wrap_content"
-    android:layout_height="59dp"
+    android:layout_height="69dp"
     android:layout_marginTop="87dp"
     android:layout_marginLeft="30dp"
     android:orientation="horizontal"
@@ -24,50 +24,48 @@
         android:layout_height="59dp"
         android:src="@drawable/dv_update_small"
         />
-<RelativeLayout
+<LinearLayout
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
     android:layout_marginLeft="10dp"
     android:gravity="left"
+    android:orientation="vertical"
     >
     <TextView
 
             android:id="@+id/tea_os_version"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:layout_alignParentTop="true"
+        android:gravity="left"
+        android:text="111"
         android:textAlignment="center"
         android:textColor="@color/white"
-        android:textSize="18sp" />
+        android:textSize="16sp" />
 
     <TextView
 
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="MADISON ART DESIGN"
-        android:gravity="center"
+        android:gravity="left"
 
         android:textAlignment="center"
         android:textColor="@color/white"
         android:textSize="12sp"
-        android:layout_above="@+id/text_db_size"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+      />
     <TextView
 
         android:id="@+id/text_db_size"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="2.2"
-        android:layout_alignParentBottom="true"
         android:layout_marginTop="3dp"
-        android:gravity="center"
+        android:gravity="left"
         android:textAlignment="center"
         android:textColor="@color/white"
         android:textSize="12sp" />
 
-</RelativeLayout>
+</LinearLayout>
 
 
 

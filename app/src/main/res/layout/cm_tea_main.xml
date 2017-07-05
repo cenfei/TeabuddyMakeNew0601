@@ -375,6 +375,13 @@
 
 
         </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="20dp"
+            >
         <TextView
 
             android:id="@+id/pc_unconnect_title"
@@ -447,7 +454,7 @@
             android:textColor="@color/white"
             android:layout_marginBottom="24dp"
             android:textSize="15sp" />
-
+        </LinearLayout>
     </RelativeLayout>
 
 
