@@ -350,7 +350,6 @@
     <RelativeLayout
         android:id="@+id/pc_unconnected_rel"
         android:layout_width="match_parent"
-        android:visibility="gone"
         android:layout_height="match_parent">
 
         <LinearLayout
@@ -376,21 +375,21 @@
 
         </LinearLayout>
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="20dp"
+            android:layout_marginBottom="24dp"
             >
         <TextView
 
             android:id="@+id/pc_unconnect_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_marginTop="99dp"
-            android:layout_centerHorizontal="true"
+            android:gravity="center_horizontal"
             android:text="设备未连接"
+            android:layout_gravity="center_horizontal"
+
             android:textColor="@color/white"
             android:textSize="30sp" />
         <TextView
@@ -398,10 +397,9 @@
             android:id="@+id/pc_unconnect_first"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@+id/pc_unconnect_title"
-            android:text="1.重新打开手机蓝牙,确保允许获取位置信息"
+            android:gravity="center_horizontal"
             android:layout_marginTop="50dp"
+            android:text="1.重新打开手机蓝牙,确保允许获取位置信息"
             android:layout_marginLeft="34dp"
             android:textColor="@color/white"
             android:textSize="15sp" />
@@ -411,10 +409,9 @@
             android:id="@+id/pc_unconnect_img_id"
             android:layout_width="41dp"
             android:layout_height="76dp"
-            android:layout_below="@+id/pc_unconnect_first"
-
-            android:layout_marginTop="18dp"
-            android:layout_centerHorizontal="true"
+            android:gravity="center_horizontal"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="30dp"
             android:scaleType="fitXY"
             android:src="@drawable/pc_unconnect" />
 
@@ -423,9 +420,9 @@
             android:id="@+id/pc_unconnect_second"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@+id/pc_unconnect_img_id"
+
             android:text="2.拿起茶密检查“b”灯是否亮"
+            android:gravity="center_horizontal"
             android:layout_marginTop="45dp"
             android:layout_marginLeft="34dp"
             android:textColor="@color/white"
@@ -436,10 +433,11 @@
             android:id="@+id/pc_cub_img_id"
             android:layout_width="82dp"
             android:layout_height="62dp"
-            android:layout_below="@+id/pc_unconnect_second"
+            android:gravity="center_horizontal"
+android:layout_marginTop="30dp"
+            android:layout_gravity="center_horizontal"
 
-            android:layout_marginTop="30dp"
-            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="30dp"
             android:scaleType="fitXY"
             android:src="@drawable/pc_cub" />
 
@@ -449,10 +447,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="还没连接上?"
-            android:layout_alignParentBottom="true"
-          android:layout_centerHorizontal="true"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_horizontal"
             android:textColor="@color/white"
-            android:layout_marginBottom="24dp"
             android:textSize="15sp" />
         </LinearLayout>
     </RelativeLayout>
