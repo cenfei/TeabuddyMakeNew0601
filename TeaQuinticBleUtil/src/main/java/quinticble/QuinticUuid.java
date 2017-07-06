@@ -48,7 +48,8 @@ public static final String SERVICE_UUID_NF = "0000fee7-0000-1000-8000-00805f9b34
     public static final String WRITE_CHARACTERISTIC_UUID = "0000feea-0000-1000-8000-00805f9b34fb";
     public static final String NOTIFY_CHARACTERISTIC_UUID = "0000feef-0000-1000-8000-00805f9b34fb";
     public static final String INDICATE_NOTIFY_CHARACTERISTIC_UUID = "0000feee-0000-1000-8000-00805f9b34fb";
-    public static final String OAD_UPDATE_UUID = "f000ccc0-0451-4000-b000-000000000000";
+    //public static final String OAD_UPDATE_UUID = "f000ccc0-0451-4000-b000-000000000000";
+    public static final String OAD_UPDATE_UUID = "0000fee7-0000-1000-8000-00805f9b34fb";
 
     /**
      * notify特征uuid

@@ -1154,11 +1154,18 @@ public class HotFragment extends Fragment {
                                     .post(new Runnable() {
                                         @Override
                                         public void run() {
+                                            MainApp mainApp = (MainApp) getActivity().getApplicationContext();
+                                            if (countError<3){
+                                                connectUi();
+                                                connectFindDevice();
+                                                countError++;
+                                        }else
 
+                                        {
                                             QuinticBleAPISdkBase.resultDevice = null;
                                             closeProgress();
                                             unconnectUi();
-
+                                        }
 
                                         }
                                     });

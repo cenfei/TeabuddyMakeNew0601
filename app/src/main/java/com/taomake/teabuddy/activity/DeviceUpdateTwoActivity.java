@@ -429,8 +429,7 @@ String  updatetext=MyStringUtils.decodeUnicode(deviceVersionObj.content);
         public void run() {
             // TODO Auto-generated method stub
             //要做的事情
-            if (process <= 20) {
-
+            if (process <= 10) {
 
 
                 writehandler.postDelayed(this, 1000);
@@ -520,6 +519,7 @@ String  updatetext=MyStringUtils.decodeUnicode(deviceVersionObj.content);
                                     foxProgressbarInterface = new FoxProgressbarInterface();
 
                                     foxProgressbarInterface.startProgressBar(DeviceUpdateTwoActivity.this, "OAD数据读取中...");
+                                    closeBle();
                                     writehandler.post(runnable);
 
                                     downloadBin(deviceVersionObj.url, Constant.path_bin_name);
@@ -686,7 +686,6 @@ String  updatetext=MyStringUtils.decodeUnicode(deviceVersionObj.content);
 
 
     }
-
 
 }
 

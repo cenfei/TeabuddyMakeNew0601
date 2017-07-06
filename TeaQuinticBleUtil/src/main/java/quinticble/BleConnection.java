@@ -15,6 +15,7 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.util.Log;
 
+import java.util.List;
 import java.util.Queue;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -147,9 +148,21 @@ public class BleConnection {
                 if (BluetoothGatt.GATT_SUCCESS == status) {
 
 
-                    final BluetoothGattService serviceoad = gatt.getService(UUID.fromString(QuinticUuid.OAD_UPDATE_UUID));
+                    List<BluetoothGattService> blelist=gatt.getServices();
+                    boolean boolUpdate=true;
+                    for(BluetoothGattService bluetoothGattService:blelist){
+                        if(bluetoothGattService.getUuid().equals(UUID.fromString(QuinticUuid.OAD_UPDATE_UUID))){
+                            boolUpdate=false;
+                            break;
+                        }
 
-                    if (serviceoad != null) {
+                    }
+
+
+
+//                    final BluetoothGattService serviceoad = gatt.getService(UUID.fromString(QuinticUuid.OAD_UPDATE_UUID));
+
+                    if (boolUpdate) {
 //                        bluetoothDevice = gatt.getDevice();
                         if (connectTimeout.isStarted()) {
                             connectTimeout.cancel();
