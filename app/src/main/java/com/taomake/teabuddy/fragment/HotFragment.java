@@ -4,14 +4,20 @@ package com.taomake.teabuddy.fragment;
  * Created by foxcen on 16/7/29.
  */
 
+import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Display;
@@ -175,7 +181,7 @@ public class HotFragment extends Fragment {
                 byte[] data = QuinticCommon.stringToBytes(trimResult);
 
                 if (trimResult.contains("ec02")) {//不用解析直接调用接口上传
-                    Log.i("Broadcast receive", trimResult+"************************");
+                    Log.i("Broadcast receive", trimResult + "************************");
 
                     MainApp mainappAll = (MainApp) getActivity().getApplicationContext();
                     long endtime = System.currentTimeMillis();
@@ -296,7 +302,7 @@ public class HotFragment extends Fragment {
 
     public void changeui() {
 
-
+        countError = 0;
         connectFindDevice();
 
         Log.d("HotFragment", "changeui");
@@ -401,6 +407,7 @@ public class HotFragment extends Fragment {
                 downupcount = 1;
                 boolShowLoadingFromTry = true;
 
+                countError = 0;
 
                 connectUi();
                 connectFindDevice();
@@ -1030,6 +1037,19 @@ public class HotFragment extends Fragment {
 
             return;
         }
+        if (Build.VERSION.SDK_INT >= 23) {
+
+            if (ContextCompat.checkSelfPermission(getActivity(),
+                    Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+                        MY_PERMISSIONS_REQUEST_ACCESS_ALL);
+                unconnectUi();
+                return;
+            }
+        }
+
+
+
         MainApp mainappAll = (MainApp) getActivity().getApplicationContext();
         long endtime = System.currentTimeMillis();
 
@@ -1155,17 +1175,17 @@ public class HotFragment extends Fragment {
                                         @Override
                                         public void run() {
                                             MainApp mainApp = (MainApp) getActivity().getApplicationContext();
-                                            if (countError<3){
+                                            if (countError < 3) {
                                                 connectUi();
                                                 connectFindDevice();
                                                 countError++;
-                                        }else
+                                            } else
 
-                                        {
-                                            QuinticBleAPISdkBase.resultDevice = null;
-                                            closeProgress();
-                                            unconnectUi();
-                                        }
+                                            {
+                                                QuinticBleAPISdkBase.resultDevice = null;
+                                                closeProgress();
+                                                unconnectUi();
+                                            }
 
                                         }
                                     });
@@ -1540,7 +1560,7 @@ public class HotFragment extends Fragment {
                                     Log.d("当前固件版本versionD", versionD + "");
 
                                     deviceVersion = versionD + "";
-//                                    deviceVersion="2.45";//fox测试
+//                                    deviceVersion = "2.45";//fox测试
                                     if (deviceVersion.length() == 3) {
                                         deviceVersion = deviceVersion + "0";
                                     }
@@ -1808,5 +1828,28 @@ public class HotFragment extends Fragment {
 
     }
 
+    int  MY_PERMISSIONS_REQUEST_ACCESS_ALL=5005;
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[]
+            grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == MY_PERMISSIONS_REQUEST_ACCESS_ALL) {
+//            postStart();
+
+
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission Granted
+                connectUi();
+                connectFindDevice();
+            } else {
+                // Permission Denied
+                unconnectUi();
+                Toast.makeText(getActivity(), "WRITE_CONTACTS Denied", Toast.LENGTH_SHORT)
+                        .show();
+            }
+        }
+
+    }
 
 }
