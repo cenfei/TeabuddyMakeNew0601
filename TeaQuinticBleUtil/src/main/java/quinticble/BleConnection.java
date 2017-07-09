@@ -67,6 +67,8 @@ public class BleConnection {
 
     private long lastcodeTime = 0;
 
+
+    public static  boolean updateneed=false;
     /**
      * 初始化ble连接
      *
@@ -148,32 +150,35 @@ public class BleConnection {
                 if (BluetoothGatt.GATT_SUCCESS == status) {
 
 
-                    List<BluetoothGattService> blelist=gatt.getServices();
-                    boolean boolUpdate=true;
-                    for(BluetoothGattService bluetoothGattService:blelist){
-                        if(bluetoothGattService.getUuid().equals(UUID.fromString(QuinticUuid.OAD_UPDATE_UUID))){
-                            boolUpdate=false;
-                            break;
-                        }
-
-                    }
-
-
-
-//                    final BluetoothGattService serviceoad = gatt.getService(UUID.fromString(QuinticUuid.OAD_UPDATE_UUID));
-
-                    if (boolUpdate) {
-//                        bluetoothDevice = gatt.getDevice();
-                        if (connectTimeout.isStarted()) {
-                            connectTimeout.cancel();
-                            LockUtil.getInstance().releaseLock(LOCK_CONNECT_DEVICE);
-                            bleStateChangeCallback.onUpdate(null);
-
-                        }
-                        gatt.disconnect();
-                        return;
-                    }
-
+//                    List<BluetoothGattService> blelist=gatt.getServices();
+//                    boolean boolUpdate=true;
+//                    for(BluetoothGattService bluetoothGattService:blelist){
+//                        if(bluetoothGattService.getUuid().equals(UUID.fromString(QuinticUuid.OAD_UPDATE_UUID))){
+//                            boolUpdate=false;
+//                            break;
+//                        }
+//
+//                    }
+//
+//
+//
+////                    final BluetoothGattService serviceoad = gatt.getService(UUID.fromString(QuinticUuid.OAD_UPDATE_UUID));
+//
+//                    if (boolUpdate) {
+//if(!updateneed){
+//                        updateneed=true;
+////                        bluetoothDevice = gatt.getDevice();
+//                        if (connectTimeout.isStarted()) {
+//                            connectTimeout.cancel();
+//                            LockUtil.getInstance().releaseLock(LOCK_CONNECT_DEVICE);
+//                            bleStateChangeCallback.onUpdate(null);
+//
+//                        }
+//                        gatt.disconnect();
+//}
+//                        return;
+//                    }
+//                    updateneed=false;
 
                     final BluetoothGattService service = gatt.getService(UUID.fromString(serviceUuid));
                     if (service == null) {

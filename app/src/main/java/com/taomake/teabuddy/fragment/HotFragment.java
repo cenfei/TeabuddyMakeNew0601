@@ -65,6 +65,7 @@ import org.androidannotations.annotations.sharedpreferences.Pref;
 import java.util.List;
 import java.util.Map;
 
+import quinticble.BleConnection;
 import quinticble.QuinticBleAPISdkBase;
 import quinticble.QuinticCallbackTea;
 import quinticble.QuinticCommon;
@@ -406,7 +407,7 @@ public class HotFragment extends Fragment {
             public void onClick(View v) {
                 downupcount = 1;
                 boolShowLoadingFromTry = true;
-
+BleConnection.updateneed=false;
                 countError = 0;
 
                 connectUi();
@@ -655,7 +656,7 @@ public class HotFragment extends Fragment {
 
                         @Override
                         public void handleCallBackBindDevice() {
-
+unconnectUi();
 
                         }
                     });
@@ -931,7 +932,7 @@ public class HotFragment extends Fragment {
         public void run() {
             // TODO Auto-generated method stub
             //要做的事情
-            if (process <= 20) {
+            if (process <= 30) {
                 connect_status_commnet_id.setVisibility(View.VISIBLE);
 
                 int processcase = process % 3;
@@ -965,6 +966,7 @@ public class HotFragment extends Fragment {
 
     public void loadOuttime() {
         isLoading = false;
+        countError=5;
         connectSendCodeFailUi("");
 //        Util.Toast(getActivity(), "设备无法连接,建议重启设备", null);
 //QuinticBleAPISdkBase.getInstanceFactory(getActivity()).setConnectionNull();
@@ -1097,7 +1099,7 @@ public class HotFragment extends Fragment {
                 Log.e("HOT", "getInstanceFactory abort");
                 QuinticBleAPISdkBase.getInstanceFactory(getActivity()).abort();
 
-//                                        QuinticBleAPISdkBase.getInstanceFactory(DeviceUpdateTwoActivity.this).conn.disconnect();
+//                                        QuinticBleAPISdkBase.getInstanceFactory(getActivity()).conn.disconnect();
 
             }
 
@@ -1125,11 +1127,14 @@ public class HotFragment extends Fragment {
                                             QuinticBleAPISdkBase.resultDevice = resultDeviceAll;
                                             // ************处理动作
                                             if (QuinticBleAPISdkBase.getInstanceFactory(getActivity()).conn != null) {
-                                                QuinticBleAPISdkBase.getInstanceFactory(getActivity()).conn.disconnect();
+//                                                QuinticBleAPISdkBase.getInstanceFactory(getActivity()).conn.disconnect();
+                                                QuinticBleAPISdkBase.getInstanceFactory(getActivity()).abort();
+
                                             }
                                             Util.Toast(getActivity(), "将立马前往升级", null);
 
                                             mustUpdate = true;
+                                            closeBle();
                                             checkDeviceUpdateToServer();
 
 //                                            try {
@@ -1175,7 +1180,7 @@ public class HotFragment extends Fragment {
                                         @Override
                                         public void run() {
                                             MainApp mainApp = (MainApp) getActivity().getApplicationContext();
-                                            if (countError < 3) {
+                                            if (countError < 5) {
                                                 connectUi();
                                                 connectFindDevice();
                                                 countError++;
@@ -1560,7 +1565,7 @@ public class HotFragment extends Fragment {
                                     Log.d("当前固件版本versionD", versionD + "");
 
                                     deviceVersion = versionD + "";
-//                                    deviceVersion = "2.45";//fox测试
+                                    deviceVersion = "2.45";//fox测试
                                     if (deviceVersion.length() == 3) {
                                         deviceVersion = deviceVersion + "0";
                                     }
@@ -1785,7 +1790,7 @@ public class HotFragment extends Fragment {
                             break;
                         case BluetoothAdapter.STATE_TURNING_OFF://蓝牙关掉---切换到没有连接页面
                             Log.e("HOT", "onReceive---------STATE_TURNING_OFF");
-                            if (mainApp.boolupdateSuccess == 2 || mainApp.boolupdateSuccess == 1) {
+                            if ( mainApp.boolupdateSuccess == 1||mainApp.boolupdateSuccess == 2) {
                                 openBle();
 
 
@@ -1827,6 +1832,25 @@ public class HotFragment extends Fragment {
 
 
     }
+
+    public void closeBle() {
+
+        BluetoothAdapter mBluetoothAdapter = BluetoothAdapter
+                .getDefaultAdapter();
+        if (mBluetoothAdapter == null) {
+            Toast.makeText(getActivity(), "本机没有找到蓝牙硬件或驱动！", Toast.LENGTH_SHORT).show();
+        }
+        // 如果本地蓝牙没有开启，则开启
+        if (mBluetoothAdapter.isEnabled()) {
+            // 用enable()方法来开启，无需询问用户(实惠无声息的开启蓝牙设备),这时就需要用到android.permission.BLUETOOTH_ADMIN权限。
+            mBluetoothAdapter.disable();
+
+
+        }
+
+
+    }
+
 
     int  MY_PERMISSIONS_REQUEST_ACCESS_ALL=5005;
 

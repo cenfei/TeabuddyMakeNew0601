@@ -49,7 +49,7 @@ public class FwUpdateActivityTea extends Activity {
     private static final int FILE_ACTIVITY_REQ = 0;
 
     private static final short OAD_CONN_INTERVAL = 12; // 15 milliseconds
-    private static final short OAD_SUPERVISION_TIMEOUT = 50; // 500 milliseconds
+    private static final short OAD_SUPERVISION_TIMEOUT = 60; // 500 milliseconds
     private static final int GATT_WRITE_TIMEOUT = 300; // Milliseconds
 
     private static final int FILE_BUFFER_SIZE = 0x40000;
@@ -66,7 +66,7 @@ public class FwUpdateActivityTea extends Activity {
     private static final int OAD_IMG_HDR_SIZE = 8;
     private static final long TIMER_INTERVAL = 1000;
 
-    private static final int SEND_INTERVAL = 20; // Milliseconds (make sure this is longer than the connection interval)
+    private static final int SEND_INTERVAL = 50; // Milliseconds (make sure this is longer than the connection interval)
     private static final int BLOCKS_PER_CONNECTION = 4; // May sent up to four blocks per connection
 
     // GUI
