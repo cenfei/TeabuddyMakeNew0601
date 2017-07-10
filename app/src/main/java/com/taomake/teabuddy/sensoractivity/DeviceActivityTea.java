@@ -77,7 +77,7 @@ public class DeviceActivityTea extends Activity {
     }
 
     FoxProgressbarInterface foxProgressbarInterface;
-
+    TextView tea_os_version;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
@@ -86,7 +86,7 @@ public class DeviceActivityTea extends Activity {
         setContentView(R.layout.sensor_device_update_two);
 
 
-        TextView tea_os_version = (TextView) findViewById(R.id.tea_os_version);
+         tea_os_version = (TextView) findViewById(R.id.tea_os_version);
         TextView text_db_size = (TextView) findViewById(R.id.text_db_size);
 
         TextView comment_content_id = (TextView) findViewById(R.id.comment_content_id);
@@ -716,6 +716,20 @@ public class DeviceActivityTea extends Activity {
                 } else {
                     Toast.makeText(getApplication(), "Service discovery failed",
                             Toast.LENGTH_LONG).show();
+
+                    new One_Permission_Popwindow().showPopwindow(DeviceActivityTea.this,  tea_os_version, "建议重启应用，以便连接", "", "停止升级", new One_Permission_Popwindow.CallBackPayWindow() {
+                        @Override
+                        public void handleCallBackChangeUser() {
+                            System.exit(0);
+                        }
+
+                        @Override
+                        public void handleCallBackBindDevice() {
+
+
+                        }
+                    });
+
                     return;
                 }
             } else if (BluetoothLeService.ACTION_DATA_NOTIFY.equals(action)) {

@@ -83,7 +83,7 @@ public class QuinticDeviceFactoryTea {
         quinticDevice0=quinticDevice;
         Log.e("QueueSupportTea","QueueSupportTea");
 
-        quinticDevice = new QuinticDeviceWithQueueSupportTea(quinticDevice);
+        quinticDevice = new QuinticDeviceWithQueueSupportTea(quinticDevice,context);
         Log.e("QueueSupportTea","QueueSupportTea end");
 
         deviceMap.put(quinticDevice.getAddress(), quinticDevice);

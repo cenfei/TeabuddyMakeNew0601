@@ -429,7 +429,7 @@ String  updatetext=MyStringUtils.decodeUnicode(deviceVersionObj.content);
         public void run() {
             // TODO Auto-generated method stub
             //要做的事情
-            if (process <= 10) {
+            if (process <= 20) {
 
 
                 writehandler.postDelayed(this, 1000);

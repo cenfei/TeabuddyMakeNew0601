@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.taomake.teabuddy.R;
 import com.taomake.teabuddy.component.FoxProgressbarInterface;
+import com.taomake.teabuddy.fragment.HotFragment;
 import com.taomake.teabuddy.network.ProtocolUtil;
 import com.taomake.teabuddy.network.RowMessageHandler;
 import com.taomake.teabuddy.object.BindDeviceCodeJson;
@@ -191,6 +192,12 @@ public class SecondQrCodeAddDevice extends AppCompatActivity {
                 if(checkCode.mac!=null&&!checkCode.mac.equals("")){
                     configPref.userDeviceMac().put(checkCode.mac);
                     configPref.userDeviceId().put(checkCode.deviceid);
+
+                    Intent intent = new Intent(HotFragment.MYACTION_UPDATE);
+                    Log.i("Broadcast addadvice Hot", "change hot addadvice");
+                    intent.putExtra("fromAddAddvice", true);
+                    sendBroadcast(intent);
+
                 }
 
                 finish();

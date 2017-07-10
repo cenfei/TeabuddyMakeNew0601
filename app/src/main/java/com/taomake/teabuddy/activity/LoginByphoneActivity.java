@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.taomake.teabuddy.R;
 import com.taomake.teabuddy.component.FoxProgressbarInterface;
 import com.taomake.teabuddy.network.ProtocolUtil;
@@ -32,6 +33,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by zhang on 2015/8/7.
@@ -340,8 +342,17 @@ boolean boolman=sexType;
         foxProgressbarInterface.stopProgressBar();
         if (resp != null && !resp.equals("")) {
 
+            Map<String, Object> orderMap = new Gson().fromJson(resp,
+                    new TypeToken<Map<String, Object>>() {
+                    }.getType());
             //解析返回json 数据
+            Double return_code_int = (Double) orderMap.get("rcode");
 
+            if(return_code_int!=0) {
+
+
+                return;
+            }
 
             BindDeviceCodeJson baseJson = new Gson().fromJson(resp, BindDeviceCodeJson.class);
             if ((baseJson.rcode + "").equals(Constant.RES_SUCCESS)) {

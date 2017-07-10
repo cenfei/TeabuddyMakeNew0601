@@ -1,6 +1,8 @@
 package quinticble;
 
 import android.bluetooth.BluetoothDevice;
+import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 
 import java.util.List;
@@ -15,14 +17,19 @@ class QuinticDeviceWithQueueSupportTea implements QuinticDeviceTea {
     private Timeout autoReconnectTimeout;
 
     private boolean isTimeoutBusy;
+    private Context mcontext;
 
-    public QuinticDeviceWithQueueSupportTea(QuinticDeviceTea device) {
+    public QuinticDeviceWithQueueSupportTea(QuinticDeviceTea device, final Context context) {
         this.device = device;
+        this.mcontext=context;
         if(autoReconnectTimeout!=null){
+            Log.d("new autoRec", "not null");
+
             isTimeoutBusy = true;
             this.autoReconnectTimeout.restart();
         }
         else {
+            Log.d("new autoRec", " null");
 
             this.autoReconnectTimeout = new Timeout(5000, new Timeout.TimerEvent() {
                 @Override
@@ -32,15 +39,19 @@ class QuinticDeviceWithQueueSupportTea implements QuinticDeviceTea {
                         @Override
                         public void onComplete(Void result) {
                             super.onComplete(result);
-                            Log.d("SupportTea", "onComplete");
-
+                            Log.d("SupportTea", "onComplete" + this.getClass());
+                            //重连成功
+                            Intent intent = new Intent("com.changehot.broadcast");
+                            Log.i("Broadcast addadvice Hot", "change hot addadvice");
+                            intent.putExtra("IsConnect", true);
+                            mcontext.sendBroadcast(intent);
                             isTimeoutBusy = false;
                             autoReconnectTimeout.restart();
                         }
 
                         @Override
                         public void oadUpdate(Void result) {
-                            Log.d("SupportTea", "oadUpdate");
+                            Log.d("SupportTea", "oadUpdate"+this.getClass());
 
                             disconnect();
                             super.oadUpdate(result);
@@ -49,8 +60,12 @@ class QuinticDeviceWithQueueSupportTea implements QuinticDeviceTea {
                         @Override
                         public void onError(QuinticException ex) {
                             super.onError(ex);
-                            Log.d("SupportTea", "onError");
-
+                            //重连失败
+                            Log.d("SupportTea", "onError"+this.getClass());
+                            Intent intent = new Intent("com.changehot.broadcast");
+                            Log.i("Broadcast addadvice Hot", "change hot addadvice");
+                            intent.putExtra("ConnectError", true);
+                            mcontext.sendBroadcast(intent);
                             isTimeoutBusy = false;
                             autoReconnectTimeout.restart();
                         }
@@ -132,6 +147,8 @@ class QuinticDeviceWithQueueSupportTea implements QuinticDeviceTea {
     private void aquire() {
         LockUtil.getInstance().aquireLock(LOCK_QUINTICDEVICE_QUEUE);
         autoReconnectTimeout.cancel();
+//        autoReconnectTimeout=null;
+
     }
 
     class QCallback<T> extends QuinticCallbackTea<T> {

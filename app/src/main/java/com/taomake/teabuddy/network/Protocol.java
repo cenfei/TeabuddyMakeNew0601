@@ -114,6 +114,9 @@ return;
                         call.getMessage(result, url);
                     } else if (return_code==2) {
 //                        Util.Toast(context, returnMsg);
+//                        if(!returnMsg.contains("fail")) {
+                            Util.Toast(context, returnMsg,null);
+//                        }
                         call.getMessage(result, url);
                     } else if (return_code==3) {
                         Util.Toast(context, returnMsg,null);

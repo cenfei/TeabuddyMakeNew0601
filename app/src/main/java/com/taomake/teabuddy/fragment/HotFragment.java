@@ -863,7 +863,11 @@ unconnectUi();
                         sysdownloadsize = deviceVersionObj.downloadsize;
                         configPref.deviceUpdateInfo().put(new Gson().toJson(deviceVersionObj));
                         update_device_id.setBackgroundResource(R.drawable.cm_update_device_c);
-                        perssion_func(update_device_id, "固件有新版本啦！", "马上升级", "以后再说");
+                        String comment="固件有新版本啦！";
+                        if(mustUpdate){
+                            comment="设备异常,系统将要为设备升级";
+                        }
+                        perssion_func(update_device_id, comment, "马上升级", "以后再说");
                     } else {
                         if (!TextUtils.isEmpty(deviceVersion)) {
 
@@ -971,21 +975,21 @@ unconnectUi();
 //        Util.Toast(getActivity(), "设备无法连接,建议重启设备", null);
 //QuinticBleAPISdkBase.getInstanceFactory(getActivity()).setConnectionNull();
 
+if(!mustUpdate) {
+    new One_Permission_Popwindow().showPopwindow(getActivity(), tea_name_id, "建议重启应用，以便连接", "去重启", "再等等", new One_Permission_Popwindow.CallBackPayWindow() {
+        @Override
+        public void handleCallBackChangeUser() {
+            System.exit(0);
+        }
 
-        new One_Permission_Popwindow().showPopwindow(getActivity(), tea_name_id, "建议重启应用，以便连接", "去重启", "再等等", new One_Permission_Popwindow.CallBackPayWindow() {
-            @Override
-            public void handleCallBackChangeUser() {
-                System.exit(0);
-            }
-
-            @Override
-            public void handleCallBackBindDevice() {
-
-
-            }
-        });
+        @Override
+        public void handleCallBackBindDevice() {
 
 
+        }
+    });
+
+}
     }
 
 
@@ -1072,9 +1076,16 @@ unconnectUi();
 //            getTeaInfoByUnionid();
 
         boolCheckBattery = false;
+        MainApp mainApp=(MainApp)getActivity().getApplicationContext();
+        if(mainApp.boolupdateSuccess == 1){
+            QuinticBleAPISdkBase.resultDevice=null;
+            QuinticBleAPISdkBase.getInstanceFactory(getActivity()).conn=null;
+        }
+
+
         if (MyStringUtils.isNotNullAndEmpty(QuinticBleAPISdkBase.resultDevice)) {
 
-//            Log.e("QuinticBleAPISdkBaseresultDevice", "not null");
+            Log.e("QuinticBleAPISdkBaseresultDevice", "not null");
             if (mainappAll.boolDownup) {
                 startLoading();
             } else {
@@ -1090,7 +1101,7 @@ unconnectUi();
             // ************处理动作
             setNowTimeBle();
         } else {
-//            Log.e("QuinticBleAPISdkBaseresultDevice", " null");
+            Log.e("QuinticBleAPISdkBaseresultDevice", " null");
             startLoading();
             if (QuinticBleAPISdkBase.getInstanceFactory(getActivity()).conn != null) {
 
@@ -1660,6 +1671,31 @@ unconnectUi();
                 String updateteaid = intent.getStringExtra("updateteaid");
 
                 String updateVoice = intent.getStringExtra("updateVoice");
+
+                boolean fromAddAddvice = intent.getBooleanExtra("fromAddAddvice", false);
+
+                boolean ConnectError = intent.getBooleanExtra("ConnectError", false);
+                boolean IsConnect = intent.getBooleanExtra("IsConnect", false);
+                if(IsConnect) {
+
+                    connectSuccessUi();
+
+                    return;
+                }
+                if(ConnectError) {
+                    unconnectUi();
+                    return;
+                }
+
+                if(fromAddAddvice){
+
+                    connectUi();
+
+                    QuinticBleAPISdkBase.resultDevice=null;
+                    connectFindDevice();
+
+return;
+                }
 
                 if (!TextUtils.isEmpty(updateVoice) && updateVoice.equals("1")) {
 

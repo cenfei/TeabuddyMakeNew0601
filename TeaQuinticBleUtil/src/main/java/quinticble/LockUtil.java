@@ -2,12 +2,9 @@ package quinticble;
 
 import android.util.Log;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Semaphore;
 
 /**
@@ -55,7 +52,7 @@ class LockUtil {
      * @param lockId 锁id
      */
     public void aquireLock(String lockId) {
-        Log.e("Fox ","Fox aquireLock");
+//        Log.e("Fox ","Fox aquireLock");
 
 //        if (!semaphoreMap.containsKey(lockId)) {
 //            semaphoreMap.put(lockId, new Semaphore(1));
@@ -75,7 +72,7 @@ class LockUtil {
      * @param lockId 锁id
      */
     public void releaseLock(String lockId) {
-        Log.e("Fox ","Fox releaseLock");
+//        Log.e("Fox ","Fox releaseLock");
 //        if (!semaphoreMap.containsKey(lockId)) {
 //            semaphoreMap.put(lockId, new Semaphore(1));
 //            locks.put(lockId, Collections.synchronizedList(new ArrayList<Date>()));
