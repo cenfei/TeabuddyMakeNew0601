@@ -38,6 +38,7 @@ import com.taomake.teabuddy.activity.ChooseTeaActivity;
 import com.taomake.teabuddy.activity.ChooseTeaActivity_;
 import com.taomake.teabuddy.activity.DeviceManagerActivity_;
 import com.taomake.teabuddy.activity.DeviceUpdateTwoActivity_;
+import com.taomake.teabuddy.activity.MineMessageListActivity;
 import com.taomake.teabuddy.activity.WebViewActivity_;
 import com.taomake.teabuddy.base.MainApp;
 import com.taomake.teabuddy.component.DynamicWave;
@@ -51,6 +52,8 @@ import com.taomake.teabuddy.object.BaseJson;
 import com.taomake.teabuddy.object.DeviceVersionJson;
 import com.taomake.teabuddy.object.DeviceVersionObj;
 import com.taomake.teabuddy.object.GetTeaInfoJson;
+import com.taomake.teabuddy.object.MsgInfoObj;
+import com.taomake.teabuddy.object.MsgListJson;
 import com.taomake.teabuddy.prefs.ConfigPref_;
 import com.taomake.teabuddy.sensoractivity.DeviceActivityTea;
 import com.taomake.teabuddy.util.Constant;
@@ -147,25 +150,153 @@ public class HotFragment extends Fragment {
 
     }
 
+    /**********************************************/
+    FoxProgressbarInterface foxProgressbarInterface0;
+
+    public void checkDeviceUpdateToServerBTN() {
+        foxProgressbarInterface0 = new FoxProgressbarInterface();
+        foxProgressbarInterface0.startProgressBar(getActivity(), "加载中...");
+
+        if (deviceVersion == null) {
+            deviceVersion = configPref.userDeviceVersion().get();
+        }
+        if (deviceVersion == null) {
+            Util.Toast(getActivity(), "设备当前没有版本号", null);
+
+            mustUpdate = false;
+
+            return;
+        }
+        Log.d("BTN开始获取固件版本信息", deviceVersion);
+
+        ProtocolUtil.getDeviceUpdateVersion(getActivity(), new CheckDeviceUpdateToServerHandler(), configPref.userDeviceId().get(), deviceVersion);
+
+
+    }
+
+
+    private class CheckDeviceUpdateToServerHandlerBTN extends RowMessageHandler {
+        @Override
+        protected void handleResp(String resp) {
+            checkDeviceUpdateToServerHandlerBTN(resp);
+        }
+    }
+
+
+    public void checkDeviceUpdateToServerHandlerBTN(String resp) {
+        foxProgressbarInterface0.stopProgressBar();
+        if (resp != null && !resp.equals("")) {
+
+            //解析返回json 数据
+            Map<String, Object> orderMap = new Gson().fromJson(resp,
+                    new TypeToken<Map<String, Object>>() {
+                    }.getType());
+            // 将 infomation 转成需要的 order信息
+
+            Double return_code_int = (Double) orderMap.get("rcode");
+            if (return_code_int == 0) {
+//                configPref.userDeviceVersion().put(deviceVersion);
+
+                MainApp mainApp = (MainApp) getActivity().getApplicationContext();
+                sysUpdateVersion = configPref.userDeviceVersion().get();
+                mainApp.boolupdateSuccess = 0;
+                needupdate = false;
+//                configPref.userDeviceVersion().put();
+                update_device_id.setBackgroundResource(R.drawable.cm_update_device);
+
+
+            } else {
+
+
+                DeviceVersionJson baseJson = new Gson().fromJson(resp, DeviceVersionJson.class);
+                if ((baseJson.rcode + "").equals(Constant.RES_SUCCESS)) {
+
+                    List<DeviceVersionObj> deviceVersionObjList = baseJson.obj;
+                    DeviceVersionObj deviceVersionObj = null;
+                    if (deviceVersionObjList != null) {
+                        deviceVersionObj = deviceVersionObjList.get(0);
+                    }
+                    MainApp mainApp = (MainApp) getActivity().getApplicationContext();
+
+                    if (deviceVersionObj != null && deviceVersionObj.url != null && !deviceVersionObj.url.equals("")) {
+                        mainApp.deviceVersionObj = deviceVersionObj;
+
+                        //将固件升级信息保存起来
+
+//                    configPref.
+
+                        mainApp.boolupdateSuccess = 0;
+                        needupdate = true;
+                        sysUpdateVersion = deviceVersionObj.ver;
+                        //当前版本和固件版本比较
+                        Double sysUpdateVersionD = Double.valueOf(sysUpdateVersion);
+                        String deviceVersion = configPref.userDeviceVersion().get();
+                        double deviceVersionD = 0;
+                        if (!TextUtils.isEmpty(deviceVersion)) {
+                            deviceVersionD = Double.valueOf(deviceVersion);
+                        }
+                        if (sysUpdateVersionD > deviceVersionD) {
+
+                            sysdownloadsize = deviceVersionObj.downloadsize;
+                            configPref.deviceUpdateInfo().put(new Gson().toJson(deviceVersionObj));
+                            update_device_id.setBackgroundResource(R.drawable.cm_update_device_c);
+//                            perssion_func(update_device_id, "固件有新版本啦！", "马上升级", "以后再说");
+                        } else {
+                            if (!TextUtils.isEmpty(deviceVersion)) {
+
+                                configPref.userDeviceVersion().put(deviceVersion);
+                            }
+
+                            mainApp.boolupdateSuccess = 0;
+                            needupdate = false;
+
+                            update_device_id.setBackgroundResource(R.drawable.cm_update_device);
+
+                        }
+
+                    } else {
+                        configPref.userDeviceVersion().put(deviceVersion);
+
+
+                        mainApp.boolupdateSuccess = 0;
+                        needupdate = false;
+
+                        update_device_id.setBackgroundResource(R.drawable.cm_update_device);
+
+                    }
+
+
+//                Log.d("开始上传Log", "上传成功");
+
+                }
+            }
+
+
+            if (isLoading) return;
+
+
+            if (needupdate) {
+
+                Intent intent = new Intent(getActivity(), DeviceUpdateTwoActivity_.class);
+
+                intent.putExtra("sysdownloadsize", sysdownloadsize);
+                intent.putExtra("upversion", sysUpdateVersion);
+
+                startActivity(intent);
+
+            } else {
+//            Util.startActivity(getActivity(), DeviceUpdateActivity_.class);
+                Util.Toast(getActivity(), "固件是最新版本!", null);
+            }
+        }
+    }
+
+
+    /***********************************************/
     @Click(R.id.tea_main_set_mg)
     void ontea_main_set_mg() {
+        checkDeviceUpdateToServerBTN();
 
-        if (isLoading) return;
-
-
-        if (needupdate) {
-
-            Intent intent = new Intent(getActivity(), DeviceUpdateTwoActivity_.class);
-
-            intent.putExtra("sysdownloadsize", sysdownloadsize);
-            intent.putExtra("upversion", sysUpdateVersion);
-
-            startActivity(intent);
-
-        } else {
-//            Util.startActivity(getActivity(), DeviceUpdateActivity_.class);
-            Util.Toast(getActivity(), "固件是最新版本!", null);
-        }
     }
 
 
@@ -407,7 +538,7 @@ public class HotFragment extends Fragment {
             public void onClick(View v) {
                 downupcount = 1;
                 boolShowLoadingFromTry = true;
-BleConnection.updateneed=false;
+                BleConnection.updateneed = false;
                 countError = 0;
 
                 connectUi();
@@ -656,7 +787,7 @@ BleConnection.updateneed=false;
 
                         @Override
                         public void handleCallBackBindDevice() {
-unconnectUi();
+                            unconnectUi();
 
                         }
                     });
@@ -863,9 +994,9 @@ unconnectUi();
                         sysdownloadsize = deviceVersionObj.downloadsize;
                         configPref.deviceUpdateInfo().put(new Gson().toJson(deviceVersionObj));
                         update_device_id.setBackgroundResource(R.drawable.cm_update_device_c);
-                        String comment="固件有新版本啦！";
-                        if(mustUpdate){
-                            comment="设备异常,系统将要为设备升级";
+                        String comment = "固件有新版本啦！";
+                        if (mustUpdate) {
+                            comment = "设备异常,系统将要为设备升级";
                         }
                         perssion_func(update_device_id, comment, "马上升级", "以后再说");
                     } else {
@@ -970,26 +1101,26 @@ unconnectUi();
 
     public void loadOuttime() {
         isLoading = false;
-        countError=5;
+        countError = 5;
         connectSendCodeFailUi("");
 //        Util.Toast(getActivity(), "设备无法连接,建议重启设备", null);
 //QuinticBleAPISdkBase.getInstanceFactory(getActivity()).setConnectionNull();
 
-if(!mustUpdate) {
-    new One_Permission_Popwindow().showPopwindow(getActivity(), tea_name_id, "建议重启应用，以便连接", "去重启", "再等等", new One_Permission_Popwindow.CallBackPayWindow() {
-        @Override
-        public void handleCallBackChangeUser() {
-            System.exit(0);
+        if (!mustUpdate) {
+            new One_Permission_Popwindow().showPopwindow(getActivity(), tea_name_id, "建议重启应用，以便连接", "去重启", "再等等", new One_Permission_Popwindow.CallBackPayWindow() {
+                @Override
+                public void handleCallBackChangeUser() {
+                    System.exit(0);
+                }
+
+                @Override
+                public void handleCallBackBindDevice() {
+
+
+                }
+            });
+
         }
-
-        @Override
-        public void handleCallBackBindDevice() {
-
-
-        }
-    });
-
-}
     }
 
 
@@ -1055,7 +1186,6 @@ if(!mustUpdate) {
         }
 
 
-
         MainApp mainappAll = (MainApp) getActivity().getApplicationContext();
         long endtime = System.currentTimeMillis();
 
@@ -1076,10 +1206,10 @@ if(!mustUpdate) {
 //            getTeaInfoByUnionid();
 
         boolCheckBattery = false;
-        MainApp mainApp=(MainApp)getActivity().getApplicationContext();
-        if(mainApp.boolupdateSuccess == 1){
-            QuinticBleAPISdkBase.resultDevice=null;
-            QuinticBleAPISdkBase.getInstanceFactory(getActivity()).conn=null;
+        MainApp mainApp = (MainApp) getActivity().getApplicationContext();
+        if (mainApp.boolupdateSuccess == 1) {
+            QuinticBleAPISdkBase.resultDevice = null;
+            QuinticBleAPISdkBase.getInstanceFactory(getActivity()).conn = null;
         }
 
 
@@ -1646,7 +1776,7 @@ if(!mustUpdate) {
                                         Log.d("是否空杯", teaingIsNull + "");
                                         Log.d("log总数", logValue + "");
 
-
+                                        getMineSortListInfo();
                                         connectSuccessUi();
                                     }
                                 } else {
@@ -1676,25 +1806,25 @@ if(!mustUpdate) {
 
                 boolean ConnectError = intent.getBooleanExtra("ConnectError", false);
                 boolean IsConnect = intent.getBooleanExtra("IsConnect", false);
-                if(IsConnect) {
+                if (IsConnect) {
 
                     connectSuccessUi();
 
                     return;
                 }
-                if(ConnectError) {
+                if (ConnectError) {
                     unconnectUi();
                     return;
                 }
 
-                if(fromAddAddvice){
+                if (fromAddAddvice) {
 
                     connectUi();
 
-                    QuinticBleAPISdkBase.resultDevice=null;
+                    QuinticBleAPISdkBase.resultDevice = null;
                     connectFindDevice();
 
-return;
+                    return;
                 }
 
                 if (!TextUtils.isEmpty(updateVoice) && updateVoice.equals("1")) {
@@ -1826,7 +1956,7 @@ return;
                             break;
                         case BluetoothAdapter.STATE_TURNING_OFF://蓝牙关掉---切换到没有连接页面
                             Log.e("HOT", "onReceive---------STATE_TURNING_OFF");
-                            if ( mainApp.boolupdateSuccess == 1||mainApp.boolupdateSuccess == 2) {
+                            if (mainApp.boolupdateSuccess == 1 || mainApp.boolupdateSuccess == 2) {
                                 openBle();
 
 
@@ -1888,7 +2018,7 @@ return;
     }
 
 
-    int  MY_PERMISSIONS_REQUEST_ACCESS_ALL=5005;
+    int MY_PERMISSIONS_REQUEST_ACCESS_ALL = 5005;
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[]
@@ -1912,4 +2042,111 @@ return;
 
     }
 
+
+    /****************************************************************************/
+    public void getMineSortListInfo() {
+//        foxProgressbarInterface = new FoxProgressbarInterface();
+//        foxProgressbarInterface.startProgressBar(this, "加载中...");
+
+        Log.i("开始获取消息列表", "第一条");
+        ProtocolUtil.getMineMsgListInfo(getActivity(), new GetMineSortListInfoHandler(), configPref.userUnion().get(), 1, 1);//devno 空表示所有
+
+
+    }
+
+
+    private class GetMineSortListInfoHandler extends RowMessageHandler {
+        @Override
+        protected void handleResp(String resp) {
+            getMineSortListInfoHandler(resp);
+        }
+    }
+
+
+    public void getMineSortListInfoHandler(String resp) {
+//        foxProgressbarInterface.stopProgressBar();
+        if (resp != null && !resp.equals("")) {
+
+
+            MsgListJson baseJson = new Gson().fromJson(resp, MsgListJson.class);
+            if ((baseJson.rcode + "").equals(Constant.RES_SUCCESS)) {
+
+                //测试数据
+//            baseJson.rows = (ArrayList<MessageJson>) setTestData();
+
+                boolean setNoReadBool = false;
+
+                if (baseJson.obj != null && baseJson.obj.size() > 0) {//列表
+
+
+                    for (MsgInfoObj msgInfoObj : baseJson.obj) {
+                        Log.i("开始获取消息列表", "条数：" + baseJson.obj.size() + "时间:" + msgInfoObj.time);
+
+
+                        Log.i("开始获取消息列表", "第一条：" + msgInfoObj.isread);
+
+                        if (msgInfoObj.isread != null && msgInfoObj.isread.equals("0") && !setNoReadBool) {
+                            setNoReadBool = true;
+
+                            break;
+                        }
+                    }
+
+                    if (setNoReadBool) {
+                        setHaveMsgNoRead();
+                    }
+                }
+
+            }
+
+
+        }
+
+
+    }
+
+    public void setHaveMsgNoRead() {
+        if (resultDeviceAll == null) return;
+        String code = "EB06";
+        final String failMsg = "设置消息未读失败";
+        MainApp mainappAll = (MainApp) getActivity().getApplicationContext();
+        mainappAll.starttime = System.currentTimeMillis();
+        resultDeviceAll.sendCommonCode(code, new QuinticCallbackTea<String>() {
+            @Override
+            public void onError(QuinticException ex) {
+                super.onError(ex);
+                connectSendCodeFailUi(failMsg);
+
+            }
+
+            @Override
+            public void onComplete(final String result) {
+                super.onComplete(result);
+                if (result == null) {
+                    connectSendCodeFailUi(failMsg);
+
+                    return;
+                }
+                new Handler(getActivity().getMainLooper())
+                        .post(new Runnable() {
+                            @Override
+                            public void run() {
+//BACK 0A 10 01
+                                String trimResult = result.replace(" ", "");
+                                MainApp mainappAll = (MainApp) getActivity().getApplicationContext();
+                                mainappAll.starttime = System.currentTimeMillis();
+                                if (trimResult.contains("eb01")) {
+
+
+                                } else {
+                                    connectSendCodeFailUi(failMsg);
+                                }
+
+                            }
+                        });
+
+            }
+        });
+
+    }
 }

@@ -258,7 +258,7 @@ public class DeviceManagerActivity extends BaseActivity {
         }
         imageLoader = ImageLoader.getInstance();
         options = ImageLoaderUtil.getAvatarOptionsInstance();
-        getDeviceCubImg();
+//        getDeviceCubImg();
 
 
 //        initdata();
@@ -295,6 +295,7 @@ public class DeviceManagerActivity extends BaseActivity {
      * 测试数据
      */
     public void getDataFromServer() {
+        getDeviceCubImg();
 
 //
 //        getMessageListFromServerForMsg();
