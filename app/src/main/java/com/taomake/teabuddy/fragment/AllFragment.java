@@ -262,7 +262,7 @@ public class AllFragment extends Fragment {
             MainApp mainApp = (MainApp) getActivity().getApplicationContext();
             long starttime = mainApp.starttime;
             long endtime = System.currentTimeMillis();
-            if (endtime - starttime > 60000) {
+            if (endtime - starttime > 2000) {
                 connectFindDevice(getActivity());
             } else {
                 if (mainApp.boofirstFragmentAll) {
@@ -360,6 +360,7 @@ public class AllFragment extends Fragment {
     public void connectSendCodeSuccesslUi_Light(int value) {
         MainApp mainApp = (MainApp) getActivity().getApplicationContext();
         mainApp.starttime = System.currentTimeMillis();
+        mainApp.boofirstFragmentAll=false;
         if (foxProgressbarInterface != null)
             foxProgressbarInterface.stopProgressBar();
 

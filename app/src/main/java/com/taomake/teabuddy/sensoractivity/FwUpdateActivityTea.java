@@ -171,7 +171,7 @@ public class FwUpdateActivityTea extends Activity {
 //
 //                }
                 if (mProgramming) {
-                    Util.Toast(FwUpdateActivityTea.this, "正在升级进制退出", null);
+                    Util.Toast(FwUpdateActivityTea.this, "正在升级，禁止退出", null);
                 } else {
                     setResult(RESULT_OK);
 

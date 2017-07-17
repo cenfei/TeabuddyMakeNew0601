@@ -128,6 +128,8 @@ public class BleConnection {
 
                     try {
                         if (gatt != null) {
+                            Log.e("..StateChange  gatt","close");
+
                             gatt.close();
                         }
                     } catch (Exception e) {
@@ -574,14 +576,21 @@ public class BleConnection {
         LockUtil.getInstance().releaseLock(LOCK_CONNECT_DEVICE);
         connectTimeout.cancel();
         try {
-            QuinticScanner.getInstance(context).stop();
+            if(QuinticScanner.instance!=null) {
+                QuinticScanner.getInstance(context).stop();
+            }
         } catch (BleException e) {
-            e.printStackTrace();
+//            e.printStackTrace();
+            Log.e("QuinticScanne  stop",e.getMessage());
         }
         try {
             if (isConnected()) {
+                Log.e("QuinticScanne  disc","isConnected");
+
                 gatt.disconnect();
             } else {
+                Log.e("QuinticScanne  disc","isConnected");
+
                 gatt.disconnect();
                 gatt.close();
             }

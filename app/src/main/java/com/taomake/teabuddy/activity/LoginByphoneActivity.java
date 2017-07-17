@@ -177,17 +177,17 @@ if(!sexType){
             return;
         }
 boolean boolman=sexType;
-
+String  ticketvalue=ticket;
         try {
-            Log.d("no encode ticket",ticket);
+            Log.d("no encode ticket",ticketvalue);
 
-            ticket= URLEncoder.encode(ticket,"UTF-8");
-            Log.d("encode ticket",ticket);
+            ticketvalue= URLEncoder.encode(ticketvalue,"UTF-8");
+            Log.d("encode ticket",ticketvalue);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
 
-        bindDeviceForMsg(phonenum, ticket, unionid,age_edittext_idText,boolman);
+        bindDeviceForMsg(phonenum, ticketvalue, unionid,age_edittext_idText,boolman);
 
 
     }
@@ -348,7 +348,7 @@ boolean boolman=sexType;
             //解析返回json 数据
             Double return_code_int = (Double) orderMap.get("rcode");
 
-            if(return_code_int!=0) {
+            if(return_code_int!=1) {
 
 
                 return;

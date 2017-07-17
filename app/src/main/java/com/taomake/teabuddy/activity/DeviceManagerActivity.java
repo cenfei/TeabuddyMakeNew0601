@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taomake.teabuddy.R;
@@ -22,12 +24,13 @@ import com.taomake.teabuddy.component.FoxProgressbarInterface;
 import com.taomake.teabuddy.network.ProtocolUtil;
 import com.taomake.teabuddy.network.RowMessageHandler;
 import com.taomake.teabuddy.object.DeviceCubImgJson;
+import com.taomake.teabuddy.object.DeviceVersionJson;
 import com.taomake.teabuddy.object.DeviceVersionObj;
 import com.taomake.teabuddy.prefs.ConfigPref_;
 import com.taomake.teabuddy.util.Constant;
 import com.taomake.teabuddy.util.ImageLoaderUtil;
+import com.taomake.teabuddy.util.MyStringUtils;
 import com.taomake.teabuddy.util.Util;
-import com.taomake.teabuddy.wxapi.WXEntryActivity;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
@@ -37,6 +40,9 @@ import org.androidannotations.annotations.sharedpreferences.Pref;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
+import quinticble.QuinticBleAPISdkBase;
 
 /**
  * Created by zhang on 2015/8/7.
@@ -119,6 +125,150 @@ public class DeviceManagerActivity extends BaseActivity {
 
     }
 
+    /**********************************************/
+    FoxProgressbarInterface foxProgressbarInterface0;
+String deviceVersion=null;
+    public void checkDeviceUpdateToServerBTN() {
+        foxProgressbarInterface0 = new FoxProgressbarInterface();
+        foxProgressbarInterface0.startProgressBar(this, "加载中...");
+
+        if (deviceVersion == null) {
+            deviceVersion = configPref.userDeviceVersion().get();
+        }
+        if (deviceVersion == null) {
+            Util.Toast(this, "设备当前没有版本号", null);
+
+            needupdate = false;
+
+            return;
+        }
+        Log.d("BTN开始获取固件版本信息", deviceVersion);
+
+        ProtocolUtil.getDeviceUpdateVersion(this, new CheckDeviceUpdateToServerHandlerBTN(), configPref.userDeviceId().get(), deviceVersion);
+
+
+    }
+
+
+    private class CheckDeviceUpdateToServerHandlerBTN extends RowMessageHandler {
+        @Override
+        protected void handleResp(String resp) {
+            checkDeviceUpdateToServerHandlerBTN(resp);
+        }
+    }
+
+
+    public void checkDeviceUpdateToServerHandlerBTN(String resp) {
+        foxProgressbarInterface0.stopProgressBar();
+        if (resp != null && !resp.equals("")) {
+
+            //解析返回json 数据
+            Map<String, Object> orderMap = new Gson().fromJson(resp,
+                    new TypeToken<Map<String, Object>>() {
+                    }.getType());
+            // 将 infomation 转成需要的 order信息
+
+            Double return_code_int = (Double) orderMap.get("rcode");
+            if (return_code_int == 0) {
+//                configPref.userDeviceVersion().put(deviceVersion);
+
+                MainApp mainApp = (MainApp) getApplicationContext();
+                sysUpdateVersion = configPref.userDeviceVersion().get();
+                mainApp.boolupdateSuccess = 0;
+                needupdate = false;
+//                configPref.userDeviceVersion().put();
+                dv_update_img_id.setBackgroundResource(R.drawable.cm_update_device);
+
+
+            } else {
+
+
+                DeviceVersionJson baseJson = new Gson().fromJson(resp, DeviceVersionJson.class);
+                if ((baseJson.rcode + "").equals(Constant.RES_SUCCESS)) {
+
+                    List<DeviceVersionObj> deviceVersionObjList = baseJson.obj;
+                    DeviceVersionObj deviceVersionObj = null;
+                    if (deviceVersionObjList != null) {
+                        deviceVersionObj = deviceVersionObjList.get(0);
+                    }
+                    MainApp mainApp = (MainApp) getApplicationContext();
+
+                    if (deviceVersionObj != null && deviceVersionObj.url != null && !deviceVersionObj.url.equals("")) {
+                        mainApp.deviceVersionObj = deviceVersionObj;
+
+                        //将固件升级信息保存起来
+
+//                    configPref.
+
+                        mainApp.boolupdateSuccess = 0;
+                        needupdate = true;
+                        sysUpdateVersion = deviceVersionObj.ver;
+                        //当前版本和固件版本比较
+                        Double sysUpdateVersionD = Double.valueOf(sysUpdateVersion);
+                        String deviceVersion = configPref.userDeviceVersion().get();
+                        double deviceVersionD = 0;
+                        if (!TextUtils.isEmpty(deviceVersion)) {
+                            deviceVersionD = Double.valueOf(deviceVersion);
+                        }
+                        if (sysUpdateVersionD > deviceVersionD) {
+
+                            sysdownloadsize = deviceVersionObj.downloadsize;
+                            configPref.deviceUpdateInfo().put(new Gson().toJson(deviceVersionObj));
+                            dv_update_img_id.setBackgroundResource(R.drawable.cm_update_device_c);
+//                            perssion_func(update_device_id, "固件有新版本啦！", "马上升级", "以后再说");
+                        } else {
+                            if (!TextUtils.isEmpty(deviceVersion)) {
+
+                                configPref.userDeviceVersion().put(deviceVersion);
+                            }
+
+                            mainApp.boolupdateSuccess = 0;
+                            needupdate = false;
+
+                            dv_update_img_id.setBackgroundResource(R.drawable.cm_update_device);
+
+                        }
+
+                    } else {
+                        configPref.userDeviceVersion().put(deviceVersion);
+
+
+                        mainApp.boolupdateSuccess = 0;
+                        needupdate = false;
+
+                        dv_update_img_id.setBackgroundResource(R.drawable.cm_update_device);
+
+                    }
+
+
+//                Log.d("开始上传Log", "上传成功");
+
+                }
+            }
+
+
+
+
+            if (needupdate) {
+
+                Intent intent = new Intent(this, DeviceUpdateTwoActivity_.class);
+
+                intent.putExtra("sysdownloadsize", sysdownloadsize);
+                intent.putExtra("upversion", sysUpdateVersion);
+
+                startActivity(intent);
+
+            } else {
+                Util.Toast(this, "固件是最新版本!", null);
+
+            }
+        }
+    }
+
+
+
+
+
     final int SCANNIN_GREQUEST_CODE = 1001;
 
     @Click(R.id.right_title_line)
@@ -130,20 +280,16 @@ public class DeviceManagerActivity extends BaseActivity {
 
     @Click(R.id.update_line_id)
     void onupdate_line_id() {
+        if (!MyStringUtils.isopenBluetooth(this)) {
 
-        if (needupdate) {
 
-            Intent intent = new Intent(this, DeviceUpdateTwoActivity_.class);
-
-            intent.putExtra("sysdownloadsize", sysdownloadsize);
-            intent.putExtra("upversion", sysUpdateVersion);
-
-            startActivity(intent);
-
-        } else {
-            Util.startActivity(this, DeviceUpdateActivity_.class);
+            return;
+        }
+        if (MyStringUtils.isNotNullAndEmpty(QuinticBleAPISdkBase.resultDevice)) {
+            checkDeviceUpdateToServerBTN();
 
         }
+
 //        finish();
 
     }
@@ -202,7 +348,7 @@ public class DeviceManagerActivity extends BaseActivity {
 
     private ImageLoader imageLoader;
     private DisplayImageOptions options;
-
+    ImageView dv_update_img_id;
     public void initUi() {
 
         RelativeLayout main_title_id = (RelativeLayout) findViewById(R.id.main_title_id);
@@ -227,7 +373,7 @@ public class DeviceManagerActivity extends BaseActivity {
             mg_title_id.setText(configPref.userName().get() + "的喝茶小伙伴");
 
 
-        ImageView dv_update_img_id = (ImageView) findViewById(R.id.dv_update_img_id);
+         dv_update_img_id = (ImageView) findViewById(R.id.dv_update_img_id);
 
 
         MainApp mainApp = (MainApp) getApplicationContext();

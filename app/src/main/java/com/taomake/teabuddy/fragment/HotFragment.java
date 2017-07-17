@@ -38,7 +38,6 @@ import com.taomake.teabuddy.activity.ChooseTeaActivity;
 import com.taomake.teabuddy.activity.ChooseTeaActivity_;
 import com.taomake.teabuddy.activity.DeviceManagerActivity_;
 import com.taomake.teabuddy.activity.DeviceUpdateTwoActivity_;
-import com.taomake.teabuddy.activity.MineMessageListActivity;
 import com.taomake.teabuddy.activity.WebViewActivity_;
 import com.taomake.teabuddy.base.MainApp;
 import com.taomake.teabuddy.component.DynamicWave;
@@ -115,7 +114,7 @@ public class HotFragment extends Fragment {
     @Click(R.id.tea_main_dl_mg)
     void ontea_main_dl_mg() {
         if (isLoading) return;
-
+if(!boolConnectBle) return;
         if (!boolCheckBattery) {
 
             Util.Toast(getActivity(), "后台正在同步", null);
@@ -129,6 +128,7 @@ public class HotFragment extends Fragment {
     @Click(R.id.pc_tea_choose_line)
     void onpc_tea_choose_line() {
         if (isLoading) return;
+        if(!boolConnectBle) return;
 
 
         Intent intent = new Intent(getActivity(), ChooseTeaActivity_.class);
@@ -169,7 +169,7 @@ public class HotFragment extends Fragment {
         }
         Log.d("BTN开始获取固件版本信息", deviceVersion);
 
-        ProtocolUtil.getDeviceUpdateVersion(getActivity(), new CheckDeviceUpdateToServerHandler(), configPref.userDeviceId().get(), deviceVersion);
+        ProtocolUtil.getDeviceUpdateVersion(getActivity(), new CheckDeviceUpdateToServerHandlerBTN(), configPref.userDeviceId().get(), deviceVersion);
 
 
     }
@@ -272,7 +272,6 @@ public class HotFragment extends Fragment {
             }
 
 
-            if (isLoading) return;
 
 
             if (needupdate) {
@@ -295,6 +294,9 @@ public class HotFragment extends Fragment {
     /***********************************************/
     @Click(R.id.tea_main_set_mg)
     void ontea_main_set_mg() {
+        if (isLoading) return;
+        if(!boolConnectBle) return;
+
         checkDeviceUpdateToServerBTN();
 
     }
@@ -568,11 +570,14 @@ public class HotFragment extends Fragment {
 
     }
 
-
+boolean boolConnectBle=false;
     public static boolean canChangePager = true;
 
     public void unconnectUi() {
+        boolConnectBle=false;
+
         showcontnect = false;
+        if(cicrle_line_id!=null)
         cicrle_line_id.setVisibility(View.GONE);
         canChangePager = false;
 
@@ -595,7 +600,7 @@ public class HotFragment extends Fragment {
 
     public void connectSuccessUi() {
 
-
+        boolConnectBle=true;
         MainApp mainappAll = (MainApp) getActivity().getApplicationContext();
 
 //        if(mainappAll.boolDownup&&downupcount==0){
@@ -710,7 +715,7 @@ public class HotFragment extends Fragment {
 //        }
         closeLoading();
         if (connect_status_commnet_id != null) {
-            connect_status_commnet_id.setText(msg);
+//            connect_status_commnet_id.setText(msg);
 
             unconnectUi();
         }
@@ -1215,7 +1220,7 @@ public class HotFragment extends Fragment {
 
         if (MyStringUtils.isNotNullAndEmpty(QuinticBleAPISdkBase.resultDevice)) {
 
-            Log.e("QuinticBleAPISdkBaseresultDevice", "not null");
+            Log.e("resultDevice", "not null");
             if (mainappAll.boolDownup) {
                 startLoading();
             } else {
@@ -1706,7 +1711,7 @@ public class HotFragment extends Fragment {
                                     Log.d("当前固件版本versionD", versionD + "");
 
                                     deviceVersion = versionD + "";
-                                    deviceVersion = "2.45";//fox测试
+//                                    deviceVersion = "2.45";//fox测试
                                     if (deviceVersion.length() == 3) {
                                         deviceVersion = deviceVersion + "0";
                                     }
@@ -1775,6 +1780,7 @@ public class HotFragment extends Fragment {
                                                 QuinticCommon.unsignedByteToInt(data[4]);
                                         Log.d("是否空杯", teaingIsNull + "");
                                         Log.d("log总数", logValue + "");
+
 
                                         getMineSortListInfo();
                                         connectSuccessUi();
@@ -2093,6 +2099,11 @@ public class HotFragment extends Fragment {
                     }
 
                     if (setNoReadBool) {
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                         setHaveMsgNoRead();
                     }
                 }

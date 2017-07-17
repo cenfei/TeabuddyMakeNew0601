@@ -42,7 +42,7 @@ class QuinticDeviceWithQueueSupportTea implements QuinticDeviceTea {
                             Log.d("SupportTea", "onComplete" + this.getClass());
                             //重连成功
                             Intent intent = new Intent("com.changehot.broadcast");
-                            Log.i("Broadcast addadvice Hot", "change hot addadvice");
+                            Log.i("Broadcast  Hot", "change hot IsConnect");
                             intent.putExtra("IsConnect", true);
                             mcontext.sendBroadcast(intent);
                             isTimeoutBusy = false;
@@ -63,7 +63,7 @@ class QuinticDeviceWithQueueSupportTea implements QuinticDeviceTea {
                             //重连失败
                             Log.d("SupportTea", "onError"+this.getClass());
                             Intent intent = new Intent("com.changehot.broadcast");
-                            Log.i("Broadcast addadvice Hot", "change hot addadvice");
+                            Log.i("Broadcast  Hot", "change hot onError");
                             intent.putExtra("ConnectError", true);
                             mcontext.sendBroadcast(intent);
                             isTimeoutBusy = false;

@@ -32,7 +32,7 @@ import java.util.UUID;
  */
 class QuinticScanner  implements ActivityCompat.OnRequestPermissionsResultCallback {
 
-    private static QuinticScanner instance;
+    public static QuinticScanner instance;
 
     // private BluetoothManager bluetoothManager;
 
