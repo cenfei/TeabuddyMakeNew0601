@@ -144,7 +144,7 @@ public class MineMessageListActivity extends BaseActivity {
         Log.i("Broadcast Change MINE", "change MINE fragment");
 
 
-        intent.putExtra("updatemsg","updatemsg");
+        intent.putExtra("updatemsg", "updatemsg");
         sendBroadcast(intent);
 
     }
@@ -327,8 +327,9 @@ public class MineMessageListActivity extends BaseActivity {
 
 
                 Integer msgnum=configPref.sedentaryInterval().get();
-                configPref.sedentaryInterval().put(msgnum-1);//消息读取成功后
+                configPref.sedentaryInterval().put(msgnum - 1);//消息读取成功后
 
+                jobJsonCurrent.isread="1";
 
 
 
@@ -358,6 +359,9 @@ public class MineMessageListActivity extends BaseActivity {
                 }else{
                     Util.Toast(MineMessageListActivity.this,"消息没有内容",null);
                 }
+                adapterHomeDesignListView.notifyDataSetChanged();
+                pullToRefreshListView.onRefreshComplete();
+                pullToRefreshListView.getRefreshableView().setSelection(y);
 
 
             }
@@ -406,6 +410,7 @@ public class MineMessageListActivity extends BaseActivity {
 
 
                     for(MsgInfoObj msgInfoObj:baseJson.obj){
+
                         if(msgInfoObj.isread!=null&&msgInfoObj.isread.equals("0")&&!setNoReadBool){
                             setNoReadBool=true;
 

@@ -714,11 +714,11 @@ boolean boolConnectBle=false;
 //            foxProgressbarInterface.stopProgressBar();
 //        }
         closeLoading();
-        if (connect_status_commnet_id != null) {
+//        if (connect_status_commnet_id != null) {
 //            connect_status_commnet_id.setText(msg);
 
             unconnectUi();
-        }
+//        }
     }
 
 
@@ -1784,6 +1784,9 @@ boolean boolConnectBle=false;
 
                                         getMineSortListInfo();
                                         connectSuccessUi();
+                                    }else{
+                                        connectSuccessUi();
+
                                     }
                                 } else {
                                     connectSendCodeFailUi(failMsg);

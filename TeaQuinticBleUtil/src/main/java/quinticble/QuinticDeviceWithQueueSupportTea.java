@@ -25,7 +25,7 @@ class QuinticDeviceWithQueueSupportTea implements QuinticDeviceTea {
         if(autoReconnectTimeout!=null){
             Log.d("new autoRec", "not null");
 
-            isTimeoutBusy = true;
+            isTimeoutBusy = false;
             this.autoReconnectTimeout.restart();
         }
         else {
