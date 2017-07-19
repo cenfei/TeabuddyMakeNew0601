@@ -184,25 +184,38 @@ public class MineTabFragment extends Fragment implements SwipeRefreshLayout.OnRe
             if (MYACTION_UPDATE_Mine.equals(intent.getAction())) {
                 Log.i("onReceive", "change receiverMine...");
 
-                MainApp mainappAll = (MainApp) getActivity().getApplicationContext();
-
-                long endtime = System.currentTimeMillis();
-
-                long starttime = mainappAll.starttime;
-
-
-                if (endtime - starttime > 2000) {
-                    changeui();
+                String updatemsg = intent.getStringExtra("updatemsg");
+                if (!TextUtils.isEmpty(updatemsg)) {
+                    int msgnum = configPref.sedentaryInterval().get();
+                    if (msgnum != 0) {
+                        mine_msg_line.setVisibility(View.VISIBLE);
+                        mine_msg_num_id.setText(msgnum + "");
+                    } else {
+                        mine_msg_line.setVisibility(View.GONE);
+//            mine_msg_num_id.setText(msgnum+"");
+                    }
                 } else {
-                    if (mainappAll.boofirstFragmentMine) {
+
+
+                    MainApp mainappAll = (MainApp) getActivity().getApplicationContext();
+
+                    long endtime = System.currentTimeMillis();
+
+                    long starttime = mainappAll.starttime;
+
+
+                    if (endtime - starttime > 2000) {
                         changeui();
                     } else {
-                        getMinePersonInfoFunc();
+                        if (mainappAll.boofirstFragmentMine) {
+                            changeui();
+                        } else {
+                            getMinePersonInfoFunc();
+
+                        }
 
                     }
-
                 }
-
 
             }
         }

@@ -143,6 +143,8 @@ public class MineMessageListActivity extends BaseActivity {
         Intent intent = new Intent(MineTabFragment.MYACTION_UPDATE_Mine);
         Log.i("Broadcast Change MINE", "change MINE fragment");
 
+
+        intent.putExtra("updatemsg","updatemsg");
         sendBroadcast(intent);
 
     }
@@ -241,10 +243,18 @@ public class MineMessageListActivity extends BaseActivity {
                     setMsgIsRead(jobJsonCurrent.mid);
                 }else{
                     //跳转到网页
-                    Intent intent = new Intent(MineMessageListActivity.this, WebViewActivity_.class);
-                    intent.putExtra("url", jobJsonCurrent.url);
-                    intent.putExtra("title", MyStringUtils.decodeUnicode(jobJsonCurrent.tit));
-                    startActivity(intent);
+                    if(jobJsonCurrent!=null&&jobJsonCurrent.url!=null&&!jobJsonCurrent.url.equals("")){
+                        //跳转到网页
+                        Intent intent = new Intent(MineMessageListActivity.this, WebViewActivity_.class);
+                        intent.putExtra("url", jobJsonCurrent.url);
+                        intent.putExtra("title", MyStringUtils.decodeUnicode(jobJsonCurrent.tit));
+                        startActivity(intent);
+
+                    }else{
+                        Util.Toast(MineMessageListActivity.this,"消息没有内容",null);
+                    }
+
+
 
 
                 }
@@ -314,6 +324,28 @@ public class MineMessageListActivity extends BaseActivity {
             BaseJson baseJson = new Gson().fromJson(resp, BaseJson.class);
 
             if ((baseJson.rcode + "").equals(Constant.RES_SUCCESS)) {
+
+
+                Integer msgnum=configPref.sedentaryInterval().get();
+                configPref.sedentaryInterval().put(msgnum-1);//消息读取成功后
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
                 //进入网页
                 if(jobJsonCurrent!=null&&jobJsonCurrent.url!=null&&!jobJsonCurrent.url.equals("")){
@@ -619,7 +651,7 @@ public class MineMessageListActivity extends BaseActivity {
 
             BaseJson baseJson = new Gson().fromJson(resp, BaseJson.class);
             if ((baseJson.rcode + "").equals(Constant.RES_SUCCESS)) {
-
+                configPref.sedentaryInterval().put(0);//消息读取成功后
                 Log.d("设置全部消息已读", "成功");
                 getMineSortListInfo();
 
