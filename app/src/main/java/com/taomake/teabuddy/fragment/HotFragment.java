@@ -300,16 +300,41 @@ if(!boolConnectBle) return;
         checkDeviceUpdateToServerBTN();
 
     }
-
-
+long startTimeReciver;
+String lastResult="";
     BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (MYACTION.equals(intent.getAction())) {
+
+
+
+
+
+
                 Log.i("onReceive", "get the broadcast from DownLoadService...");
                 final String result = intent.getStringExtra("CurrentLoading");
                 Log.i("Broadcast receive", result);
                 String trimResult = result.replace(" ", "");
+
+                if(startTimeReciver==0){
+                    startTimeReciver=System.currentTimeMillis();
+
+                }else{
+                    long endtimeReciver=System.currentTimeMillis();
+                    if(endtimeReciver-startTimeReciver<50&&trimResult.equals(lastResult)){
+                        startTimeReciver=endtimeReciver;
+
+                        return;
+                    }else{
+                        lastResult=trimResult;
+                        startTimeReciver=endtimeReciver;
+                    }
+
+
+                }
+
+
 
                 //判断返回的设备信息  并更新数据
                 byte[] data = QuinticCommon.stringToBytes(trimResult);
