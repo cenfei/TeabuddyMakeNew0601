@@ -318,15 +318,15 @@ public class MainActivity extends BaseFragmentActivity {
             tab_mine_img_c.setVisibility(View.VISIBLE);
             tab_mine_text.setTextColor(getResources().getColor(R.color.white));
 
-            long endtime = System.currentTimeMillis();
-
-            long starttime = mainappAll.starttime;
-            if (endtime - starttime > 2000) {
+//            long endtime = System.currentTimeMillis();
+//
+//            long starttime = mainappAll.starttime;
+//            if (endtime - starttime > 2000) {
                 Intent intent = new Intent(MineTabFragment.MYACTION_UPDATE_Mine);
                 Log.i("Broadcast Change MINE", "change MINE fragment");
 
                 sendBroadcast(intent);
-            }
+//            }
         } else {//当没有登录的时候不能被点击
             perssion_func();
 

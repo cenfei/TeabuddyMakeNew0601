@@ -149,7 +149,7 @@ public class MineRemindsettingActivity extends BaseActivity {
 
         Set<Integer> choosePHash = myGridDbRecordAdapter.clickTempHash;
 
-        if (choosePHash.size() == 0) {
+        if (choosePHash.size() == 0&&chooseNumButton==1) {
 
             Util.Toast(MineRemindsettingActivity.this, "选择日期", null);
             return;

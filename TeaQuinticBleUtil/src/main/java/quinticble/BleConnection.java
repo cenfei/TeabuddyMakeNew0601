@@ -332,7 +332,11 @@ public class BleConnection {
                         doWrite();
                         bleStateChangeCallback.onWrite(characteristic.getValue());
 //                    }
+                    if (trimResult.contains("ec02")&&trimResult.length()==12) {
+                        bleStateChangeCallback.onNotify(characteristic.getValue());
 
+
+                    }
 
                     if (trimResult.equals("eb0501")) {
                         bleStateChangeCallback.onNotify(characteristic.getValue());

@@ -319,10 +319,12 @@ if(!boolConnectBle) return;
 
                     MainApp mainappAll = (MainApp) getActivity().getApplicationContext();
                     long endtime = System.currentTimeMillis();
-                    if (endtime - mainappAll.starttime > 1000) {
-                        Log.i("Broadcast receive", "getLogHistory************************");
+                    if (endtime - mainappAll.starttime > 10) {
 
-                        getLogHistory(true);
+                        String code="EC02"+trimResult.substring(trimResult.length()-8);
+                        Log.i("ec02", "code************************"+code);
+
+//                        setEC02Back(code);
                     }
 
 
@@ -354,6 +356,15 @@ if(!boolConnectBle) return;
                     if (showcontnect) {
                         connectSuccessUi();
                     }
+
+                    MainApp mainappAll = (MainApp) getActivity().getApplicationContext();
+                    long endtime = System.currentTimeMillis();
+                    if (endtime - mainappAll.starttime > 300) {
+                        Log.i("Broadcast receive", "getLogHistory************************");
+
+                        getLogHistory(true);
+                    }
+
 
                 } else if (trimResult.contains("ec0e")) {//是否在充电
                     int isbatterying = QuinticCommon.unsignedByteToInt(data[2]);
@@ -1472,7 +1483,7 @@ boolean boolConnectBle=false;
 
 
     int batteryLevelValue = 0;
-    FoxProgressbarInterface foxProgressbarInterfaceonly = null;
+    FoxProgressbarInterfaceHot foxProgressbarInterfaceonly = null;
 
     public void getbatteryLevel(final boolean only) {
         if (resultDeviceAll == null) return;
@@ -1480,8 +1491,13 @@ boolean boolConnectBle=false;
         MainApp mainappAll = (MainApp) getActivity().getApplicationContext();
         mainappAll.starttime = System.currentTimeMillis();
         if (only) {
-            foxProgressbarInterfaceonly = new FoxProgressbarInterface();
-            foxProgressbarInterfaceonly.startProgressBar(getActivity(), "设置中");
+            foxProgressbarInterfaceonly = new FoxProgressbarInterfaceHot();
+            foxProgressbarInterfaceonly.startProgressBar(getActivity(), "设置中", 5, new FoxProgressbarInterfaceHot.FoxHotCallback() {
+                @Override
+                public void foxhotCallback() {
+
+                }
+            });
         }
         resultDeviceAll.sendCommonCode(code, new QuinticCallbackTea<String>() {
             @Override
@@ -2151,6 +2167,52 @@ boolean boolConnectBle=false;
                                 mainappAll.starttime = System.currentTimeMillis();
                                 if (trimResult.contains("eb01")) {
 
+
+                                } else {
+                                    connectSendCodeFailUi(failMsg);
+                                }
+
+                            }
+                        });
+
+            }
+        });
+
+    }
+
+
+    public void setEC02Back(final String code) {
+        if (resultDeviceAll == null) return;
+//      final  String code = "EA07";
+        final String failMsg = "ECO2返回确认失败";
+        MainApp mainappAll = (MainApp) getActivity().getApplicationContext();
+        mainappAll.starttime = System.currentTimeMillis();
+        resultDeviceAll.sendCommonCode(code, new QuinticCallbackTea<String>() {
+            @Override
+            public void onError(QuinticException ex) {
+                super.onError(ex);
+                connectSendCodeFailUi(failMsg);
+
+            }
+
+            @Override
+            public void onComplete(final String result) {
+                super.onComplete(result);
+                if (result == null) {
+                    connectSendCodeFailUi(failMsg);
+
+                    return;
+                }
+                new Handler(getActivity().getMainLooper())
+                        .post(new Runnable() {
+                            @Override
+                            public void run() {
+//BACK 0A 10 01
+                                String trimResult = result.replace(" ", "");
+                                MainApp mainappAll = (MainApp) getActivity().getApplicationContext();
+                                mainappAll.starttime = System.currentTimeMillis();
+                                if (trimResult.contains(code)) {
+Log.d("ECO2确认",code+"成功");
 
                                 } else {
                                     connectSendCodeFailUi(failMsg);
