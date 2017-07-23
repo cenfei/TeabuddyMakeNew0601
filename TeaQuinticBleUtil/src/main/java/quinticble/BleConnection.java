@@ -13,9 +13,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.os.Parcelable;
 import android.util.Log;
 
-import java.util.List;
 import java.util.Queue;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -152,35 +152,35 @@ public class BleConnection {
                 if (BluetoothGatt.GATT_SUCCESS == status) {
 
 
-                    List<BluetoothGattService> blelist=gatt.getServices();
-                    boolean boolUpdate=true;
-                    for(BluetoothGattService bluetoothGattService:blelist){
-                        if(bluetoothGattService.getUuid().equals(UUID.fromString(QuinticUuid.OAD_UPDATE_UUID))){
-                            boolUpdate=false;
-                            break;
-                        }
-
-                    }
-
-
-
-//                    final BluetoothGattService serviceoad = gatt.getService(UUID.fromString(QuinticUuid.OAD_UPDATE_UUID));
-
-                    if (boolUpdate) {
-                        if(!updateneed){
-                            updateneed=true;
-//                        bluetoothDevice = gatt.getDevice();
-                            if (connectTimeout.isStarted()) {
-                                connectTimeout.cancel();
-                                LockUtil.getInstance().releaseLock(LOCK_CONNECT_DEVICE);
-                                bleStateChangeCallback.onUpdate(null);
-
-                            }
-                            gatt.disconnect();
-                        }
-                        return;
-                    }
-                    updateneed=false;
+//                    List<BluetoothGattService> blelist=gatt.getServices();
+//                    boolean boolUpdate=true;
+//                    for(BluetoothGattService bluetoothGattService:blelist){
+//                        if(bluetoothGattService.getUuid().equals(UUID.fromString(QuinticUuid.OAD_UPDATE_UUID))){
+//                            boolUpdate=false;
+//                            break;
+//                        }
+//
+//                    }
+//
+//
+//
+////                    final BluetoothGattService serviceoad = gatt.getService(UUID.fromString(QuinticUuid.OAD_UPDATE_UUID));
+//
+//                    if (boolUpdate) {
+//                        if(!updateneed){
+//                            updateneed=true;
+////                        bluetoothDevice = gatt.getDevice();
+//                            if (connectTimeout.isStarted()) {
+//                                connectTimeout.cancel();
+//                                LockUtil.getInstance().releaseLock(LOCK_CONNECT_DEVICE);
+//                                bleStateChangeCallback.onUpdate(null);
+//
+//                            }
+//                            gatt.disconnect();
+//                        }
+//                        return;
+//                    }
+//                    updateneed=false;
 
                     final BluetoothGattService service = gatt.getService(UUID.fromString(serviceUuid));
                     if (service == null) {
@@ -333,6 +333,9 @@ public class BleConnection {
                         bleStateChangeCallback.onWrite(characteristic.getValue());
 //                    }
                     if (trimResult.contains("ec02")&&trimResult.length()==12) {
+
+                        Log.i("-ble write ec02-", "ec02");
+
                         bleStateChangeCallback.onNotify(characteristic.getValue());
 
 
@@ -355,7 +358,14 @@ public class BleConnection {
                     }
 
 
-                } else {
+                }
+              else  if (status == BluetoothGatt.GATT_INVALID_ATTRIBUTE_LENGTH) {
+                    Log.i("-ble write ec02-", "GATT_INVALID_ATTRIBUTE_LENGTH");
+
+                    bleStateChangeCallback.onNotify(characteristic.getValue());
+
+                }
+                    else{
                     errorWhenConnecting(new BleException(BleException.DEVICE_UNREACHABLE, "写入时发生错误"));
                 }
             }
@@ -408,6 +418,8 @@ public class BleConnection {
                     String  trimResultHead1=trimResult.substring(0,2);
 
                     if (trimResultHead1.contains("ec")) {
+
+                        if(!(trimResult.contains("ec02")&&trimResult.length()==12)){
                         connectTimeout.restart(600000);
 
                         Intent intent = new Intent("com.pushtest.broadcast");
@@ -417,6 +429,7 @@ public class BleConnection {
 
                         final Context context1 = context;
                         context1.sendBroadcast(intent);
+                        }
                     }else{
                         connectTimeout.restart(15000);
 
@@ -495,7 +508,7 @@ public class BleConnection {
                         Log.d("connectDevice", "QuinticScanCallback---------");
 
                         try {
-                            if (Build.VERSION.SDK_INT <= 18 ) {
+                            if (Build.VERSION.SDK_INT <= 18) {
                                 QuinticScanCallback cb = new QuinticScanCallback() {
                                     @Override
                                     public void onScan(QuinticScanResult scanResult) {
@@ -528,7 +541,15 @@ public class BleConnection {
                                 scanner.stop();
                             }
                             connectTimeout.restart(30000);
-                            gatt = bluetoothAdapter.getRemoteDevice(deviceAddress).connectGatt(context, false, gattCallback);
+
+                            BluetoothDevice bluetoothDeviceFox=bluetoothAdapter.getRemoteDevice(deviceAddress);
+
+                      Parcelable[] parcelables= bluetoothDeviceFox.getUuids();
+                        String name=    bluetoothDeviceFox.getName();
+                        String address=    bluetoothDeviceFox.getAddress();
+//                        P    bluetoothDeviceFox.getUuids();
+                        Log.e("ble state info","type:"+bluetoothDeviceFox.getType()+",state"+bluetoothDeviceFox.getBondState());
+                            gatt = bluetoothDeviceFox.connectGatt(context, false, gattCallback);
 
 //                            gatt = bluetoothAdapter.getRemoteDevice(deviceAddress).connectGatt(context, false, gattCallback,BluetoothDevice.TRANSPORT_LE);
                         } catch (BleException e) {

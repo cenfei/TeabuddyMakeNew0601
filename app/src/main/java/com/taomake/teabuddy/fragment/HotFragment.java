@@ -13,6 +13,7 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -64,8 +65,18 @@ import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.ViewById;
 import org.androidannotations.annotations.sharedpreferences.Pref;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import quinticble.BleConnection;
 import quinticble.QuinticBleAPISdkBase;
@@ -74,6 +85,8 @@ import quinticble.QuinticCommon;
 import quinticble.QuinticDeviceFactoryTea;
 import quinticble.QuinticDeviceTea;
 import quinticble.QuinticException;
+import quinticble.QuinticScanCallback;
+import quinticble.QuinticScanResult;
 
 import static android.content.Context.WINDOW_SERVICE;
 
@@ -240,7 +253,7 @@ if(!boolConnectBle) return;
                             sysdownloadsize = deviceVersionObj.downloadsize;
                             configPref.deviceUpdateInfo().put(new Gson().toJson(deviceVersionObj));
                             update_device_id.setBackgroundResource(R.drawable.cm_update_device_c);
-//                            perssion_func(update_device_id, "固件有新版本啦！", "马上升级", "以后再说");
+                            perssion_func(update_device_id, "固件有新版本啦！", "马上升级", "以后再说");
                         } else {
                             if (!TextUtils.isEmpty(deviceVersion)) {
 
@@ -349,7 +362,7 @@ String lastResult="";
                         String code="EC02"+trimResult.substring(trimResult.length()-8);
                         Log.i("ec02", "code************************"+code);
 
-//                        setEC02Back(code);
+                        setEC02Back(code);
                     }
 
 
@@ -358,7 +371,7 @@ String lastResult="";
                     Log.d("当前电量", batteryLevelValue + "");
 
                     if (showcontnect) {
-                        connectSuccessUi();
+                        connectSuccessUi(false);
                     }
                 } else if (trimResult.contains("ec0a01")) {
                     //泡茶状态： 1 Byte ， 0 : 非泡茶，1 : 泡茶中
@@ -378,19 +391,20 @@ String lastResult="";
                     Log.d("当前teaingTimeValue", teaingTimeValue + "");
                     Log.d("当前teaingIsNull", teaingIsNull + "");
 
-                    if (showcontnect) {
-                        connectSuccessUi();
-                    }
+
 
                     MainApp mainappAll = (MainApp) getActivity().getApplicationContext();
                     long endtime = System.currentTimeMillis();
-                    if (endtime - mainappAll.starttime > 300) {
+                    if (endtime - mainappAll.starttime > 30) {
                         Log.i("Broadcast receive", "getLogHistory************************");
 
                         getLogHistory(true);
                     }
+                    if (showcontnect) {
+                        connectSuccessUi(false);
+                    }
 
-
+                    return;
                 } else if (trimResult.contains("ec0e")) {//是否在充电
                     int isbatterying = QuinticCommon.unsignedByteToInt(data[2]);
                     Log.d("是否在充电", isbatterying + "");
@@ -634,7 +648,7 @@ boolean boolConnectBle=false;
     }
 
 
-    public void connectSuccessUi() {
+    public void connectSuccessUi(boolean updatetime) {
 
         boolConnectBle=true;
         MainApp mainappAll = (MainApp) getActivity().getApplicationContext();
@@ -650,8 +664,9 @@ boolean boolConnectBle=false;
 
         boolCheckBattery = true;
 
-
-        mainappAll.starttime = System.currentTimeMillis();
+if(updatetime) {
+    mainappAll.starttime = System.currentTimeMillis();
+}
 
         cicrle_line_id.setVisibility(View.VISIBLE);
 
@@ -1205,10 +1220,9 @@ boolean boolConnectBle=false;
     }
 
     //*********************加载条***************
-    int downupcount = 0;
-    boolean boolCheckBattery = true;
+Set<String> addresses=new HashSet<>();
+    public void connectFindDevice(){
 
-    public void connectFindDevice() {
         if (!MyStringUtils.isopenBluetooth(getActivity())) {
             connectSendCodeFailUi("");
 
@@ -1225,34 +1239,9 @@ boolean boolConnectBle=false;
                 return;
             }
         }
-
-
-        MainApp mainappAll = (MainApp) getActivity().getApplicationContext();
-        long endtime = System.currentTimeMillis();
-
-        long starttime = mainappAll.starttime;
-        if (endtime - starttime < 2000) {
-            return;
-
-        }
-
-
         blindDeviceId = configPref.userDeviceMac().get();
         blindDeviceId = MyStringUtils.macStringToUpper(blindDeviceId);
-
-
-//        blindDeviceId = "88:4A:EA:83:A5:62";
-//        configPref.userDeviceMac().put("884AEA83A562");
-        Log.e("blindDeviceId:", blindDeviceId);
-//            getTeaInfoByUnionid();
-
-        boolCheckBattery = false;
-        MainApp mainApp = (MainApp) getActivity().getApplicationContext();
-        if (mainApp.boolupdateSuccess == 1) {
-            QuinticBleAPISdkBase.resultDevice = null;
-            QuinticBleAPISdkBase.getInstanceFactory(getActivity()).conn = null;
-        }
-
+        MainApp mainappAll = (MainApp) getActivity().getApplicationContext();
 
         if (MyStringUtils.isNotNullAndEmpty(QuinticBleAPISdkBase.resultDevice)) {
 
@@ -1266,6 +1255,138 @@ boolean boolConnectBle=false;
                 }
 
             }
+        }else{
+            startLoading();
+        }
+        Log.e("blindDeviceId:", blindDeviceId);
+     final    QuinticDeviceFactoryTea quinticDeviceFactory = QuinticBleAPISdkBase
+                .getInstanceFactory(getActivity());
+        quinticDeviceFactory.startScanDevice(new QuinticScanCallback() {
+            @Override
+            public void onScan(final QuinticScanResult scanResult) {
+                String addrScan=    scanResult.getDeviceAddress();
+
+                if (addresses.contains(addrScan)) {
+                    return;
+                }
+
+                addresses.add(addrScan);
+                if(addrScan.equalsIgnoreCase(blindDeviceId)){
+                    String bytestr=QuinticCommon.unsignedBytesToHexString(scanResult.getAdvertiseData(),"");
+
+                    int  po=bytestr.indexOf("ad110");
+
+                    String status=bytestr.substring(po + 4, po + 6);
+                    if(status.equals("01")){//正常模式
+                        connectFindDeviceForTing();
+                    }else{//待升级模式
+
+                        new Handler(getActivity().getMainLooper())
+                                .post(new Runnable() {
+                                    @Override
+                                    public void run() {
+
+                                        closeProgress();
+
+
+                                        // ************处理动作
+                                        if (QuinticBleAPISdkBase.getInstanceFactory(getActivity()).conn != null) {
+//                                                QuinticBleAPISdkBase.getInstanceFactory(getActivity()).conn.disconnect();
+                                            QuinticBleAPISdkBase.getInstanceFactory(getActivity()).abort();
+
+                                        }
+                                        Util.Toast(getActivity(), "将立马前往升级", null);
+
+                                        mustUpdate = true;
+                                        closeBle();
+                                        checkDeviceUpdateToServer();
+
+
+                                    }
+                                });
+
+
+                    }
+
+
+
+                }
+                quinticDeviceFactory.stopScanDevice();
+
+
+            }
+
+            @Override
+            public void onStop() {
+
+            }
+
+            @Override
+            public void onError(QuinticException ex) {
+//                quinticDeviceFactory.abort();
+                new Handler(getActivity().getMainLooper())
+                        .post(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                connectSendCodeFailUi("");
+                            }});
+            }
+
+            @Override
+            public void onStart() {
+
+            }
+        });
+    }
+
+
+
+
+
+
+
+    //*******************扫描**************
+
+    int downupcount = 0;
+    boolean boolCheckBattery = true;
+
+    public void connectFindDeviceForTing() {
+
+
+
+        MainApp mainappAll = (MainApp) getActivity().getApplicationContext();
+        long endtime = System.currentTimeMillis();
+
+        long starttime = mainappAll.starttime;
+        if (endtime - starttime < 2000) {
+            return;
+
+        }
+
+
+
+
+        boolCheckBattery = false;
+        MainApp mainApp = (MainApp) getActivity().getApplicationContext();
+        if (mainApp.boolupdateSuccess == 1) {
+            QuinticBleAPISdkBase.resultDevice = null;
+            QuinticBleAPISdkBase.getInstanceFactory(getActivity()).conn = null;
+        }
+
+
+        if (MyStringUtils.isNotNullAndEmpty(QuinticBleAPISdkBase.resultDevice)) {
+
+            Log.e("resultDevice", "not null");
+//            if (mainappAll.boolDownup) {
+//                startLoading();
+//            } else {
+//                if (boolShowLoadingFromTry) {
+//                    startLoading();
+//                    boolShowLoadingFromTry = false;
+//                }
+//
+//            }
 
 
             resultDeviceAll = QuinticBleAPISdkBase.resultDevice;
@@ -1273,20 +1394,20 @@ boolean boolConnectBle=false;
             setNowTimeBle();
         } else {
             Log.e("QuinticBleAPISdkBaseresultDevice", " null");
-            startLoading();
-            if (QuinticBleAPISdkBase.getInstanceFactory(getActivity()).conn != null) {
-
-//                                        QuinticBleAPISdkBase.getInstanceFactory(DeviceUpdateTwoActivity.this).deviceMap.clear();
+//            startLoading();
+//            if (QuinticBleAPISdkBase.getInstanceFactory(getActivity()).conn != null) {
 //
-                Log.e("HOT", "getInstanceFactory abort");
-                QuinticBleAPISdkBase.getInstanceFactory(getActivity()).abort();
-
-//                                        QuinticBleAPISdkBase.getInstanceFactory(getActivity()).conn.disconnect();
-
-            }
-
-
-            QuinticBleAPISdkBase.getInstanceFactory(getActivity()).deviceMap.clear();//每次重连都会重新获取连接
+////                                        QuinticBleAPISdkBase.getInstanceFactory(DeviceUpdateTwoActivity.this).deviceMap.clear();
+////
+//                Log.e("HOT", "getInstanceFactory abort");
+//                QuinticBleAPISdkBase.getInstanceFactory(getActivity()).abort();
+//
+////                                        QuinticBleAPISdkBase.getInstanceFactory(getActivity()).conn.disconnect();
+//
+//            }
+//
+//
+//            QuinticBleAPISdkBase.getInstanceFactory(getActivity()).deviceMap.clear();//每次重连都会重新获取连接
 
             final Context context = getActivity();
             QuinticDeviceFactoryTea quinticDeviceFactory = QuinticBleAPISdkBase
@@ -1298,40 +1419,7 @@ boolean boolConnectBle=false;
                         public void oadUpdate(final QuinticDeviceTea bluetoothDevice) {
                             super.oadUpdate(bluetoothDevice);
 
-                            new Handler(context.getMainLooper())
-                                    .post(new Runnable() {
-                                        @Override
-                                        public void run() {
 
-                                            closeProgress();
-
-                                            resultDeviceAll = bluetoothDevice;
-                                            QuinticBleAPISdkBase.resultDevice = resultDeviceAll;
-                                            // ************处理动作
-                                            if (QuinticBleAPISdkBase.getInstanceFactory(getActivity()).conn != null) {
-//                                                QuinticBleAPISdkBase.getInstanceFactory(getActivity()).conn.disconnect();
-                                                QuinticBleAPISdkBase.getInstanceFactory(getActivity()).abort();
-
-                                            }
-                                            Util.Toast(getActivity(), "将立马前往升级", null);
-
-                                            mustUpdate = true;
-                                            closeBle();
-                                            checkDeviceUpdateToServer();
-
-//                                            try {
-//                                                Thread.sleep(6000);
-//                                            } catch (InterruptedException e) {
-//                                                e.printStackTrace();
-//                                            }
-//
-//
-//                                            Intent intent = new Intent(getActivity(), DeviceActivityTea.class);
-//                                            intent.putExtra("MAC_DEVICE", blindDeviceId);
-//                                            startActivity(intent);
-
-                                        }
-                                    });
 
 
                         }
@@ -1824,9 +1912,9 @@ boolean boolConnectBle=false;
 
 
                                         getMineSortListInfo();
-                                        connectSuccessUi();
+                                        connectSuccessUi(true);
                                     }else{
-                                        connectSuccessUi();
+                                        connectSuccessUi(true);
 
                                     }
                                 } else {
@@ -1858,7 +1946,7 @@ boolean boolConnectBle=false;
                 boolean IsConnect = intent.getBooleanExtra("IsConnect", false);
                 if (IsConnect) {
 
-                    connectSuccessUi();
+                    connectSuccessUi(false);
 
                     return;
                 }
@@ -1931,6 +2019,100 @@ boolean boolConnectBle=false;
     public static String MYACTION_UPDATE = "com.changehot.broadcast";
 
 
+
+    public void downloadBin(final String urlStr, final String fileName) {
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+//                String fileName = "2.mp3";
+                OutputStream output = null;
+                String pathName = null;
+                try {
+                /*
+                 * 通过URL取得HttpURLConnection
+                 * 要网络连接成功，需在AndroidMainfest.xml中进行权限配置
+                 * <uses-permission android:name="android.permission.INTERNET" />
+                 */
+                    URL url = new URL(urlStr);
+                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                    //取得inputStream，并将流中的信息写入SDCard
+
+                /*
+                 * 写前准备
+                 * 1.在AndroidMainfest.xml中进行权限配置
+                 * <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+                 * 取得写入SDCard的权限
+                 * 2.取得SDCard的路径： Environment.getExternalStorageDirectory()
+                 * 3.检查要保存的文件上是否已经存在
+                 * 4.不存在，新建文件夹，新建文件
+                 * 5.将input流中的信息写入SDCard
+                 * 6.关闭流
+                 */
+                    String path = Constant.path;
+                    String SDCard = Environment.getExternalStorageDirectory() + "";
+                    pathName = SDCard + "/" + path + "/" + fileName;//文件存储路径
+
+                    File file = new File(pathName);
+                    InputStream input = conn.getInputStream();
+                    if (file.exists()) {
+                        System.out.println("exits");
+//                        file.delete();
+//                        return;
+                    } else {
+                        String dir = SDCard + "/" + path;
+                        new File(dir).mkdir();//新建文件夹
+                        file.createNewFile();//新建文件
+
+                    }
+
+                    output = new FileOutputStream(file);
+                    byte[] voice_bytes = new byte[1024];
+                    int len1 = -1;
+                    while ((len1 = input.read(voice_bytes)) != -1) {
+                        output.write(voice_bytes, 0, len1);
+                        output.flush();
+
+                    }
+
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } finally {
+                    try {
+                        output.close();
+                        System.out.println("success");
+                    } catch (IOException e) {
+                        System.out.println("fail");
+                        e.printStackTrace();
+                    }
+                }
+
+
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        foxProgressbarInterface0.stopProgressBar();
+                        Intent intent = new Intent(getActivity(), DeviceActivityTea.class);
+                        intent.putExtra("MAC_DEVICE", blindDeviceId);
+                        String version = configPref.userDeviceVersion().get();
+                        intent.putExtra("upversion", sysUpdateVersion);
+                        intent.putExtra("deviceVersionObj", configPref.deviceUpdateInfo().get());
+                        intent.putExtra("sysdownloadsize", sysdownloadsize);
+
+
+                        startActivity(intent);
+                    }
+                });
+
+
+
+            }
+
+        }).start();
+    }
+
     public void perssion_func(View tab_paocha, String comment, String text1, String text2) {
         new One_Permission_Popwindow().showPopwindow(getActivity(), tab_paocha, comment, text1, text2, new One_Permission_Popwindow.CallBackPayWindow() {
             @Override
@@ -1941,15 +2123,17 @@ boolean boolConnectBle=false;
 
                 if (mustUpdate) {
                     mustUpdate = false;
-                    Intent intent = new Intent(getActivity(), DeviceActivityTea.class);
-                    intent.putExtra("MAC_DEVICE", blindDeviceId);
-                    String version = configPref.userDeviceVersion().get();
-                    intent.putExtra("upversion", sysUpdateVersion);
-                    intent.putExtra("deviceVersionObj", configPref.deviceUpdateInfo().get());
-                    intent.putExtra("sysdownloadsize", sysdownloadsize);
+                    foxProgressbarInterface0 = new FoxProgressbarInterface();
+                    foxProgressbarInterface0.startProgressBar(getActivity(), "下载固件...");
 
 
-                    startActivity(intent);
+                    MainApp mainApp = (MainApp) getActivity().getApplicationContext();
+
+                    DeviceVersionObj deviceVersionObj=mainApp.deviceVersionObj;
+                    downloadBin(deviceVersionObj.url, Constant.path_bin_name);
+
+
+
                 } else {
                     Intent intent = new Intent(getActivity(), DeviceUpdateTwoActivity_.class);
 
@@ -2216,7 +2400,7 @@ boolean boolConnectBle=false;
             @Override
             public void onError(QuinticException ex) {
                 super.onError(ex);
-                connectSendCodeFailUi(failMsg);
+//                connectSendCodeFailUi(failMsg);
 
             }
 

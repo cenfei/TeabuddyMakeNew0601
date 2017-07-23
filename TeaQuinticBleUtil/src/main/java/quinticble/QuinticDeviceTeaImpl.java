@@ -499,9 +499,9 @@ public void convertCodeMap3(final List<byte[]> code, final QuinticCallbackTea<St
 //        Log.e("mapcode0",QuinticCommon.unsignedBytesToHexString(mapcode0,0,1000));
 //        Log.e("mapcode0",QuinticCommon.unsignedBytesToHexString(mapcode0,1000,mapcode0.length-1000));
 
-        int packageCount = mapcode0.length / 64;
+        int packageCount = mapcode0.length / 64;//219
 
-        if(packageCount%64!=0){
+        if(mapcode0.length%64!=0){
             packageCount=packageCount+1;
         }
 
@@ -546,6 +546,7 @@ public void convertCodeMap3(final List<byte[]> code, final QuinticCallbackTea<St
 
 
             String everyCode =null;
+            //14016 有问题
             everyCode = "EB0C" + iHexH + iHexL + "40" + QuinticCommon.unsignedBytesToHexString(mapcode, 64 * i, 64);
 
             connection.writeData(new BleWriteData(QuinticCommon.stringToBytes(everyCode)));

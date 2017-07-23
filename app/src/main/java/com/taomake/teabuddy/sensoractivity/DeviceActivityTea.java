@@ -717,15 +717,15 @@ public class DeviceActivityTea extends Activity {
                     Toast.makeText(getApplication(), "Service discovery failed",
                             Toast.LENGTH_LONG).show();
 
-                    new One_Permission_Popwindow().showPopwindow(DeviceActivityTea.this,  tea_os_version, "建议重启应用，以便连接", "", "停止升级", new One_Permission_Popwindow.CallBackPayWindow() {
+                    new One_Permission_Popwindow().showPopwindow(DeviceActivityTea.this,  tea_os_version, "建议重启应用，以便重现升级", "取消", "停止升级", new One_Permission_Popwindow.CallBackPayWindow() {
                         @Override
                         public void handleCallBackChangeUser() {
-                            System.exit(0);
+
                         }
 
                         @Override
                         public void handleCallBackBindDevice() {
-
+                            System.exit(0);
 
                         }
                     });

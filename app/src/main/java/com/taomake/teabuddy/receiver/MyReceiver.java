@@ -92,7 +92,7 @@ public class MyReceiver extends BroadcastReceiver {
 			Intent intent0 = new Intent(context, WebViewActivity_.class);
 			intent0.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP );
 
-			intent0.putExtra("url", "http://www.baidu.com");//测试数据
+			intent0.putExtra("url", content);//测试数据
 			intent0.putExtra("title", title);
 			context.startActivity(intent0);
         	

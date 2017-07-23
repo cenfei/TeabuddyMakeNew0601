@@ -25,6 +25,9 @@ class QuinticUuid {
 //智能茶密 水杯 设置uuid
 public static final String SERVICE_UUID_NF = "0000fee7-0000-1000-8000-00805f9b34fb";
 
+
+    public static final String SERVICE_UUID_OAD = "0000fff0-0000-1000-8000-00805f9b34fb";
+
     public static final String SERVICE_UUID = "0000fe00-0000-1000-8000-00805f9b34fb";
 //
 //    /**

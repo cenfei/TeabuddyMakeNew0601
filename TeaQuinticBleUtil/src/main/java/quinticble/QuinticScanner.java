@@ -14,7 +14,6 @@ import android.bluetooth.le.ScanResult;
 import android.bluetooth.le.ScanSettings;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.os.Build;
@@ -48,12 +47,14 @@ class QuinticScanner  implements ActivityCompat.OnRequestPermissionsResultCallba
             List<UUID> uuidList = UUIDParser.parseUUIDs(scanRecord);
             for (UUID uuid : uuidList) {
                 Log.d("uuid", uuid.toString().toLowerCase());
-                if (QuinticUuid.SERVICE_UUID.toLowerCase().equals(uuid.toString().toLowerCase())) {
+                if (QuinticUuid.SERVICE_UUID.toLowerCase().equals(uuid.toString().toLowerCase())||
+                        QuinticUuid.SERVICE_UUID_OAD.toLowerCase().equals(uuid.toString().toLowerCase())) {
                     matchUuid = true;
                     break;
                 }
             }
-            if (!matchUuid && !"Quintic BLE".equals(device.getName()) && !"iShuaShua".equals(device.getName())) {
+            if (!matchUuid){
+//                    && !"Quintic BLE".equals(device.getName()) && !"iShuaShua".equals(device.getName())) {
                 return;
             }
 
@@ -94,18 +95,18 @@ class QuinticScanner  implements ActivityCompat.OnRequestPermissionsResultCallba
 
     public synchronized void start() {
         if (!isScanning) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ) {
+            if (Build.VERSION.SDK_INT < 23&&Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ) {
 
                 ensureDiscoverable();
 //                startScanningApi21(scanCallback);
 
             }
-//            else if (Build.VERSION.SDK_INT >= 23) {
-//                if (quinticScanCallback != null) {
-//                    quinticScanCallback.onStart();
-//                }
-//                bluetoothAdapter.startLeScan(leCallback);
-//            }
+            else if (Build.VERSION.SDK_INT >= 23) {
+                if (quinticScanCallback != null) {
+                    quinticScanCallback.onStart();
+                }
+                bluetoothAdapter.startLeScan(leCallback);
+            }
             else {
                 if (quinticScanCallback != null) {
                     quinticScanCallback.onStart();
@@ -205,11 +206,11 @@ class QuinticScanner  implements ActivityCompat.OnRequestPermissionsResultCallba
      */
     public boolean checkSupperBluetoothLE() {
         final int version = Build.VERSION.SDK_INT;
-        if (version >= Build.VERSION_CODES.LOLLIPOP) {
-            return isMultipleAdvertisementSupported();
-        } else {
+//        if (version >= Build.VERSION_CODES.LOLLIPOP) {
+//            return isMultipleAdvertisementSupported();
+//        } else {
             return isSupperBluetoothLE();
-        }
+//        }
     }
 
     /**
@@ -219,25 +220,49 @@ class QuinticScanner  implements ActivityCompat.OnRequestPermissionsResultCallba
      */
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public synchronized void startScanningApi21() {
-        scanCallback = new ScanCallback() {
-            @Override
-            public void onScanResult(int callbackType, final ScanResult result) {
-                super.onScanResult(callbackType, result);
-                Log.d("callbackType", "" + callbackType);
-                if (quinticScanCallback != null) {
-                    QuinticScanResult result0 = new QuinticScanResult();
-                    result0.setAdvertiseData(result.getScanRecord().getBytes());
-                    result0.setDeviceAddress(result.getDevice().getAddress());
-                    result0.setRssi(result.getRssi());
-                    quinticScanCallback.onScan(result0);
-                }
-            }
+        if(scanCallback==null) {
+            scanCallback = new ScanCallback() {
+                @Override
+                public void onScanResult(int callbackType, final ScanResult result) {
+                    super.onScanResult(callbackType, result);
+                    Log.d("callbackType", "" + callbackType);
+                    boolean matchUuid = false;
 
-            @Override
-            public void onScanFailed(int errorCode) {
-                super.onScanFailed(errorCode);
-            }
-        };
+                    List<UUID> uuidList = UUIDParser.parseUUIDs(result.getScanRecord().getBytes());
+                    for (UUID uuid : uuidList) {
+                        Log.d("uuid", uuid.toString().toLowerCase());
+                        if (QuinticUuid.SERVICE_UUID.toLowerCase().equals(uuid.toString().toLowerCase())
+                                ||                        QuinticUuid.SERVICE_UUID_OAD.toLowerCase().equals(uuid.toString().toLowerCase()))
+
+                             {
+                            matchUuid = true;
+                            break;
+                        }
+                    }
+                    BluetoothDevice device = result.getDevice();
+//                if (!matchUuid && !"Quintic BLE".equals(device.getName()) && !"iShuaShua".equals(device.getName())) {
+//                    return;
+//                }
+if (!matchUuid){
+    return;
+}
+
+
+                    if (quinticScanCallback != null) {
+                        QuinticScanResult result0 = new QuinticScanResult();
+                        result0.setAdvertiseData(result.getScanRecord().getBytes());
+                        result0.setDeviceAddress(result.getDevice().getAddress());
+                        result0.setRssi(result.getRssi());
+                        quinticScanCallback.onScan(result0);
+                    }
+                }
+
+                @Override
+                public void onScanFailed(int errorCode) {
+                    super.onScanFailed(errorCode);
+                }
+            };
+        }
         mBluetoothLeScanner = bluetoothAdapter.getBluetoothLeScanner();
         if (quinticScanCallback != null) {
             quinticScanCallback.onStart();
