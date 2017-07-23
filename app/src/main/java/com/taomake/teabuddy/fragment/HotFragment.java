@@ -56,6 +56,7 @@ import com.taomake.teabuddy.object.MsgInfoObj;
 import com.taomake.teabuddy.object.MsgListJson;
 import com.taomake.teabuddy.prefs.ConfigPref_;
 import com.taomake.teabuddy.sensoractivity.DeviceActivityTea;
+import com.taomake.teabuddy.sensoractivity.FwUpdateActivityTea;
 import com.taomake.teabuddy.util.Constant;
 import com.taomake.teabuddy.util.MyStringUtils;
 import com.taomake.teabuddy.util.Util;
@@ -1288,7 +1289,7 @@ Set<String> addresses=new HashSet<>();
 
                                         closeProgress();
 
-
+                                        FwUpdateActivityTea.SEND_INTERVAL=120;
                                         // ************处理动作
                                         if (QuinticBleAPISdkBase.getInstanceFactory(getActivity()).conn != null) {
 //                                                QuinticBleAPISdkBase.getInstanceFactory(getActivity()).conn.disconnect();
@@ -1840,7 +1841,7 @@ Set<String> addresses=new HashSet<>();
                                     Log.d("当前固件版本versionD", versionD + "");
 
                                     deviceVersion = versionD + "";
-//                                    deviceVersion = "2.45";//fox测试
+//                                    deviceVersion = "15";//fox测试
                                     if (deviceVersion.length() == 3) {
                                         deviceVersion = deviceVersion + "0";
                                     }

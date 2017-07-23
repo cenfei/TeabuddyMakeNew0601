@@ -66,7 +66,7 @@ public class FwUpdateActivityTea extends Activity {
     private static final int OAD_IMG_HDR_SIZE = 8;
     private static final long TIMER_INTERVAL = 1000;
 
-    private static final int SEND_INTERVAL = 50; // Milliseconds (make sure this is longer than the connection interval)
+    public static  int SEND_INTERVAL = 50; // Milliseconds (make sure this is longer than the connection interval)
     private static final int BLOCKS_PER_CONNECTION = 4; // May sent up to four blocks per connection
 
     // GUI

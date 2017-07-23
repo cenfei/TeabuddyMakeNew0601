@@ -23,6 +23,7 @@ import com.taomake.teabuddy.network.RowMessageHandler;
 import com.taomake.teabuddy.object.DeviceVersionObj;
 import com.taomake.teabuddy.prefs.ConfigPref_;
 import com.taomake.teabuddy.sensoractivity.DeviceActivityTea;
+import com.taomake.teabuddy.sensoractivity.FwUpdateActivityTea;
 import com.taomake.teabuddy.util.Constant;
 import com.taomake.teabuddy.util.MyStringUtils;
 
@@ -515,6 +516,7 @@ String  updatetext=MyStringUtils.decodeUnicode(deviceVersionObj.content);
                                                     DeviceVersionObj deviceVersionObj=new Gson().fromJson(configPref.deviceUpdateInfo().get(), DeviceVersionObj.class);
 //
 //
+                                    FwUpdateActivityTea.SEND_INTERVAL=50;
 
                                     foxProgressbarInterface = new FoxProgressbarInterface();
 
