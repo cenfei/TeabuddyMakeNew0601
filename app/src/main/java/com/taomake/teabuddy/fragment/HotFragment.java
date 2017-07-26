@@ -1396,19 +1396,19 @@ Set<String> addresses=new HashSet<>();
         } else {
             Log.e("QuinticBleAPISdkBaseresultDevice", " null");
 //            startLoading();
-//            if (QuinticBleAPISdkBase.getInstanceFactory(getActivity()).conn != null) {
+            if (QuinticBleAPISdkBase.getInstanceFactory(getActivity()).conn != null) {
+
+//                                        QuinticBleAPISdkBase.getInstanceFactory(DeviceUpdateTwoActivity.this).deviceMap.clear();
 //
-////                                        QuinticBleAPISdkBase.getInstanceFactory(DeviceUpdateTwoActivity.this).deviceMap.clear();
-////
-//                Log.e("HOT", "getInstanceFactory abort");
-//                QuinticBleAPISdkBase.getInstanceFactory(getActivity()).abort();
-//
-////                                        QuinticBleAPISdkBase.getInstanceFactory(getActivity()).conn.disconnect();
-//
-//            }
-//
-//
-//            QuinticBleAPISdkBase.getInstanceFactory(getActivity()).deviceMap.clear();//每次重连都会重新获取连接
+                Log.e("HOT", "getInstanceFactory abort");
+                QuinticBleAPISdkBase.getInstanceFactory(getActivity()).abort();
+
+//                                        QuinticBleAPISdkBase.getInstanceFactory(getActivity()).conn.disconnect();
+
+            }
+
+
+            QuinticBleAPISdkBase.getInstanceFactory(getActivity()).deviceMap.clear();//每次重连都会重新获取连接
 
             final Context context = getActivity();
             QuinticDeviceFactoryTea quinticDeviceFactory = QuinticBleAPISdkBase
@@ -1958,9 +1958,24 @@ Set<String> addresses=new HashSet<>();
 
                 if (fromAddAddvice) {
 
+
+
+
+
                     connectUi();
 
                     QuinticBleAPISdkBase.resultDevice = null;
+                    if (QuinticBleAPISdkBase.getInstanceFactory(getActivity()).conn != null) {
+
+                        Log.e("HOT", "getInstanceFactory abort");
+                        QuinticBleAPISdkBase.getInstanceFactory(getActivity()).abort();
+
+                    }
+
+
+                    QuinticBleAPISdkBase.getInstanceFactory(getActivity()).deviceMap.clear();//关掉上一个连接 重新连接新的设备
+
+
                     connectFindDevice();
 
                     return;

@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.taomake.teabuddy.R;
 import com.taomake.teabuddy.component.FoxProgressbarInterface;
+import com.taomake.teabuddy.component.FoxToastInterface;
 import com.taomake.teabuddy.network.ProtocolUtil;
 import com.taomake.teabuddy.network.RowMessageHandler;
 import com.taomake.teabuddy.object.BaseJson;
@@ -309,6 +310,7 @@ public class SetOnlineDebugTwoActivity extends BaseActivity {
                                                 connectFindDevice();
                                                 countError++;
                                             } else {
+                                                connectSendCodeFailUi("");
 //                                            unconnectUi();
                                                 // *****************连接失败
 //                                                Util.Toast(context,
@@ -323,8 +325,13 @@ public class SetOnlineDebugTwoActivity extends BaseActivity {
 
     public void connectSendCodeFailUi(String failMsg) {
         Log.e("getLogHistory", failMsg);
-        Util.Toast(SetOnlineDebugTwoActivity.this,"诊断数据查询没有数据",null);
-        finish();
+        Util.Toast(SetOnlineDebugTwoActivity.this, "诊断数据查询失败", new FoxToastInterface.FoxToastCallback() {
+            @Override
+            public void toastCloseCallbak() {
+                finish();
+            }
+        });
+
 
     }
 
