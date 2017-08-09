@@ -43,6 +43,9 @@ class QuinticScanner  implements ActivityCompat.OnRequestPermissionsResultCallba
 
         @Override
         public void onLeScan(BluetoothDevice device, int rssi, byte[] scanRecord) {
+            if(!isScanning){
+                return;
+            }
             boolean matchUuid = false;
             List<UUID> uuidList = UUIDParser.parseUUIDs(scanRecord);
             for (UUID uuid : uuidList) {

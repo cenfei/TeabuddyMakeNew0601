@@ -649,6 +649,7 @@ String  updatetext=MyStringUtils.decodeUnicode(deviceVersionObj.content);
                     e.printStackTrace();
                 } finally {
                     try {
+                        if(output!=null)
                         output.close();
                         System.out.println("success");
                     } catch (IOException e) {

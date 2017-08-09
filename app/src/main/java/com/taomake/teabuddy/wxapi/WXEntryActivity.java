@@ -50,6 +50,7 @@ import com.tencent.mm.opensdk.modelbase.BaseReq;
 import com.tencent.mm.opensdk.modelbase.BaseResp;
 import com.tencent.mm.opensdk.modelmsg.SendAuth;
 import com.tencent.mm.opensdk.openapi.IWXAPIEventHandler;
+import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -86,6 +87,27 @@ public class WXEntryActivity extends AppCompatActivity implements IWXAPIEventHan
 		handleIntent(getIntent());
 	}
 
+	@Override
+	protected void onResume() {
+		super.onResume();
+		MobclickAgent.onResume(this);
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+		MobclickAgent.onPause(this);
+	}
+
+	//	protected void onResume() {
+//		super.onResume();
+//		MobclickAgent.onResume(this);          //统计时长
+//	}
+//
+//	protected void onPause() {
+//		super.onPause();
+//		MobclickAgent.onPause(this);
+//	}
 	@Override
 	protected void onNewIntent(Intent intent) {
 // TODO Auto-generated method stub

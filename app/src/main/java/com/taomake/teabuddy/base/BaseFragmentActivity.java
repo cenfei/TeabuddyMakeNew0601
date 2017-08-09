@@ -10,6 +10,7 @@ import android.widget.ImageView;
 
 import com.taomake.teabuddy.R;
 import com.taomake.teabuddy.util.MyPreferences;
+import com.umeng.analytics.MobclickAgent;
 
 public abstract class BaseFragmentActivity extends FragmentActivity {
 
@@ -29,12 +30,12 @@ public abstract class BaseFragmentActivity extends FragmentActivity {
         super.onResume();
 
         setActivityBg();
-//        MobclickAgent.onResume(this);
+        MobclickAgent.onResume(this);
     }
 
     protected void onPause() {
         super.onPause();
-//        MobclickAgent.onPause(this);
+        MobclickAgent.onPause(this);
     }
 
     private int guideResourceId=0;//引导页图片资源id

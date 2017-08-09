@@ -139,6 +139,7 @@ if(!boolConnectBle) return;
 
     }
 
+
     @Click(R.id.pc_tea_choose_line)
     void onpc_tea_choose_line() {
         if (isLoading) return;
@@ -1222,8 +1223,9 @@ if(updatetime) {
 
     //*********************加载条***************
 Set<String> addresses=new HashSet<>();
+    boolean scannerSuccess=false;
     public void connectFindDevice(){
-
+        scannerSuccess=false;
         if (!MyStringUtils.isopenBluetooth(getActivity())) {
             connectSendCodeFailUi("");
 
@@ -1265,22 +1267,24 @@ Set<String> addresses=new HashSet<>();
         quinticDeviceFactory.startScanDevice(new QuinticScanCallback() {
             @Override
             public void onScan(final QuinticScanResult scanResult) {
-                String addrScan=    scanResult.getDeviceAddress();
+                String addrScan = scanResult.getDeviceAddress();
 
                 if (addresses.contains(addrScan)) {
                     return;
                 }
 
                 addresses.add(addrScan);
-                if(addrScan.equalsIgnoreCase(blindDeviceId)){
-                    String bytestr=QuinticCommon.unsignedBytesToHexString(scanResult.getAdvertiseData(),"");
+                if (addrScan.equalsIgnoreCase(blindDeviceId)) {
+                    scannerSuccess = true;
 
-                    int  po=bytestr.indexOf("ad110");
+                    String bytestr = QuinticCommon.unsignedBytesToHexString(scanResult.getAdvertiseData(), "");
 
-                    String status=bytestr.substring(po + 4, po + 6);
-                    if(status.equals("01")){//正常模式
+                    int po = bytestr.indexOf("ad110");
+
+                    String status = bytestr.substring(po + 4, po + 6);
+                    if (status.equals("01")) {//正常模式
                         connectFindDeviceForTing();
-                    }else{//待升级模式
+                    } else {//待升级模式
 
                         new Handler(getActivity().getMainLooper())
                                 .post(new Runnable() {
@@ -1289,7 +1293,7 @@ Set<String> addresses=new HashSet<>();
 
                                         closeProgress();
 
-                                        FwUpdateActivityTea.SEND_INTERVAL=120;
+                                        FwUpdateActivityTea.SEND_INTERVAL = 120;
                                         // ************处理动作
                                         if (QuinticBleAPISdkBase.getInstanceFactory(getActivity()).conn != null) {
 //                                                QuinticBleAPISdkBase.getInstanceFactory(getActivity()).conn.disconnect();
@@ -1310,7 +1314,6 @@ Set<String> addresses=new HashSet<>();
                     }
 
 
-
                 }
                 quinticDeviceFactory.stopScanDevice();
 
@@ -1319,23 +1322,42 @@ Set<String> addresses=new HashSet<>();
 
             @Override
             public void onStop() {
+                Log.e("scan onStop:", "hot onStop");
+                new Handler(getActivity().getMainLooper())
+                        .post(new Runnable() {
+                            @Override
+                            public void run() {
+                                Log.e("scan onStop:", "hot connectFindDevice2" + scannerSuccess);
 
+                                if (!scannerSuccess) {
+                                    Log.e("scan onStop:", "hot connectFindDevice1");
+
+                                    connectFindDevice();
+                                    scannerSuccess = true;
+                                }
+
+                            }
+                        });
             }
 
             @Override
             public void onError(QuinticException ex) {
 //                quinticDeviceFactory.abort();
+                Log.e("scan onError:", "hot onError" + ex.getCode() + ex.getMessage());
+
                 new Handler(getActivity().getMainLooper())
                         .post(new Runnable() {
                             @Override
                             public void run() {
 
                                 connectSendCodeFailUi("");
-                            }});
+                            }
+                        });
             }
 
             @Override
             public void onStart() {
+                Log.e("scan onStart:", "hot onStart");
 
             }
         });
@@ -1396,19 +1418,19 @@ Set<String> addresses=new HashSet<>();
         } else {
             Log.e("QuinticBleAPISdkBaseresultDevice", " null");
 //            startLoading();
-            if (QuinticBleAPISdkBase.getInstanceFactory(getActivity()).conn != null) {
-
+//            if (QuinticBleAPISdkBase.getInstanceFactory(getActivity()).conn != null) {
+//
 //                                        QuinticBleAPISdkBase.getInstanceFactory(DeviceUpdateTwoActivity.this).deviceMap.clear();
 //
-                Log.e("HOT", "getInstanceFactory abort");
-                QuinticBleAPISdkBase.getInstanceFactory(getActivity()).abort();
-
+//                Log.e("HOT", "getInstanceFactory abort");
+//                QuinticBleAPISdkBase.getInstanceFactory(getActivity()).abort();
+//
 //                                        QuinticBleAPISdkBase.getInstanceFactory(getActivity()).conn.disconnect();
+//
+//            }
 
-            }
 
-
-            QuinticBleAPISdkBase.getInstanceFactory(getActivity()).deviceMap.clear();//每次重连都会重新获取连接
+//            QuinticBleAPISdkBase.getInstanceFactory(getActivity()).deviceMap.clear();//每次重连都会重新获取连接
 
             final Context context = getActivity();
             QuinticDeviceFactoryTea quinticDeviceFactory = QuinticBleAPISdkBase
@@ -1974,9 +1996,10 @@ Set<String> addresses=new HashSet<>();
 
 
                     QuinticBleAPISdkBase.getInstanceFactory(getActivity()).deviceMap.clear();//关掉上一个连接 重新连接新的设备
+                    blindDeviceId = configPref.userDeviceMac().get();
+                    blindDeviceId = MyStringUtils.macStringToUpper(blindDeviceId);
 
-
-                    connectFindDevice();
+                    connectFindDeviceForTing();
 
                     return;
                 }
