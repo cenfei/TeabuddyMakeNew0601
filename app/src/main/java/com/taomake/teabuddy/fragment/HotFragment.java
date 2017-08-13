@@ -1125,19 +1125,20 @@ if(updatetime) {
         public void run() {
             // TODO Auto-generated method stub
             //要做的事情
-            if (process <= 30) {
+            if (process <= 150) {
                 connect_status_commnet_id.setVisibility(View.VISIBLE);
 
                 int processcase = process % 3;
                 switch (processcase) {
                     case 1:
-                        connect_status_commnet_id.setText("正在连接中.");
+
+                        connect_status_commnet_id.setText("正在连接中."+connnectCommnet);
                         break;
                     case 2:
-                        connect_status_commnet_id.setText("正在连接中..");
+                        connect_status_commnet_id.setText("正在连接中.."+connnectCommnet);
                         break;
                     case 0:
-                        connect_status_commnet_id.setText("正在连接中...");
+                        connect_status_commnet_id.setText("正在连接中..."+connnectCommnet);
                         break;
 
                     default:
@@ -1180,11 +1181,11 @@ if(updatetime) {
 
         }
     }
-
+String connnectCommnet="";
 
     public void startLoading() {
         isLoading = true;
-
+        connnectCommnet="";
         writehandler.post(runnable);
         dccontrol_id.setTextColor(getResources().getColor(R.color.white_alpha60));
         update_id.setTextColor(getResources().getColor(R.color.white_alpha60));
@@ -1314,8 +1315,15 @@ Set<String> addresses=new HashSet<>();
                     }
 
 
+                    quinticDeviceFactory.stopScanDevice();
+                    try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+
                 }
-                quinticDeviceFactory.stopScanDevice();
 
 
             }
@@ -1329,7 +1337,7 @@ Set<String> addresses=new HashSet<>();
                             public void run() {
                                 Log.e("scan onStop:", "hot connectFindDevice2" + scannerSuccess);
 
-                                if (!scannerSuccess) {
+                                if (!scannerSuccess&&countError==0) {
                                     Log.e("scan onStop:", "hot connectFindDevice1");
 
                                     connectFindDevice();
@@ -1361,6 +1369,7 @@ Set<String> addresses=new HashSet<>();
 
             }
         });
+//        connectFindDeviceForTing();
     }
 
 
@@ -1475,8 +1484,13 @@ Set<String> addresses=new HashSet<>();
                                             MainApp mainApp = (MainApp) getActivity().getApplicationContext();
                                             if (countError < 5) {
                                                 connectUi();
-                                                connectFindDevice();
+
+
+                                                connectFindDeviceForTing();
                                                 countError++;
+                                                connnectCommnet="\n系统蓝牙有缓存，第" + countError +"次重试";
+                                             //   Util.Toast(getActivity(),"系统蓝牙有缓存，第"+countError+"次重试",null);
+
                                             } else
 
                                             {

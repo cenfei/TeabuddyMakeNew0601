@@ -131,9 +131,9 @@ public class QuinticDeviceFactoryTea {
                 @Override
                 public void onError(BleException ex) {
                     super.onError(ex);
-                    Log.d("onConnected", "onError");
+                    Log.e("onConnected", "onError");
 //                    deviceMap.clear();
-                    Log.d("onConnected fox", "onError clear");
+                    Log.e("onConnected fox", "onError clear");
 
                     callback.onError(new QuinticException(ex));
                 }

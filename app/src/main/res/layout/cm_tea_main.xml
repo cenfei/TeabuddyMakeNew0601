@@ -339,6 +339,7 @@
             android:layout_below="@+id/pc_tea_choose_line"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="30dp"
+            android:gravity="center"
             android:textColor="@color/white"
             android:textSize="15sp" />
     </RelativeLayout>

@@ -16,6 +16,7 @@ import android.os.Build;
 import android.os.Parcelable;
 import android.util.Log;
 
+import java.lang.reflect.Method;
 import java.util.Queue;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -84,6 +85,8 @@ public class BleConnection {
         this.notifyCharacteristicUuid = notifyCharacteristicUuid;
         this.writeDataQueue = new ConcurrentLinkedQueue<>();
         bluetoothManager = (BluetoothManager) context.getSystemService(Context.BLUETOOTH_SERVICE);
+
+
         bluetoothAdapter = bluetoothManager.getAdapter();
         if (bluetoothAdapter == null || !bluetoothAdapter.isEnabled()) {
             throw new BleException(BleException.BLUETOOTH_NOT_OPENED, "设备未打开蓝牙");
@@ -96,9 +99,14 @@ public class BleConnection {
                 try {
                     if (!isConnected()) {
                         if (gatt != null) {
+                            Log.e("connectTimeout","close");
+
                             gatt.close();
+                            refreshDeviceCache(gatt);
                         }
                     } else {
+                        Log.e("connectTimeout","disconnect");
+
                         gatt.disconnect();
                     }
                 } catch (Exception ex) {
@@ -115,14 +123,31 @@ public class BleConnection {
             public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
                 super.onConnectionStateChange(gatt, status, newState);
                 BleConnection.this.gatt = gatt;
+                Log.e("gatt", status + "," + newState);
 
                 Log.d("gatt", status + "," + newState + gatt.getServices());
                 if (BluetoothGatt.GATT_SUCCESS == status && newState == BluetoothProfile.STATE_CONNECTED) {
-                    connectTimeout.restart(10000);
+//                    refreshDeviceCache(gatt);
+
+                    connectTimeout.restart(20000);
+
+//                    try {
+//                        Thread.sleep(500);
+//                    } catch (InterruptedException e) {
+//                        e.printStackTrace();
+//                    }
+
+
                     if (!gatt.discoverServices()) {
                         errorWhenConnecting(new BleException(BleException.SERVICE_NOT_FOUND, "无法发现服务"));
                         gatt.disconnect();
                     }
+//                    if(gatt.getServices().size()==0){
+//
+//                        gatt.close();
+//                    }
+
+
                 } else {
 
 
@@ -131,6 +156,7 @@ public class BleConnection {
                             Log.e("..StateChange  gatt","close");
 
                             gatt.close();
+                            refreshDeviceCache(gatt);
                         }
                     } catch (Exception e) {
                     }
@@ -542,16 +568,16 @@ public class BleConnection {
                             }
                             connectTimeout.restart(30000);
 
+
+
                             BluetoothDevice bluetoothDeviceFox=bluetoothAdapter.getRemoteDevice(deviceAddress);
 
                       Parcelable[] parcelables= bluetoothDeviceFox.getUuids();
                         String name=    bluetoothDeviceFox.getName();
                         String address=    bluetoothDeviceFox.getAddress();
-//                        P    bluetoothDeviceFox.getUuids();
                         Log.e("ble state info","type:"+bluetoothDeviceFox.getType()+",state"+bluetoothDeviceFox.getBondState());
                             gatt = bluetoothDeviceFox.connectGatt(context, false, gattCallback);
-
-//                            gatt = bluetoothAdapter.getRemoteDevice(deviceAddress).connectGatt(context, false, gattCallback,BluetoothDevice.TRANSPORT_LE);
+                            refreshDeviceCache(gatt);
                         } catch (BleException e) {
                             LockUtil.getInstance().releaseLock(LOCK_CONNECT_DEVICE);
                             callback.onError(e);
@@ -578,7 +604,19 @@ public class BleConnection {
             writeDataQueue.add(data);
         }
     }
-
+    private boolean refreshDeviceCache(BluetoothGatt gatt){
+        try {
+            BluetoothGatt localBluetoothGatt = gatt;
+            Method localMethod = localBluetoothGatt.getClass().getMethod("refresh", new Class[0]);
+            if (localMethod != null) {
+                boolean bool = ((Boolean) localMethod.invoke(localBluetoothGatt, new Object[0])).booleanValue();
+                return bool;
+            }
+        }
+        catch (Exception localException) {
+            Log.e("Bleconnection", "An exception occured while refreshing device");
+        }
+        return false;}
     public boolean isConnected() {
         if (!isBluetoothEnabled()) {
             return false;
